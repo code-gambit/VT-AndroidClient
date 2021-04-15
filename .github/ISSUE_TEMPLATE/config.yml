@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Mailing List
+  - url: https://groups.google.com/u/2/g/vt-android-client
+  - about: This mailing list can be used for reporting bugs and androidClient related discussions.
+  - name: Slack Community Channel
+  - url: https://join.slack.com/t/codegambit/shared_invite/zt-pe1nuhbk-iPuFm2B1JuMS86od4a4wXQ
+  - about: Please join the community channel here.
