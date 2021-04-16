@@ -1,11 +1,12 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.File
 import com.github.code.gambit.entity.chache.FileCacheEntity
+import com.github.code.gambit.model.File
 
 class FileCacheMapper
-constructor(): EntityMapper<FileCacheEntity, File>{
+constructor() : EntityMapper<FileCacheEntity, File> {
+
     override fun mapFromEntity(entity: FileCacheEntity): File {
         return File(
             id = entity.id,

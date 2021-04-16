@@ -1,11 +1,12 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.Url
 import com.github.code.gambit.entity.chache.UrlCacheEntity
+import com.github.code.gambit.model.Url
 
 class UrlCacheMapper
-constructor(): EntityMapper<UrlCacheEntity, Url> {
+constructor() : EntityMapper<UrlCacheEntity, Url> {
+
     override fun mapFromEntity(entity: UrlCacheEntity): Url {
         return Url(
             id = entity.id,
