@@ -1,10 +1,12 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.Url
 import com.github.code.gambit.entity.network.UrlNetworkEntity
+import com.github.code.gambit.model.Url
+import javax.inject.Inject
 
 class UrlNetworkMapper
+@Inject
 constructor(): EntityMapper<UrlNetworkEntity, Url>{
     override fun mapFromEntity(entity: UrlNetworkEntity): Url {
         return Url(

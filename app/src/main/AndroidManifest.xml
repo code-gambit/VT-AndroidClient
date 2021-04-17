@@ -3,6 +3,7 @@
     package="com.github.code.gambit">
 
     <application
+        android:name=".VTransfer"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

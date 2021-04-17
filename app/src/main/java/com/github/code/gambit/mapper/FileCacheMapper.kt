@@ -1,10 +1,12 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.File
 import com.github.code.gambit.entity.chache.FileCacheEntity
+import com.github.code.gambit.model.File
+import javax.inject.Inject
 
 class FileCacheMapper
+@Inject
 constructor(): EntityMapper<FileCacheEntity, File>{
     override fun mapFromEntity(entity: FileCacheEntity): File {
         return File(

@@ -26,6 +26,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -58,5 +59,12 @@ dependencies {
     // hilt dependency
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // Amplify core dependency
+    implementation "com.amplifyframework:core:$amplify_core_version"
+    implementation "com.amplifyframework:aws-auth-cognito:$amplify_core_version"
+
+    // Support for Java 8 features
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
 
 }
