@@ -1,6 +1,6 @@
 package com.github.code.gambit
 
-import java.util.*
+import java.util.Base64
 
 fun String.toBase64(): String {
     val byteArray = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

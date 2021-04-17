@@ -1,11 +1,12 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.Url
 import com.github.code.gambit.entity.network.UrlNetworkEntity
+import com.github.code.gambit.model.Url
 
 class UrlNetworkMapper
-constructor(): EntityMapper<UrlNetworkEntity, Url>{
+constructor() : EntityMapper<UrlNetworkEntity, Url> {
+
     override fun mapFromEntity(entity: UrlNetworkEntity): Url {
         return Url(
             id = entity.gs1_pk,

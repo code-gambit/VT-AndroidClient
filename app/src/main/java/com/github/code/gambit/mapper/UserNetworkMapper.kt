@@ -1,11 +1,11 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.User
 import com.github.code.gambit.entity.network.UserNetworkEntity
+import com.github.code.gambit.model.User
 
 class UserNetworkMapper
-constructor(): EntityMapper<UserNetworkEntity, User>{
+constructor() : EntityMapper<UserNetworkEntity, User> {
 
     override fun mapFromEntity(entity: UserNetworkEntity): User {
         return User(

@@ -1,13 +1,13 @@
 package com.github.code.gambit.mapper
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.model.File
-import com.github.code.gambit.fromBase64
 import com.github.code.gambit.entity.network.FileNetworkEntity
+import com.github.code.gambit.fromBase64
+import com.github.code.gambit.model.File
 import com.github.code.gambit.toBase64
 
 class FileNetworkMapper
-constructor(): EntityMapper<FileNetworkEntity, File> {
+constructor() : EntityMapper<FileNetworkEntity, File> {
 
     override fun mapFromEntity(entity: FileNetworkEntity): File {
         return File(
