@@ -8,6 +8,7 @@ import javax.inject.Inject
 class UrlNetworkMapper
 @Inject
 constructor(): EntityMapper<UrlNetworkEntity, Url>{
+
     override fun mapFromEntity(entity: UrlNetworkEntity): Url {
         return Url(
             id = entity.gs1_pk,

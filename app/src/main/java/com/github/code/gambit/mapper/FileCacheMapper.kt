@@ -8,6 +8,7 @@ import javax.inject.Inject
 class FileCacheMapper
 @Inject
 constructor(): EntityMapper<FileCacheEntity, File>{
+
     override fun mapFromEntity(entity: FileCacheEntity): File {
         return File(
             id = entity.id,
