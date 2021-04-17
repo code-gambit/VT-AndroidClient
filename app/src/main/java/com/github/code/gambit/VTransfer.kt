@@ -8,7 +8,7 @@ import com.amplifyframework.core.Amplify
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class VTransfer: Application() {
+class VTransfer : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -21,5 +21,4 @@ class VTransfer: Application() {
             Log.i("MyAmplifyApp", "Could not initialize Amplify", error)
         }
     }
-
 }

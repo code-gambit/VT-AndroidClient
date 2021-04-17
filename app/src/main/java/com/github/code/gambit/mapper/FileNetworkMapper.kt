@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class FileNetworkMapper
 @Inject
-constructor(): EntityMapper<FileNetworkEntity, File> {
+constructor() : EntityMapper<FileNetworkEntity, File> {
 
     override fun mapFromEntity(entity: FileNetworkEntity): File {
         return File(

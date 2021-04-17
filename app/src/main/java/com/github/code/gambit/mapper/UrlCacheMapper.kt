@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class UrlCacheMapper
 @Inject
-constructor(): EntityMapper<UrlCacheEntity, Url> {
+constructor() : EntityMapper<UrlCacheEntity, Url> {
 
     override fun mapFromEntity(entity: UrlCacheEntity): Url {
         return Url(

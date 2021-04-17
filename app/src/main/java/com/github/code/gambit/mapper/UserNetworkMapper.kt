@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class UserNetworkMapper
 @Inject
-constructor(): EntityMapper<UserNetworkEntity, User>{
+constructor() : EntityMapper<UserNetworkEntity, User> {
 
     override fun mapFromEntity(entity: UserNetworkEntity): User {
         return User(
