@@ -3,8 +3,10 @@ package com.github.code.gambit.mapper
 import com.github.code.gambit.EntityMapper
 import com.github.code.gambit.entity.chache.UrlCacheEntity
 import com.github.code.gambit.model.Url
+import javax.inject.Inject
 
 class UrlCacheMapper
+@Inject
 constructor() : EntityMapper<UrlCacheEntity, Url> {
 
     override fun mapFromEntity(entity: UrlCacheEntity): Url {
