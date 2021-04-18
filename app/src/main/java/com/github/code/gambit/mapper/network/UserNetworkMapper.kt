@@ -1,4 +1,4 @@
-package com.github.code.gambit.mapper
+package com.github.code.gambit.mapper.network
 
 import com.github.code.gambit.EntityMapper
 import com.github.code.gambit.entity.network.UserNetworkEntity

@@ -1,5 +1,7 @@
-package com.github.code.gambit
+package com.github.code.gambit.utility
 
+import android.view.Window
+import android.view.WindowManager
 import java.util.Base64
 
 fun String.toBase64(): String {
@@ -18,4 +20,10 @@ fun String.fromBase64(): String {
         android.util.Base64.decode(this, android.util.Base64.DEFAULT)
     }
     return String(byteArray)
+}
+
+fun Window.setStatusColor(color: Int) {
+    this.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    this.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    this.statusBarColor = color
 }

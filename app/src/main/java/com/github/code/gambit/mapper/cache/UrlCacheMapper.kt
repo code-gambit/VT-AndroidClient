@@ -1,4 +1,4 @@
-package com.github.code.gambit.mapper
+package com.github.code.gambit.mapper.cache
 
 import com.github.code.gambit.EntityMapper
 import com.github.code.gambit.entity.chache.UrlCacheEntity

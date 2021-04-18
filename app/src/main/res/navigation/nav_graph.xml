@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onBoardingActivity">
+
+    <activity
+        android:id="@+id/onBoardingActivity"
+        android:name="com.github.code.gambit.ui.OnBoardingActivity"
+        android:label="activity_on_boarding"
+        tools:layout="@layout/activity_on_boarding" >
+        <action
+            android:id="@+id/action_onBoardingActivity_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </activity>
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.github.code.gambit.ui.fragment.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_firstOnBoardingFragment"
+            app:destination="@id/firstOnBoardingFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_onBoardingActivity"
+            app:destination="@id/onBoardingActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstOnBoardingFragment"
+        android:name="com.github.code.gambit.ui.fragment.FirstOnBoardingFragment"
+        android:label="fragment_first_on_boarding"
+        tools:layout="@layout/fragment_first_on_boarding" >
+        <action
+            android:id="@+id/action_firstOnBoardingFragment_to_secondOnBoardingFragment"
+            app:destination="@id/secondOnBoardingFragment" />
+        <action
+            android:id="@+id/action_firstOnBoardingFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondOnBoardingFragment"
+        android:name="com.github.code.gambit.ui.fragment.SecondOnBoardingFragment"
+        android:label="fragment_second_on_boarding"
+        tools:layout="@layout/fragment_second_on_boarding" >
+        <action
+            android:id="@+id/action_secondOnBoardingFragment_to_thirdOnBoardingFragment"
+            app:destination="@id/thirdOnBoardingFragment" />
+        <action
+            android:id="@+id/action_secondOnBoardingFragment_to_firstOnBoardingFragment"
+            app:destination="@id/firstOnBoardingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thirdOnBoardingFragment"
+        android:name="com.github.code.gambit.ui.fragment.ThirdOnBoardingFragment"
+        android:label="fragment_third_on_boarding"
+        tools:layout="@layout/fragment_third_on_boarding" >
+        <action
+            android:id="@+id/action_thirdOnBoardingFragment_to_secondOnBoardingFragment"
+            app:destination="@id/secondOnBoardingFragment" />
+    </fragment>
+</navigation>

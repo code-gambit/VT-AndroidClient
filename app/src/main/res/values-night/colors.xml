@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#242424</color>
+    <color name="primaryVariant">#242424</color>
+    <color name="onPrimary">#242424</color>
+    <color name="primaryDark">#242424</color>
+
+    <color name="secondary">#EB6D6D</color>
+    <color name="secondaryVariant">#EB6D6D</color>
+    <color name="onSecondary">#EB6D6D</color>
+
+    <color name="bottom_bar">#4C4C4C</color>
+</resources>
