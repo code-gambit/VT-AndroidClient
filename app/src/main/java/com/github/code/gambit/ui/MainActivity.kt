@@ -1,9 +1,10 @@
-package com.github.code.gambit
+package com.github.code.gambit.ui
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.amplifyframework.core.Amplify
+import com.github.code.gambit.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

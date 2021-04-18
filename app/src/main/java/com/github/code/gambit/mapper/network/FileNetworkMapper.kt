@@ -1,10 +1,10 @@
-package com.github.code.gambit.mapper
+package com.github.code.gambit.mapper.network
 
 import com.github.code.gambit.EntityMapper
 import com.github.code.gambit.entity.network.FileNetworkEntity
-import com.github.code.gambit.fromBase64
 import com.github.code.gambit.model.File
-import com.github.code.gambit.toBase64
+import com.github.code.gambit.utility.fromBase64
+import com.github.code.gambit.utility.toBase64
 import javax.inject.Inject
 
 class FileNetworkMapper
