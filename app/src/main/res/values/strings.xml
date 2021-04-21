@@ -3,4 +3,22 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="change_splashscreen_fab_desc">change splashscreen</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="the_world">the world</string>
+    <string name="where">where</string>
+    <string name="security">security</string>
+    <string name="is_sharing">is sharing</string>
+    <string name="easy_come_amp_go"><![CDATA[Easy Come & Go]]></string>
+    <string name="to_the_world_of_secure_and_easy_file_sharing">To the world of security and easy file sharing.</string>
+    <string name="safe_amp_secure"><![CDATA[Safe & Secure]]></string>
+    <string name="keep_your_files_safe_with_us">Keep your files safe with Us.</string>
+    <string name="quick_and_swift">Quick and Swift</string>
+    <string name="file_sharing_made_faster">File sharing made Faster!</string>
+    <string name="illustration">illustration</string>
+    <string name="on_boarding_large_text_transition_name">ONB_LARGE_TEXT</string>
+    <string name="on_boarding_small_text_transition_name">ONB_SMALL_TEXT</string>
+    <string name="on_boarding_image_transition_name">ONB_IMAGE</string>
+    <string name="skip">Skip</string>
+    <string name="back_button">back button</string>
+    <string name="next">Next</string>
 </resources>

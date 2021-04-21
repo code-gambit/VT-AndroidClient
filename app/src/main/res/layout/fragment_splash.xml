@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.onboarding.SplashFragment">
+
+    <RelativeLayout
+        android:id="@+id/multi_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/app_name"
+            android:alpha="0"
+            android:scaleX="0"
+            android:scaleY="0"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="64dp"
+            app:cornerRadius="12dp"
+            android:text="@string/next"
+            android:backgroundTint="@color/secondary"
+            android:alpha="0"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/welcome_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/welcome_to_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_to"
+            style="@style/welcome_thin_text" />
+
+        <TextView
+            android:id="@+id/the_world_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/the_world"
+            style="@style/welcome_thin_text" />
+
+        <TextView
+            android:id="@+id/where_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/where"
+            style="@style/welcome_thin_text"/>
+
+        <TextView
+            android:id="@+id/security_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/security"
+            android:letterSpacing="0.03"
+            style="@style/welcome_thick_text"/>
+
+        <TextView
+            android:id="@+id/is_sharing_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/is_sharing"
+            android:letterSpacing="0.03"
+            style="@style/welcome_thick_text" />
+
+    </LinearLayout>
+</FrameLayout>

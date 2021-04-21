@@ -10,4 +10,7 @@
     <color name="onSecondary">#EB6D6D</color>
 
     <color name="bottom_bar">#4C4C4C</color>
+
+    <color name="white">#000</color>
+    <color name="black">#fff</color>
 </resources>

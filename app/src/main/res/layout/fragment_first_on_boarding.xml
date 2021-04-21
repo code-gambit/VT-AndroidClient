@@ -1,49 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.FirstOnBoardingFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="true"
+    android:theme="@style/Theme.OnBoardingTheme">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/first_text"
+        style="@style/on_boarding_large_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/easy_come_amp_go" />
+
+    <TextView
+        android:id="@+id/second_text"
+        style="@style/on_boarding_small_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_text"
+        android:text="@string/to_the_world_of_secure_and_easy_file_sharing" />
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary">
+        android:layout_height="200dp"
+        android:layout_below="@id/second_text"
+        android:layout_marginTop="@dimen/on_boarding_image_top_margin"
+        android:contentDescription="@string/illustration"
+        android:src="@drawable/illus_one" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Easy Come"
-                android:textSize="42sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="n Easy Go"
-                android:textDirection="ltr"
-                android:textSize="42sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="To the world of secure and easy file sharing."
-                android:textSize="18sp" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/illus_one"
-                android:layout_marginTop="32dp"/>
-
-        </LinearLayout>
-    </RelativeLayout>
-
-
-</layout>
+</RelativeLayout>
