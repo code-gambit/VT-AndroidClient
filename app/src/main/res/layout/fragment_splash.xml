@@ -32,7 +32,7 @@
             android:layout_marginBottom="64dp"
             app:cornerRadius="12dp"
             android:text="@string/next"
-            android:backgroundTint="@color/secondary"
+            android:backgroundTint="@color/login_signup_button_color"
             android:alpha="0"/>
 
     </RelativeLayout>

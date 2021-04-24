@@ -10,6 +10,8 @@
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorSecondaryVariant">@color/secondaryVariant</item>
         <item name="colorOnSecondary">@color/onSecondary</item>
+
+        <item name="android:windowBackground">@color/primary</item>
     </style>
 
     <style name="Theme.OnBoardingTheme" parent="Theme.VTransfer">
@@ -60,6 +62,30 @@
         <item name="android:transitionName">@string/on_boarding_small_text_transition_name</item>
         <item name="android:alpha">0.8</item>
         <item name="android:layout_marginStart">@dimen/on_boarding_text_start_margin</item>
+    </style>
+
+    <style name="input_theme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/secondary</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="boxStrokeColor">@color/input_box_selector_color</item>
+        <item name="hintTextColor">@color/secondary</item>
+    </style>
+
+    <style name="input_theme.editText" parent="Widget.AppCompat.EditText">
+        <item name="android:maxLines">1</item>
+        <item name="android:minLines">1</item>
+    </style>
+
+    <style name="Widget.App.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
+    </style>
+
+    <style name="ThemeOverlay.App.FloatingActionButton" parent="">
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/primary</item>
+        <item name="colorOnSurface">@color/primary</item>
     </style>
 
 </resources>

@@ -9,7 +9,6 @@ plugins {
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.2"
-    dataBinding.enabled true
 
     defaultConfig {
         applicationId "com.github.code.gambit"
@@ -22,6 +21,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
     buildTypes {
         release {

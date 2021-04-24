@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.auth.AuthFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:tabMode="auto"
+        android:layout_marginBottom="12dp"
+        app:tabTextColor="@color/auth_tab_selector"
+        app:tabIndicatorColor="@color/secondary"
+        android:background="@color/primary"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/on_boarding_image_bottom_margin" />
+
+        <ImageView
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/on_boarding_image_bottom_margin"
+            android:layout_gravity="bottom"
+            android:background="@color/auth_bottom_bar"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/bottom_bar"
+            app:layout_anchorGravity="top|end"
+            android:backgroundTint="@color/login_signup_button_color"
+            app:icon="@drawable/ic_next"
+            app:iconTint="@color/raw_white"
+            app:iconGravity="textEnd"
+            app:cornerRadius="12dp"
+            app:iconSize="16dp"
+            android:layout_marginEnd="32dp"/>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>
