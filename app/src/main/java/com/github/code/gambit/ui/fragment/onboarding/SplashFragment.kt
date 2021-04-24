@@ -86,6 +86,10 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         navigate(R.id.action_splashFragment_to_homeFragment)
     }
 
+    private fun navigateToAuth() {
+        navigate(R.id.action_splashFragment_to_authFragment)
+    }
+
     private fun navigate(action: Int) {
         findNavController().navigate(action)
     }

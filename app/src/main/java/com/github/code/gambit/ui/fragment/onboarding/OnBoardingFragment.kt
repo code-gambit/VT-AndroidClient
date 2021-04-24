@@ -50,7 +50,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_on_boarding) {
         TabLayoutMediator(binding.tabLayout, binding.pageContainerView) { _, _ -> }.attach()
 
         binding.skipButton.setOnClickListener {
-            navigateToHome()
+            navigateToAuth()
         }
 
         binding.backButton.setOnClickListener {
@@ -63,11 +63,11 @@ class OnBoardingFragment : Fragment(R.layout.fragment_on_boarding) {
         binding.floatingActionButton.setOnClickListener {
             when (currentItem) {
                 0 -> binding.backButton.show()
-                2 -> navigateToHome()
+                2 -> navigateToAuth()
             }
             binding.pageContainerView.currentItem += 1
         }
     }
 
-    private fun navigateToHome() = findNavController().navigate(R.id.action_onBoardingFragment_to_homeFragment)
+    private fun navigateToAuth() = findNavController().navigate(R.id.action_onBoardingFragment_to_authFragment)
 }

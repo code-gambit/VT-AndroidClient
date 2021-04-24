@@ -5,16 +5,21 @@
     <color name="onPrimary">#E1E1E1</color>
     <color name="primaryDark">#E1E1E1</color>
 
-    <color name="secondary">#522C20</color>
-    <color name="secondaryVariant">#522C20</color>
-    <color name="onSecondary">#522C20</color>
+    <color name="secondary">#63C2D2</color>
+    <color name="secondaryVariant">#63C2D2</color>
+    <color name="onSecondary">#63C2D2</color>
 
-    <color name="bottom_bar">#63C2D2</color>
+    <color name="auth_bottom_bar">#63C2D2</color>
+
+    <color name="login_signup_button_color">#522C20</color>
 
     <color name="white">#fff</color>
     <color name="black">#000</color>
 
+    <color name="bottom_nav_bar">#4C4C4C</color>
+
     <!-- info: below are the raw colors and appears same in every theme-->
     <color name="raw_white">#fff</color>
     <color name="raw_black">#000</color>
+
 </resources>
