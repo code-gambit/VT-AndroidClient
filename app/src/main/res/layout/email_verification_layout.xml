@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/secondary"
+    android:id="@+id/root">
+
+    <TextView
+        android:id="@+id/verification_code_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/verification_code"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/raw_black"/>
+
+    <TextView
+        android:id="@+id/info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/please_type_the_verification_code_send_to"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:textColor="@color/raw_black"
+        android:fontFamily="sans-serif"
+        android:layout_below="@id/verification_code_text"/>
+    <TextView
+        android:id="@+id/email_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_text"
+        android:layout_centerHorizontal="true"/>
+
+    <in.aabhasjindal.otptextview.OtpTextView
+        android:id="@+id/otp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        app:height="40dp"
+        app:width="40dp"
+        app:otp_box_background="@drawable/otp_box_bg"
+        app:bar_height="2dp"
+        app:length="6"
+        app:otp_box_background_error="@drawable/otp_box_error_bg"
+        app:otp_text_size="24dp"
+        android:layout_marginTop="64dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/email_text"/>
+
+    <TextView
+        android:id="@+id/validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:letterSpacing="0.1"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginBottom="64dp"
+        android:textColor="@color/raw_black"
+        android:text="@string/validate"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/login_signup_button_color"/>
+
+</RelativeLayout>

@@ -31,4 +31,8 @@ class AuthFragmentAdapter(
     override fun createFragment(position: Int): Fragment {
         return fragments[position]
     }
+
+    fun getFragment(pos: Int): Fragment {
+        return fragments[pos]
+    }
 }

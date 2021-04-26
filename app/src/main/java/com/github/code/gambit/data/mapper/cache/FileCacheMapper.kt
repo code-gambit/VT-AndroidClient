@@ -1,8 +1,8 @@
-package com.github.code.gambit.mapper.cache
+package com.github.code.gambit.data.mapper.cache
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.entity.chache.FileCacheEntity
-import com.github.code.gambit.model.File
+import com.github.code.gambit.data.entity.chache.FileCacheEntity
+import com.github.code.gambit.data.model.File
 import javax.inject.Inject
 
 class FileCacheMapper

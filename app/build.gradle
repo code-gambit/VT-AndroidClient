@@ -67,9 +67,14 @@ dependencies {
 
     // Amplify core dependency
     implementation "com.amplifyframework:core:$amplify_core_version"
+    implementation 'com.amplifyframework:core-kotlin:0.1.2'
     implementation "com.amplifyframework:aws-auth-cognito:$amplify_core_version"
 
     // Support for Java 8 features
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
+
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+
+    implementation 'com.github.aabhasr1:OtpView:v1.1.2-ktx'
 
 }

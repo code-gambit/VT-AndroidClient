@@ -12,7 +12,7 @@
         android:layout_gravity="center_vertical">
 
         <LinearLayout
-            android:id="@+id/profile_container"
+            android:id="@+id/dp_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -21,15 +21,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/upload_dp_fab"
                 style="@style/Widget.App.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/upload_a_profile_picture_optional"
                 android:src="@drawable/iclink"
-
                 android:tint="#FF0000" />
 
             <TextView
+                android:id="@+id/upload_dp_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -47,7 +48,7 @@
             android:layout_marginTop="16dp"
             android:hint="@string/full_name"
             app:endIconMode="clear_text"
-            app:layout_constraintTop_toBottomOf="@id/profile_container">
+            app:layout_constraintTop_toBottomOf="@id/dp_container">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/input_theme.editText"

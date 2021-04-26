@@ -1,4 +1,4 @@
-package com.github.code.gambit.model
+package com.github.code.gambit.data.model
 
 data class File(
     var id: String,

@@ -1,4 +1,4 @@
-package com.github.code.gambit.entity.chache
+package com.github.code.gambit.data.entity.chache
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

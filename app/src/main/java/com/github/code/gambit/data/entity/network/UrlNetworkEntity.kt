@@ -1,4 +1,4 @@
-package com.github.code.gambit.entity.network
+package com.github.code.gambit.data.entity.network
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

@@ -18,13 +18,6 @@
         <item name="android:background">@color/primary</item>
     </style>
 
-    <!--style name="Splash.theme" parent="Theme.VTransfer">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style-->
-
     <style name="welcome_thin_text" parent="Widget.AppCompat.TextView">
         <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">normal</item>
@@ -71,6 +64,11 @@
         <item name="android:layout_marginTop">8dp</item>
         <item name="boxStrokeColor">@color/input_box_selector_color</item>
         <item name="hintTextColor">@color/secondary</item>
+        <item name="android:theme">@style/editText_cursor_theme</item>
+    </style>
+
+    <style name="editText_cursor_theme" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/secondary</item>
     </style>
 
     <style name="input_theme.editText" parent="Widget.AppCompat.EditText">

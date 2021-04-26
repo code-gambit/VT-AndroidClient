@@ -31,4 +31,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="upload_a_profile_picture_optional">Upload a profile picture [Optional]</string>
     <string name="user_email">User Email</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="please_type_the_verification_code_send_to">Please type the verification code send to</string>
+    <string name="validate">VALIDATE</string>
 </resources>
