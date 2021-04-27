@@ -1,8 +1,8 @@
-package com.github.code.gambit.mapper.network
+package com.github.code.gambit.data.mapper.network
 
 import com.github.code.gambit.EntityMapper
-import com.github.code.gambit.entity.network.UserNetworkEntity
-import com.github.code.gambit.model.User
+import com.github.code.gambit.data.entity.network.UserNetworkEntity
+import com.github.code.gambit.data.model.User
 import javax.inject.Inject
 
 class UserNetworkMapper

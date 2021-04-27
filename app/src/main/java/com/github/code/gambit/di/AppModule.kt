@@ -2,6 +2,7 @@ package com.github.code.gambit.di
 
 import android.content.Context
 import com.github.code.gambit.PreferenceManager
+import com.github.code.gambit.VTransfer
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment
@@ -15,6 +16,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideBaseApplication(@ApplicationContext context: Context): VTransfer {
+        return context as VTransfer
+    }
 
     @Singleton
     @Provides

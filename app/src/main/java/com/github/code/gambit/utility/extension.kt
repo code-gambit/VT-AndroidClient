@@ -4,6 +4,12 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
+import com.amplifyframework.auth.AuthUserAttribute
+import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.github.code.gambit.data.model.User
+import com.github.code.gambit.helper.auth.AuthData
+import com.google.android.material.snackbar.Snackbar
 import java.util.Base64
 
 fun String.toBase64(): String {
@@ -59,4 +65,37 @@ fun List<View>.hideAll() {
 
 fun List<View>.showAll() {
     this.forEach { it.show() }
+}
+
+fun View.snackbar(message: String) {
+    Snackbar
+        .make(this, message, Snackbar.LENGTH_INDEFINITE)
+        .also { snackbar ->
+            snackbar.setAction("OK") {
+                snackbar.dismiss()
+            }
+                .show()
+        }
+}
+
+fun AuthSignUpOptions.Builder<*>.defaultBuilder(authData: AuthData): AuthSignUpOptions {
+    return userAttributes(
+        mutableListOf
+        (
+            AuthUserAttribute(AuthUserAttributeKey.email(), authData.email),
+            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), "test"),
+            AuthUserAttribute(AuthUserAttributeKey.name(), authData.fullname)
+        )
+    ).build()
+}
+
+fun AuthSignUpOptions.Builder<*>.defaultBuilder(user: User): AuthSignUpOptions {
+    return userAttributes(
+        mutableListOf
+        (
+            AuthUserAttribute(AuthUserAttributeKey.email(), user.email),
+            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), user.thumbnail),
+            AuthUserAttribute(AuthUserAttributeKey.name(), user.name)
+        )
+    ).build()
 }

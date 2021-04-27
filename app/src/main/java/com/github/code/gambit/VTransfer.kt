@@ -17,6 +17,8 @@ class VTransfer : Application() {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.configure(this)
             Log.i("MyAmplifyApp", "Initialized Amplify")
+            // val user = com.amplifyframework.kotlin.core.Amplify.Auth.getCurrentUser()
+            // Log.i("MyAmplifyApp", "${user}")
         } catch (error: AmplifyException) {
             Log.i("MyAmplifyApp", "Could not initialize Amplify", error)
         }

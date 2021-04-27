@@ -51,21 +51,22 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun next() {
-        binding.appIcon.hide()
         if (preferenceManager.isFirstLaunch()) {
             showWelcomeUI()
+        } else if (!preferenceManager.isAuthenticated()) {
+            navigateToAuth()
         } else {
             navigateToHome()
         }
     }
 
     private fun showWelcomeUI() {
+        binding.appIcon.hide()
         binding.multiViewContainer.setBackgroundResource(R.drawable.bg_welcome)
         binding.multiViewContainer.alpha = 0f
         binding.welcomeTextContainer.show()
         startAnimationSequence(textViews)
         startAnimationSequence(listOf(binding.multiViewContainer))
-        // preferenceManager.updateLaunchState()
         val ts = 2000L
         Handler().postDelayed(
             {
