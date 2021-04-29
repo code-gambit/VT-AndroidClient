@@ -77,4 +77,6 @@ dependencies {
 
     implementation 'com.github.aabhasr1:OtpView:v1.1.2-ktx'
 
+    implementation "com.github.ligi:ipfs-api-kotlin:$ipfs_kotlin_version"
+
 }
