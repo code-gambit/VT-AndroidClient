@@ -22,4 +22,10 @@
     <color name="raw_white">#fff</color>
     <color name="raw_black">#000</color>
 
+    <color name="raw_purple_text">#6d7cff</color>
+
+    <color name="overlay">#40000000</color>
+
+    <color name="raw_dark_grey">#9A9A9A</color>
+
 </resources>

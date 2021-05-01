@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/root_side_margin">
+
+    <RelativeLayout
+        android:id="@+id/bottom_sheet_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/root_side_margin"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <include
+            android:id="@+id/file_detail_layout"
+            layout="@layout/file_list_item" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/url_list_card_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/file_detail_layout"
+            android:layout_marginBottom="@dimen/root_side_margin"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/close_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/root_side_margin"
+                    android:layout_marginTop="@dimen/root_side_margin"
+                    android:background="@color/transparent"
+                    android:contentDescription="@string/close"
+                    android:rotation="45"
+                    android:src="@drawable/ic_plus"
+                    android:tint="@color/black" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/create_new_url_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/close_button"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-8dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:text="@string/create_new_url"
+                    android:textSize="12sp"
+                    app:chipIcon="@drawable/ic_add_round"
+                    app:chipIconSize="14dp"
+                    app:iconStartPadding="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/create_new_url_button"
+                    android:layout_marginTop="@dimen/root_side_margin"
+                    tools:listitem="@layout/url_list_item" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,10 +3,14 @@ package com.github.code.gambit.utility
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.widget.RelativeLayout
+import androidx.core.view.isVisible
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.github.code.gambit.R
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.auth.AuthData
 import com.google.android.material.snackbar.Snackbar
@@ -59,12 +63,32 @@ fun View.show() {
     this.visibility = View.VISIBLE
 }
 
+fun View.toggleVisibility() {
+    if (isVisible) {
+        visibility = View.GONE
+        return
+    }
+    visibility = View.VISIBLE
+}
+
 fun List<View>.hideAll() {
     this.forEach { it.hide() }
 }
 
 fun List<View>.showAll() {
     this.forEach { it.show() }
+}
+
+fun View.snackbar(message: String, view: View) {
+    Snackbar
+        .make(this, message, Snackbar.LENGTH_INDEFINITE)
+        .setAnchorView(view)
+        .also { snackbar ->
+            snackbar.setAction("OK") {
+                snackbar.dismiss()
+            }
+                .show()
+        }
 }
 
 fun View.snackbar(message: String) {
@@ -98,4 +122,18 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(user: User): AuthSignUpOptions {
             AuthUserAttribute(AuthUserAttributeKey.name(), user.name)
         )
     ).build()
+}
+
+fun RelativeLayout.bottomNavHide() {
+    if (isVisible) {
+        visibility = View.GONE
+        animation = AnimationUtils.loadAnimation(context, R.anim.bottom_nav_hide)
+    }
+}
+
+fun RelativeLayout.bottomNavShow() {
+    if (!isVisible) {
+        visibility = View.VISIBLE
+        animation = AnimationUtils.loadAnimation(context, R.anim.bottom_nav_show)
+    }
 }

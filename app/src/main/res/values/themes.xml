@@ -57,6 +57,15 @@
         <item name="android:layout_marginStart">@dimen/on_boarding_text_start_margin</item>
     </style>
 
+    <style name="search_input_theme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="colorControlActivated">@color/secondary</item>
+        <item name="android:layout_marginEnd">@dimen/search_input_corner_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/search_input_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/search_input_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/search_input_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/search_input_corner_radius</item>
+    </style>
+
     <style name="input_theme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="colorPrimary">@color/secondary</item>
         <item name="android:layout_marginStart">16dp</item>
@@ -84,6 +93,24 @@
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorOnSecondary">@color/primary</item>
         <item name="colorOnSurface">@color/primary</item>
+    </style>
+
+    <style name="bottom_nav_fab_style" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
+        <item name="shapeAppearanceOverlay">@style/fab_style.appearance</item>
+    </style>
+
+    <style name="fab_style.appearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">20%</item>
+    </style>
+
+    <style name="circle_image_view_style" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="shapeAppearanceOverlay">@style/profile_image_shape_appearance</item>
+    </style>
+
+    <style name="profile_image_shape_appearance" parent="">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 
 </resources>

@@ -34,4 +34,19 @@
     <string name="verification_code">Verification Code</string>
     <string name="please_type_the_verification_code_send_to">Please type the verification code send to</string>
     <string name="validate">VALIDATE</string>
+    <string name="recently">Recently</string>
+    <string name="added">Added</string>
+    <string name="file_icon">File Icon</string>
+    <string name="filter_icon">filter icon</string>
+    <string name="search_file">search file</string>
+    <string name="add_file">add file</string>
+    <string name="profile_image">profile image</string>
+    <string name="edit_profile_image">Edit profile image</string>
+    <string name="search">Search</string>
+    <string name="create_new_url">Create New Url</string>
+    <string name="close">close</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="document">Document</string>
+    <string name="filter_by_date">Filter By Date</string>
 </resources>
