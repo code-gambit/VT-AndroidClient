@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.User
+import com.github.code.gambit.databinding.EmailVerificationLayoutBinding
 import com.github.code.gambit.databinding.FragmentAuthBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
@@ -101,7 +102,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         binding.progressBar.hide()
                         binding.root.snackbar("Welcome ${it.data.name}")
                         if (this::dialog.isInitialized && dialog.isShowing) {
-                            revealShow(false, exit = true)
+                            revealShow(false, exit = true) { navigateToHome() }
                         } else {
                             navigateToHome()
                         }
@@ -123,6 +124,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private fun showConfirmationDialog() {
         dialog = Dialog(requireContext(), R.style.Theme_VTransfer)
+        EmailVerificationLayoutBinding.inflate(layoutInflater)
         dialog.setContentView(R.layout.email_verification_layout)
         dialog.window?.setStatusColor(
             ContextCompat.getColor(
@@ -169,7 +171,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         dialog.show()
     }
 
-    private fun revealShow(b: Boolean, exit: Boolean = false) {
+    private fun revealShow(b: Boolean, exit: Boolean = false, exitFunction: () -> Unit = {}) {
         val view = dialogView.findViewById<View>(R.id.root)
         val w = view.width
         val h = view.height
@@ -191,7 +193,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     dialog.dismiss()
                     view.visibility = View.INVISIBLE
                     if (exit) {
-                        navigateToHome()
+                        exitFunction()
                     }
                 }
             })
@@ -215,5 +217,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         viewModel.setEvent(AuthEvent.ConfirmationEvent(authData))
     }
 
-    private fun navigateToHome() = findNavController().navigate(R.id.action_authFragment_to_homeFragment)
+    private fun navigateToHome() =
+        findNavController().navigate(R.id.action_authFragment_to_homeFragment)
 }

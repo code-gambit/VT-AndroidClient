@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="@dimen/root_side_margin"
+    app:cardBackgroundColor="@color/raw_white"
+    app:cardCornerRadius="22sp"
+    app:cardElevation="5dp">
+
+    <RelativeLayout
+        android:id="@+id/file_icon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/file_icon"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/file_icon"
+            android:scaleType="centerCrop"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:src="@drawable/ic_file_pdf" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/file_size"
+            android:layout_toEndOf="@id/file_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="18sp"
+                tools:text="Demo.pdf" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:textColor="@color/raw_purple_text"
+                android:textSize="12sp"
+                tools:text="24-01-2021" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/file_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/file_unit"
+            android:textColor="@color/raw_purple_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="45" />
+
+        <TextView
+            android:id="@+id/file_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="32dp"
+            android:textColor="@color/raw_purple_text"
+            android:textSize="18sp"
+            tools:text="MB" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

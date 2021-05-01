@@ -7,4 +7,12 @@
     <dimen name="on_boarding_text_start_margin">32dp</dimen>
     <dimen name="on_boarding_image_top_margin">64dp</dimen>
     <dimen name="on_boarding_image_bottom_margin">64dp</dimen>
+
+    <dimen name="root_side_margin">16dp</dimen>
+    <dimen name="profile_image_large_size">150dp</dimen>
+
+    <dimen name="search_input_corner_radius">16dp</dimen>
+
+    <dimen name="url_options_spacing">32dp</dimen>
+    <dimen name="options_icon_size">18dp</dimen>
 </resources>
