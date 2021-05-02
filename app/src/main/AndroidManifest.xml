@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.github.code.gambit">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".VTransfer"
         android:allowBackup="true"
-        android:fullBackupContent="true"
+        android:fullBackupContent="false"
+        tools:replace="android:fullBackupContent"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VTransfer">
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://@code-gambit"/>
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">

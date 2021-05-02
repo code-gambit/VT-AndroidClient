@@ -107,7 +107,7 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(authData: AuthData): AuthSignUpO
         mutableListOf
         (
             AuthUserAttribute(AuthUserAttributeKey.email(), authData.email),
-            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), "test"),
+            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), authData.thumbnail),
             AuthUserAttribute(AuthUserAttributeKey.name(), authData.fullname)
         )
     ).build()

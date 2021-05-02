@@ -7,91 +7,91 @@ import com.amplifyframework.auth.cognito.AWSCognitoUserPoolTokens
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.kotlin.core.Amplify
 import com.github.code.gambit.helper.auth.AuthData
-import com.github.code.gambit.helper.auth.AuthResult
+import com.github.code.gambit.helper.auth.ServiceResult
 import com.github.code.gambit.utility.defaultBuilder
 
-class AuthService_Impl : AuthService {
+class AuthServiceImpl : AuthService {
 
-    override suspend fun login(authData: AuthData): AuthResult<Unit> {
+    override suspend fun login(authData: AuthData): ServiceResult<Unit> {
         return try {
             val result = Amplify.Auth.signIn(authData.email, authData.password)
             if (result.isSignInComplete) {
-                AuthResult.Success(Unit)
+                ServiceResult.Success(Unit)
             } else {
-                AuthResult.Error(Exception("Login incomplete + ${result.nextStep}"))
+                ServiceResult.Error(Exception("Login incomplete + ${result.nextStep}"))
             }
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 
-    override suspend fun signUp(authData: AuthData): AuthResult<Unit> {
+    override suspend fun signUp(authData: AuthData): ServiceResult<Unit> {
         val options = AuthSignUpOptions.builder().defaultBuilder(authData)
         return try {
             val result = Amplify.Auth.signUp(authData.email, authData.password, options)
             if (result.isSignUpComplete) {
-                AuthResult.Success(Unit)
+                ServiceResult.Success(Unit)
             } else {
-                AuthResult.Error(Exception("SignUp incomplete + ${result.nextStep}"))
+                ServiceResult.Error(Exception("SignUp incomplete + ${result.nextStep}"))
             }
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 
-    override suspend fun confirmSignUp(authData: AuthData): AuthResult<Unit> {
+    override suspend fun confirmSignUp(authData: AuthData): ServiceResult<Unit> {
         return try {
             val result = Amplify.Auth.confirmSignUp(authData.email, authData.confirmationCode!!)
             if (result.isSignUpComplete) {
-                AuthResult.Success(Unit)
+                ServiceResult.Success(Unit)
             } else {
-                AuthResult.Error(Exception("Confirmation incomplete + ${result.nextStep}"))
+                ServiceResult.Error(Exception("Confirmation incomplete + ${result.nextStep}"))
             }
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 
-    override suspend fun fetchSession(): AuthResult<AWSCognitoAuthSession> {
+    override suspend fun fetchSession(): ServiceResult<AWSCognitoAuthSession> {
         return try {
             val authSession = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
-            AuthResult.Success(authSession)
+            ServiceResult.Success(authSession)
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 
-    override suspend fun fetchIdToken(): AuthResult<String> {
+    override suspend fun fetchIdToken(): ServiceResult<String> {
         when (val session = fetchSession()) {
-            is AuthResult.Error -> {
-                return AuthResult.Error(session.exception)
+            is ServiceResult.Error -> {
+                return ServiceResult.Error(session.exception)
             }
-            is AuthResult.Success<AWSCognitoAuthSession> -> {
+            is ServiceResult.Success<AWSCognitoAuthSession> -> {
                 val tokens: AWSCognitoUserPoolTokens = session.data.userPoolTokens.value
-                    ?: return AuthResult.Error(Exception("token not generated, user might be not authentication"))
-                return AuthResult.Success(tokens.idToken)
+                    ?: return ServiceResult.Error(Exception("token not generated, user might be not authentication"))
+                return ServiceResult.Success(tokens.idToken)
             }
             else -> {
-                return AuthResult.Error(Exception("Illegal state!!"))
+                return ServiceResult.Error(Exception("Illegal state!!"))
             }
         }
     }
 
-    override suspend fun fetchUserAttribute(): AuthResult<List<AuthUserAttribute>> {
+    override suspend fun fetchUserAttribute(): ServiceResult<List<AuthUserAttribute>> {
         return try {
             val attributes = Amplify.Auth.fetchUserAttributes()
-            AuthResult.Success(attributes)
+            ServiceResult.Success(attributes)
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 
-    override suspend fun resentConfirmationCode(email: String): AuthResult<Unit> {
+    override suspend fun resentConfirmationCode(email: String): ServiceResult<Unit> {
         return try {
             Amplify.Auth.resendSignUpCode(email)
-            AuthResult.Success(Unit)
+            ServiceResult.Success(Unit)
         } catch (e: AuthException) {
-            AuthResult.Error(e)
+            ServiceResult.Error(e)
         }
     }
 }

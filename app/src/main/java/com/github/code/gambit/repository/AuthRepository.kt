@@ -1,15 +1,19 @@
 package com.github.code.gambit.repository
 
+import android.net.Uri
 import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.auth.AuthData
-import com.github.code.gambit.helper.auth.AuthResult
+import com.github.code.gambit.helper.auth.ServiceResult
 import com.github.code.gambit.network.auth.AuthService
+import com.github.code.gambit.network.image.ImageService
 
 class AuthRepository
+
 constructor(
     private val authService: AuthService,
+    private val imageService: ImageService,
     private val preferenceManager: PreferenceManager,
     private val userAttributeMapper: UserAttributeMapper
 ) {
@@ -18,48 +22,56 @@ constructor(
     val getToken get() = preferenceManager.getIdToken()
     val revokeAuth = { preferenceManager.revokeAuthentication() }
 
-    suspend fun login(authData: AuthData): AuthResult<User> {
+    suspend fun login(authData: AuthData): ServiceResult<User> {
         val res = authService.login(authData)
-        if (res is AuthResult.Error) {
+        if (res is ServiceResult.Error) {
             return res
         }
-        (res as AuthResult.Success)
+        (res as ServiceResult.Success)
 
         val userFetchResult = authService.fetchUserAttribute()
-        if (userFetchResult is AuthResult.Error) {
+        if (userFetchResult is ServiceResult.Error) {
             return userFetchResult
         }
-        (userFetchResult as AuthResult.Success)
+        (userFetchResult as ServiceResult.Success)
         val user = userAttributeMapper.mapFromEntity(userFetchResult.data)
         preferenceManager.setUser(user)
 
         val idResult = authService.fetchIdToken()
-        if (idResult is AuthResult.Error) {
+        if (idResult is ServiceResult.Error) {
             return idResult
         }
-        (idResult as AuthResult.Success)
+        (idResult as ServiceResult.Success)
         preferenceManager.updateIdToken(idResult.data)
         preferenceManager.setAuthenticated(true)
         preferenceManager.updateLaunchState()
 
-        return AuthResult.Success(user)
+        return ServiceResult.Success(user)
     }
 
-    suspend fun signUp(authData: AuthData): AuthResult<Unit> {
+    private suspend fun uploadProfileImage(imageUri: Uri): ServiceResult<String> {
+        return imageService.uploadImage(imageUri)
+    }
+
+    suspend fun signUp(authData: AuthData): ServiceResult<Unit> {
+        val uploadImageRes = uploadProfileImage(Uri.parse(authData.thumbnail))
+        if (uploadImageRes is ServiceResult.Success) {
+            authData.thumbnail = uploadImageRes.data
+        }
         val signUpRes = authService.signUp(authData)
-        if (signUpRes is AuthResult.Error) {
+        if (signUpRes is ServiceResult.Error) {
             return signUpRes
         }
-        (signUpRes as AuthResult.Success)
+        (signUpRes as ServiceResult.Success)
         return signUpRes
     }
 
-    suspend fun signUpConfirmation(authData: AuthData): AuthResult<User> {
+    suspend fun signUpConfirmation(authData: AuthData): ServiceResult<User> {
         val confirmationResult = authService.confirmSignUp(authData)
-        if (confirmationResult is AuthResult.Error) {
+        if (confirmationResult is ServiceResult.Error) {
             return confirmationResult
         }
-        (confirmationResult as AuthResult.Success)
+        (confirmationResult as ServiceResult.Success)
         return login(authData)
     }
 }

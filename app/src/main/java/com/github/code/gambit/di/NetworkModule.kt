@@ -8,6 +8,7 @@ import com.github.code.gambit.network.api.url.UrlService
 import com.github.code.gambit.network.api.url.UrlServiceImpl
 import com.github.code.gambit.network.api.user.UserService
 import com.github.code.gambit.network.api.user.UserServiceImpl
+import com.github.code.gambit.utility.AppConstant
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -41,7 +42,7 @@ object NetworkModule {
     }
 
     @Singleton
-    @Named("UID")
+    @Named(AppConstant.Named.USER_ID)
     @Provides
     fun provideUserId(preferenceManager: PreferenceManager): String {
         return preferenceManager.getUserId()!!

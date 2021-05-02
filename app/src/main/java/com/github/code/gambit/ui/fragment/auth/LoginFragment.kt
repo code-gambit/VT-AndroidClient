@@ -41,6 +41,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (error) {
             binding.root.snackbar("Validation error!!")
         }
-        return AuthData("", username, password, null)
+        return AuthData("", username, password, null, null)
     }
 }
