@@ -7,5 +7,5 @@ interface FileService {
 
     suspend fun getFiles(@Named("UID") userId: String): List<FileNetworkEntity>
     suspend fun uploadFile(@Named("UID") userId: String, fileNetworkEntity: FileNetworkEntity): FileNetworkEntity
-    suspend fun deleteFile(fileId: String): FileNetworkEntity
+    suspend fun deleteFile(userId: String, fileId: String): FileNetworkEntity
 }

@@ -16,7 +16,7 @@ class FileServiceImpl(val apiService: ApiService) : FileService {
         return apiService.uploadFiles(userId, fileNetworkEntity)
     }
 
-    override suspend fun deleteFile(fileId: String): FileNetworkEntity {
-        return apiService.deleteFile(fileId)
+    override suspend fun deleteFile(userId: String, fileId: String): FileNetworkEntity {
+        return apiService.deleteFile(userId, fileId)
     }
 }

@@ -8,7 +8,7 @@ import javax.inject.Named
 interface NetworkDataSource {
     suspend fun getFiles(@Named("UID") userId: String): List<File>
     suspend fun uploadFile(@Named("UID") userId: String, fileNetworkEntity: File): File
-    suspend fun deleteFile(fileId: String): File
+    suspend fun deleteFile(userId: String, fileId: String): File
 
     suspend fun getUrls(fileId: String): List<Url>
     suspend fun generateUrl(fileId: String): Url

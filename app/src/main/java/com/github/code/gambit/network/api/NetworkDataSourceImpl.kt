@@ -27,8 +27,8 @@ class NetworkDataSourceImpl(
         return fileNetworkMapper.mapFromEntity(fileService.uploadFile(userId, fileNetworkMapper.mapToEntity(file)))
     }
 
-    override suspend fun deleteFile(fileId: String): File {
-        return fileNetworkMapper.mapFromEntity(fileService.deleteFile(fileId))
+    override suspend fun deleteFile(userId: String, fileId: String): File {
+        return fileNetworkMapper.mapFromEntity(fileService.deleteFile(userId, fileId))
     }
 
     override suspend fun getUrls(fileId: String): List<Url> {
