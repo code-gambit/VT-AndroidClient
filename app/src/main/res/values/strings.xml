@@ -49,4 +49,11 @@
     <string name="camera">Camera</string>
     <string name="document">Document</string>
     <string name="filter_by_date">Filter By Date</string>
+    <string name="currently_you_dont_have_any_file_add_file">No files yet uploaded\nAdd File</string>
+    <string name="search_files">Search files</string>
+    <string name="you_can_search_any_file_uploaded_any_time">You can search any file\nuploaded any time</string>
+    <string name="upload_file">Upload file</string>
+    <string name="you_can_upload_any_type_of_file">You can upload any type of file</string>
+    <string name="or_you_can_filter_files_based_on_dates_they_were_uploaded">or you can filter files\nbased on dates they were uploaded</string>
+    <string name="use_filters">Use filters</string>
 </resources>

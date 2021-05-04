@@ -2,7 +2,9 @@ package com.github.code.gambit.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -111,6 +113,22 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun getHomeView(): View {
+        // return binding.addFileButton
+        val item = binding.bottomNavigation.menu.get(0)
+        return item.actionView
+    }
+
+    fun getAddFab(): View {
+        return binding.addFileButton
+    }
+
+    fun getProfileView(): View {
+        // return binding.addFileButton
+        val item = binding.bottomNavigation.menu.get(2)
+        return item.actionView
     }
 
     fun animateBottomNav(offset: Float) {

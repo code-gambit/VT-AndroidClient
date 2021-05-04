@@ -15,6 +15,7 @@ buildscript {
     versions.timber = '4.7.1'
     versions.glide = '4.12.0'
     versions.shimmer = '0.5.0'
+    versions.spotlight = '2.0.5'
 
     repositories {
         google()
