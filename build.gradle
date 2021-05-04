@@ -14,6 +14,7 @@ buildscript {
     versions.cloudinary = '1.30.0'
     versions.timber = '4.7.1'
     versions.glide = '4.12.0'
+    versions.shimmer = '0.5.0'
 
     repositories {
         google()

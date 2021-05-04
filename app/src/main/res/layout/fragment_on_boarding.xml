@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.onboarding.OnBoardingFragment">
 
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pageContainerView"
         android:layout_width="match_parent"
@@ -33,9 +32,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/login_signup_button_color"
         android:contentDescription="@string/change_splashscreen_fab_desc"
         android:src="@drawable/ic_next"
-        android:backgroundTint="@color/login_signup_button_color"
         app:tint="@android:color/white"
         tools:ignore="RelativeOverlap" />
 
@@ -44,25 +43,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00000000"
-        android:minHeight="32dp"
-        android:minWidth="32dp"
-        android:src="@drawable/ic_baseline_navigate_before_24"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:contentDescription="@string/back_button"
-        android:visibility="gone"/>
+        android:minWidth="32dp"
+        android:minHeight="32dp"
+        android:padding="@dimen/root_side_margin"
+        android:src="@drawable/ic_baseline_navigate_before_24"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/skip_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/skip"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:alpha="0.5"
+        android:padding="@dimen/root_side_margin"
+        android:text="@string/skip"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         tools:ignore="RelativeOverlap" />
 </RelativeLayout>

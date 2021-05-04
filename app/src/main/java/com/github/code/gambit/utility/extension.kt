@@ -56,11 +56,15 @@ fun View.anim(delay: Long) {
 }
 
 fun View.hide() {
-    this.visibility = View.GONE
+    if (visibility != View.GONE) {
+        this.visibility = View.GONE
+    }
 }
 
 fun View.show() {
-    this.visibility = View.VISIBLE
+    if (visibility != View.VISIBLE) {
+        this.visibility = View.VISIBLE
+    }
 }
 
 fun View.toggleVisibility() {
@@ -107,7 +111,7 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(authData: AuthData): AuthSignUpO
         mutableListOf
         (
             AuthUserAttribute(AuthUserAttributeKey.email(), authData.email),
-            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), authData.thumbnail),
+            AuthUserAttribute(AuthUserAttributeKey.custom(AppConstant.AUTH_ATTRIBUTE_CUSTOM_PROFILE), authData.thumbnail),
             AuthUserAttribute(AuthUserAttributeKey.name(), authData.fullname)
         )
     ).build()

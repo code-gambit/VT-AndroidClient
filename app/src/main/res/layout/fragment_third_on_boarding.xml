@@ -3,35 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.OnBoardingTheme"
     tools:context=".ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment"
-    tools:viewBindingIgnore="true"
-    android:theme="@style/Theme.OnBoardingTheme">
-
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/large_text"
         style="@style/on_boarding_large_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/quick_and_swift"
-        android:layout_marginTop="64dp"/>
+        android:layout_marginTop="64dp"
+        android:text="@string/quick_and_swift" />
 
     <TextView
         android:id="@+id/info_text"
         style="@style/on_boarding_small_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/file_sharing_made_faster"
-        android:layout_below="@id/large_text"/>
+        android:layout_below="@id/large_text"
+        android:text="@string/file_sharing_made_faster" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_below="@id/info_text"
         android:layout_marginTop="@dimen/on_boarding_image_top_margin"
         android:contentDescription="@string/illustration"
-        android:src="@drawable/illus_sharing"
-        android:transitionName="image_transition"
-        android:layout_below="@id/info_text"/>
-
-
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/illus_quick_swift"
+        android:transitionName="image_transition" />
 </RelativeLayout>

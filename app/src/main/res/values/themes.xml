@@ -55,6 +55,7 @@
         <item name="android:transitionName">@string/on_boarding_small_text_transition_name</item>
         <item name="android:alpha">0.8</item>
         <item name="android:layout_marginStart">@dimen/on_boarding_text_start_margin</item>
+        <item name="android:layout_marginEnd">@dimen/root_side_margin</item>
     </style>
 
     <style name="search_input_theme" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">

@@ -1,6 +1,7 @@
 package com.github.code.gambit.ui.fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -42,12 +43,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         registerFilterComponents()
 
         binding.filterButton.setOnClickListener {
-            requireMainActivity().animateBottomNav(0f)
             showFilter()
         }
 
         binding.searchButton.setOnClickListener {
-            requireMainActivity().hideBottomNav()
             showSearch()
         }
 
@@ -58,40 +57,59 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         searchBinding.homeButton.setOnClickListener {
             requireMainActivity().onBackPressed()
         }
+
+        Handler().postDelayed(
+            {
+                requireMainActivity().showBottomNav()
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.visibility = View.GONE
+                binding.topContainer.visibility = View.VISIBLE
+                binding.swipeRefresh.visibility = View.VISIBLE
+            },
+            5000
+        )
     }
 
     private fun registerFilterComponents() {
         val bottomSheetBehavior = BottomSheetBehavior.from(filterBinding.bottomSheetContainer)
         bottomSheetBehavior.peekHeight = 0
-        bottomSheetBehavior.isHideable = false
+        bottomSheetBehavior.isHideable = true
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
                     binding.overlay.hide()
                 }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                binding.overlay.show()
                 binding.overlay.animate().alpha(slideOffset).setDuration(0).start()
                 requireMainActivity().animateBottomNav(1 - slideOffset)
             }
         })
     }
 
-    private fun showFilter() = setState(true)
-    fun closeFilter() = setState(false)
+    private fun showFilter() {
+        requireMainActivity().animateBottomNav(0f)
+        binding.overlay.show()
+        filterBinding.root.show()
+        setState(true)
+    }
+
+    fun closeFilter() {
+        setState(false)
+        requireMainActivity().animateBottomNav(1f)
+        binding.overlay.hide()
+        filterBinding.root.hide()
+    }
 
     private fun showSearch() {
-        if (!searchBinding.root.isVisible) {
-            searchBinding.root.show()
-        }
+        requireMainActivity().hideBottomNav()
+        searchBinding.root.show()
     }
 
     fun closeSearch() {
-        if (searchBinding.root.isVisible) {
-            searchBinding.root.hide()
-        }
+        searchBinding.root.hide()
         requireMainActivity().showBottomNav()
     }
 

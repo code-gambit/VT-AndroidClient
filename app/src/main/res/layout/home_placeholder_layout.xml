@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/root_side_margin"
+        android:layout_marginTop="@dimen/root_side_margin"
+        android:layout_marginEnd="@dimen/root_side_margin"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@color/white" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@color/transparent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_container">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/root_side_margin"
+            android:paddingTop="16dp"
+            android:paddingEnd="@dimen/root_side_margin"
+            android:visibility="gone"
+            tools:listitem="@layout/file_list_item" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_container"
+        android:layout_marginStart="@dimen/root_side_margin"
+        android:layout_marginTop="@dimen/root_side_margin"
+        android:layout_marginEnd="@dimen/root_side_margin"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+        <include layout="@layout/file_list_item_placeholder" />
+
+    </LinearLayout>
+</RelativeLayout>

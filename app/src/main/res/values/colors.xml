@@ -28,4 +28,6 @@
 
     <color name="raw_dark_grey">#9A9A9A</color>
 
+    <color name="placeholder_shimmer_bg">#dddddd</color>
+
 </resources>

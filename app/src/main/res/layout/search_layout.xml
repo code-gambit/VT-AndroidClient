@@ -65,5 +65,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/file_list_item" />
+        tools:listitem="@layout/file_list_item"
+        android:paddingStart="@dimen/root_side_margin"
+        android:paddingEnd="@dimen/root_side_margin"/>
 </LinearLayout>

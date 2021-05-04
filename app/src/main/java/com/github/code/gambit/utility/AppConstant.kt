@@ -1,6 +1,7 @@
 package com.github.code.gambit.utility
 
 object AppConstant {
+    const val AUTH_ATTRIBUTE_CUSTOM_PROFILE = "custom:profile_image"
     object RequestCode {
         const val PERMISSIONS = 101
     }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    android:layout_marginBottom="@dimen/root_side_margin"
+    app:cardBackgroundColor="@color/raw_white"
+    app:cardCornerRadius="22sp">
+
+    <RelativeLayout
+        android:id="@+id/file_icon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/file_icon"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/file_icon"
+            android:scaleType="centerCrop"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:background="@color/placeholder_shimmer_bg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/file_icon"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+            android:layout_marginEnd="42dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:background="@color/placeholder_shimmer_bg"
+                android:layout_marginBottom="2dp"/>
+
+            <View
+                android:layout_width="82dp"
+                android:layout_height="14dp"
+                android:background="@color/placeholder_shimmer_bg"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

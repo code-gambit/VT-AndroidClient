@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNavContainer.bottomNavHide()
                 }
                 R.id.homeFragment -> {
-                    binding.bottomNavContainer.bottomNavShow()
+                    // info bottomNav is hiddent until data is loading in homeFragment
+                    // binding.bottomNavContainer.bottomNavShow()
                 }
                 R.id.authFragment -> {
                     binding.bottomNavContainer.bottomNavHide()
@@ -113,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun animateBottomNav(offset: Float) {
-        if (this::_binding.isInitialized) {
+        if (this::_binding.isInitialized && offset.isFinite()) {
             binding.bottomLayout.animate().alpha(offset).scaleX(offset).scaleY(offset)
                 .setDuration(0).start()
         }

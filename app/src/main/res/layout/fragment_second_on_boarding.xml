@@ -3,16 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.OnBoardingTheme"
     tools:context=".ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment"
-    tools:viewBindingIgnore="true"
-    android:theme="@style/Theme.OnBoardingTheme">
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/illustration"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:contentDescription="@string/illustration"
-        android:src="@drawable/illus_security"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:src="@drawable/illus_safe_secure"
         android:transitionName="image_transition" />
 
     <TextView
@@ -20,15 +22,14 @@
         style="@style/on_boarding_large_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/safe_amp_secure"
-        android:layout_below="@id/illustration"/>
+        android:layout_below="@id/illustration"
+        android:text="@string/safe_amp_secure" />
 
     <TextView
         android:id="@+id/info_text"
         style="@style/on_boarding_small_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/keep_your_files_safe_with_us"
-        android:layout_below="@id/large_text"/>
-
+        android:layout_below="@id/large_text"
+        android:text="@string/keep_your_files_safe_with_us" />
 </RelativeLayout>

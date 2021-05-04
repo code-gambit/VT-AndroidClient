@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:viewBindingIgnore="true"
-    android:theme="@style/Theme.OnBoardingTheme">
+    android:theme="@style/Theme.OnBoardingTheme"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/first_text"
@@ -24,10 +24,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_below="@id/second_text"
         android:layout_marginTop="@dimen/on_boarding_image_top_margin"
         android:contentDescription="@string/illustration"
-        android:src="@drawable/illus_one" />
-
+        android:src="@drawable/illus_easy_share" />
 </RelativeLayout>
