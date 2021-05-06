@@ -114,4 +114,25 @@
         <item name="cornerFamily">rounded</item>
     </style>
 
+    <style name="spotlight.next.button" parent="Widget.MaterialComponents.Button">
+        <item name="android:text">Next</item>
+        <item name="android:textColor">@color/raw_black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/raw_white</item>
+    </style>
+
+    <style name="spotlight.txt" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/raw_white</item>
+        <item name="fontFamily">casual</item>
+        <item name="android:layout_marginStart">@dimen/root_side_margin</item>
+    </style>
+
+    <style name="spotlight.txt.large" parent="spotlight.txt">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="spotlight.txt.small" parent="spotlight.txt">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 </resources>

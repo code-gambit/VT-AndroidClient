@@ -86,4 +86,6 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$versions.glide"
 
     implementation "com.facebook.shimmer:shimmer:$versions.shimmer"
+
+    implementation "com.github.takusemba:spotlight:$versions.spotlight"
 }

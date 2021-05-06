@@ -3,6 +3,9 @@ package com.github.code.gambit.ui.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.github.code.gambit.PreferenceManager
@@ -16,6 +19,11 @@ import com.github.code.gambit.utility.hide
 import com.github.code.gambit.utility.show
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.takusemba.spotlight.OnSpotlightListener
+import com.takusemba.spotlight.OnTargetListener
+import com.takusemba.spotlight.Spotlight
+import com.takusemba.spotlight.Target
+import com.takusemba.spotlight.shape.Circle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -62,12 +70,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             {
                 requireMainActivity().showBottomNav()
                 binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.visibility = View.GONE
-                binding.topContainer.visibility = View.VISIBLE
-                binding.swipeRefresh.visibility = View.VISIBLE
+                binding.shimmerLayout.hide()
+                binding.topContainer.show()
+                binding.swipeRefresh.show()
+                binding.noFileIllustrationContainer.show()
             },
             5000
         )
+
+        Handler().postDelayed({ spotlight() }, 6000)
     }
 
     private fun registerFilterComponents() {
@@ -87,6 +98,58 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireMainActivity().animateBottomNav(1 - slideOffset)
             }
         })
+    }
+
+    private fun spotlight() {
+        val targets = ArrayList<Target>()
+
+        val firstRoot = FrameLayout(requireContext())
+        val first = layoutInflater.inflate(R.layout.home_first_spot, firstRoot)
+        val firstTarget = Target.Builder()
+            .setAnchor(requireMainActivity().getAddFab())
+            .setShape(Circle(120f))
+            .setOverlay(first)
+            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} })
+            .build()
+
+        val secondRoot = FrameLayout(requireContext())
+        val second = layoutInflater.inflate(R.layout.home_second_spot, secondRoot)
+        val secondTarget = Target.Builder()
+            .setAnchor(binding.searchButton)
+            .setShape(Circle(50f))
+            .setOverlay(second)
+            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} }).build()
+
+        val thirdTarget = Target.Builder()
+            .setAnchor(binding.filterButton)
+            .setShape(Circle(50f))
+            .setOverlay(second)
+            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} }).build()
+
+        targets.add(firstTarget)
+        targets.add(secondTarget)
+        targets.add(thirdTarget)
+
+        val spotlight = Spotlight.Builder(requireActivity())
+            .setTargets(targets)
+            .setBackgroundColorRes(R.color.spotlightBackground)
+            .setDuration(1000L)
+            .setAnimation(DecelerateInterpolator(2f))
+            .setOnSpotlightListener(object : OnSpotlightListener { override fun onStarted() {} override fun onEnded() {} }).build()
+
+        spotlight.start()
+
+        val nextTarget = View.OnClickListener { spotlight.next() }
+
+        // val closeSpotlight = View.OnClickListener { spotlight.finish() }
+
+        first.findViewById<View>(R.id.next_button).setOnClickListener(nextTarget)
+        second.findViewById<View>(R.id.next_button).setOnClickListener {
+            spotlight.next()
+            second.findViewById<TextView>(R.id.title_text).text = getString(R.string.use_filters)
+            second.findViewById<TextView>(R.id.info_text).text = getString(R.string.or_you_can_filter_files_based_on_dates_they_were_uploaded)
+            second.findViewById<View>(R.id.arrow).animate().rotation(105f).setDuration(500).start()
+        }
     }
 
     private fun showFilter() {

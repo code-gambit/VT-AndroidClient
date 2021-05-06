@@ -30,4 +30,6 @@
 
     <color name="placeholder_shimmer_bg">#dddddd</color>
 
+    <color name="spotlightBackground">#E9000000</color>
+
 </resources>
