@@ -19,7 +19,7 @@
         android:theme="@style/Theme.VTransfer">
         <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://@code-gambit"/>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

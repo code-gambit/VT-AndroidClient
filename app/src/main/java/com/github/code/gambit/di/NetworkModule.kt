@@ -30,8 +30,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetroFitBuilder(gson: Gson): Retrofit.Builder {
-        return Retrofit.Builder().baseUrl("https://open-api.xyz/placeholder/")
+    fun provideRetroFitBuilder(gson: Gson, @Named(AppConstant.Named.BASE_URL) baseUrl: String): Retrofit.Builder {
+        return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
@@ -39,13 +39,6 @@ object NetworkModule {
     @Provides
     fun provideApiService(retrofitBuilder: Retrofit.Builder): ApiService {
         return retrofitBuilder.build().create(ApiService::class.java)
-    }
-
-    @Singleton
-    @Named(AppConstant.Named.USER_ID)
-    @Provides
-    fun provideUserId(preferenceManager: PreferenceManager): String {
-        return preferenceManager.getUserId()!!
     }
 
     @Singleton
@@ -62,7 +55,15 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideUserService(apiService: ApiService, @Named("UID") userId: String): UserService {
+    fun provideUserService(apiService: ApiService, preferenceManager: PreferenceManager): UserService {
+        val userId = preferenceManager.getUserId()!!
         return UserServiceImpl(apiService, userId)
+    }
+
+    @Singleton
+    @Named(AppConstant.Named.BASE_URL)
+    @Provides
+    fun providesBaseUrl(): String {
+        return "https://mhv71te0rh.execute-api.ap-south-1.amazonaws.com/beta/"
     }
 }

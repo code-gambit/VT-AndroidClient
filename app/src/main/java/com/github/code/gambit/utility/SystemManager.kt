@@ -7,15 +7,17 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.provider.MediaStore
+import android.provider.OpenableColumns
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import java.io.File
 import javax.inject.Named
 
 class SystemManager
-constructor(val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)val permissions: List<String>) {
+constructor(private val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)val permissions: List<String>) {
 
     fun checkPermission(fragment: Fragment, permissionResult: (success: Boolean) -> Unit) {
         if (!checkAllPermissions()) {
@@ -53,6 +55,19 @@ constructor(val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)val perm
         launcher.launch(permissions.toTypedArray())
     }
 
+    fun requestFile(activity: ComponentActivity, result: (file: Uri?) -> Unit): ActivityResultLauncher<Intent> {
+        return activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val st = it.data!!.data
+                if (st == null) {
+                    result(null)
+                    return@registerForActivityResult
+                }
+                result(st)
+            }
+        }
+    }
+
     fun requestImage(fragment: Fragment, result: (imageUri: Uri?) -> Unit): ActivityResultLauncher<Intent> {
         return fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
@@ -63,8 +78,37 @@ constructor(val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)val perm
         }
     }
 
-    fun launchActivity(launcher: ActivityResultLauncher<Intent>) {
-        launcher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+    fun launchActivity(launcher: ActivityResultLauncher<Intent>, intent: Intent) {
+        launcher.launch(intent)
+    }
+
+    fun getFileName(context: Context, uri: Uri): String {
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        val nameIndex = cursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor.moveToFirst()
+        val name = cursor.getString(nameIndex)
+        cursor.close()
+        return name
+    }
+
+    fun getFileSize(context: Context, uri: Uri): Int {
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        val sizeIndex = cursor!!.getColumnIndex(OpenableColumns.SIZE)
+        cursor.moveToFirst()
+        val size = cursor.getInt(sizeIndex)
+        cursor.close()
+        return size
+    }
+
+    fun getFilePath(context: Context, uri: Uri): String {
+        val path = FileUtil.getPathFromLocalUri(context, uri)
+        if (path != null) {
+            return path
+        }
+        val ins = context.contentResolver.openInputStream(uri)
+        val file = File(context.externalCacheDir!!.absolutePath + "/test")
+        file.writeBytes(ins!!.readBytes())
+        return file.absolutePath
     }
 
     fun isOnline(): Boolean {

@@ -1,6 +1,7 @@
 package com.github.code.gambit.repository
 
 import android.net.Uri
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoJWTParser
 import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
@@ -42,6 +43,8 @@ constructor(
             return idResult
         }
         (idResult as ServiceResult.Success)
+        val id = CognitoJWTParser.getClaim(idResult.data, "sub")
+        preferenceManager.setUserId(id)
         preferenceManager.updateIdToken(idResult.data)
         preferenceManager.setAuthenticated(true)
         preferenceManager.updateLaunchState()

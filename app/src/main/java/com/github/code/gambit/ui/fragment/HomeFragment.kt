@@ -13,7 +13,7 @@ import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
-import com.github.code.gambit.ui.MainActivity
+import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.utility.exitFullscreen
 import com.github.code.gambit.utility.hide
 import com.github.code.gambit.utility.show
@@ -78,7 +78,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             5000
         )
 
-        Handler().postDelayed({ spotlight() }, 6000)
+        // Handler().postDelayed({ spotlight() }, 6000)
     }
 
     private fun registerFilterComponents() {

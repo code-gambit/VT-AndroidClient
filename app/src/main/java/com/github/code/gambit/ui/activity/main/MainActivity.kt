@@ -1,10 +1,14 @@
-package com.github.code.gambit.ui
+package com.github.code.gambit.ui.activity.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -15,11 +19,16 @@ import com.amplifyframework.hub.HubChannel
 import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.ActivityMainBinding
+import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.fragment.HomeFragment
+import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.bottomNavHide
 import com.github.code.gambit.utility.bottomNavShow
+import com.github.code.gambit.utility.snackbar
 import com.github.code.gambit.utility.toggleVisibility
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,22 +37,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
     private val binding get() = _binding
 
+    private val viewModel: MainViewModel by viewModels()
+
     @Inject
     lateinit var preferenceManager: PreferenceManager
 
+    @Inject
+    lateinit var systemManager: SystemManager
+
     private lateinit var navController: NavController
+
+    private lateinit var launcher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         registerAmplifyCallback()
+        registerForActivityResult()
         val hostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
-
-        binding.addFileButton.setOnClickListener { binding.fileUploadContainer.toggleVisibility() }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -64,28 +78,72 @@ class MainActivity : AppCompatActivity() {
         }
 
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
+
+        setupClickListeners()
+
+        viewModel.fileUploadState.observe(this) {
+            when (it) {
+                is FileUploadState.UploadStarted -> {
+                    binding.root.snackbar("Uploading File ${it.fileName}")
+                }
+                is FileUploadState.UploadSuccess -> {
+                    Toast.makeText(this, it.file.toString(), Toast.LENGTH_LONG).show()
+                    binding.root.snackbar("File successfully uploaded")
+                }
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.addFileButton.setOnClickListener { binding.fileUploadContainer.toggleVisibility() }
+
+        binding.galleryButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            systemManager.launchActivity(launcher, intent)
+        }
+        binding.cameraButton.setOnClickListener {
+            ImagePicker.with(this)
+                .cameraOnly()
+                .start { _, data ->
+                    uploadFile(data!!.data)
+                }
+        }
+        binding.documentButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.type = "*/*"
+
+            systemManager.launchActivity(launcher, intent)
+        }
+    }
+
+    private fun registerForActivityResult() {
+        launcher = systemManager.requestFile(this) { fileUri -> uploadFile(fileUri) }
+    }
+
+    private fun uploadFile(fileUri: Uri?) {
+        viewModel.setEvent(MainEvent.UploadFileEvent(fileUri!!))
     }
 
     private fun registerAmplifyCallback() {
         Amplify.Hub.subscribe(HubChannel.AUTH) { event ->
             when (event.name) {
                 InitializationStatus.SUCCEEDED.toString() ->
-                    Log.i("AuthQuickstart", "Auth successfully initialized")
+                    Timber.tag("AuthQuickstart").i("Auth successfully initialized")
                 InitializationStatus.FAILED.toString() ->
-                    Log.i("AuthQuickstart", "Auth failed to succeed")
+                    Timber.tag("AuthQuickstart").i("Auth failed to succeed")
                 else -> when (AuthChannelEventName.valueOf(event.name)) {
                     AuthChannelEventName.SIGNED_IN ->
-                        Log.i("AuthQuickstart", "Auth just became signed in")
+                        Timber.tag("AuthQuickstart").i("Auth just became signed in")
                     AuthChannelEventName.SIGNED_OUT -> {
                         preferenceManager.revokeAuthentication()
-                        Log.i("AuthQuickstart", "Auth just became signed out")
+                        Timber.tag("AuthQuickstart").i("Auth just became signed out")
                     }
                     AuthChannelEventName.SESSION_EXPIRED -> {
                         preferenceManager.revokeAuthentication()
-                        Log.i("AuthQuickstart", "Auth session just expired")
+                        Timber.tag("AuthQuickstart").i("Auth session just expired")
                     }
                     else ->
-                        Log.w("AuthQuickstart", "Unhandled Auth Event: ${event.name}")
+                        Timber.tag("AuthQuickstart").i("Unhandled Auth Event: ${event.name}")
                 }
             }
         }
@@ -115,20 +173,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getHomeView(): View {
-        // return binding.addFileButton
-        val item = binding.bottomNavigation.menu.get(0)
-        return item.actionView
-    }
-
     fun getAddFab(): View {
         return binding.addFileButton
-    }
-
-    fun getProfileView(): View {
-        // return binding.addFileButton
-        val item = binding.bottomNavigation.menu.get(2)
-        return item.actionView
     }
 
     fun animateBottomNav(offset: Float) {
