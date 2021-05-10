@@ -13,6 +13,7 @@ constructor() : EntityMapper<FileCacheEntity, File> {
         return File(
             id = entity.id,
             name = entity.name,
+            hash = entity.hash,
             type = entity.type,
             timestamp = entity.timestamp,
             size = entity.size,
@@ -24,6 +25,7 @@ constructor() : EntityMapper<FileCacheEntity, File> {
         return FileCacheEntity(
             id = domainModel.id,
             name = domainModel.name,
+            hash = domainModel.hash,
             type = domainModel.type,
             timestamp = domainModel.timestamp,
             size = domainModel.size,

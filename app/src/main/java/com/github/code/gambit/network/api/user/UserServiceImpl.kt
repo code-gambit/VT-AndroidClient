@@ -7,14 +7,14 @@ import javax.inject.Named
 class UserServiceImpl(val apiService: ApiService, @Named("UID") val userId: String) : UserService {
 
     override suspend fun getUser(): UserNetworkEntity {
-        return apiService.getUser(userId)
+        return apiService.getUser(userId).body
     }
 
     override suspend fun updateUser(userNetworkEntity: UserNetworkEntity): UserNetworkEntity {
-        return apiService.updateUser(userId, userNetworkEntity)
+        return apiService.updateUser(userId, userNetworkEntity).body
     }
 
     override suspend fun deleteUser(userId: String): UserNetworkEntity {
-        return apiService.deleteUser(userId)
+        return apiService.deleteUser(userId).body
     }
 }

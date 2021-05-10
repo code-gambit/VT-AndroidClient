@@ -15,6 +15,7 @@ constructor() : EntityMapper<FileNetworkEntity, File> {
         return File(
             id = "${entity.pk}__${entity.sk}".toBase64(),
             name = entity.ls1_sk,
+            hash = entity.hash,
             type = entity.type,
             timestamp = entity.sk.split("#")[1],
             size = "${entity.size} Mb",
@@ -26,6 +27,7 @@ constructor() : EntityMapper<FileNetworkEntity, File> {
         return FileNetworkEntity(
             pk = domainModel.id.fromBase64().split("__")[0],
             sk = "FILE#${domainModel.timestamp}",
+            hash = domainModel.hash,
             ls1_sk = domainModel.name,
             size = domainModel.size.split(" ")[0].toInt(),
             type = domainModel.type

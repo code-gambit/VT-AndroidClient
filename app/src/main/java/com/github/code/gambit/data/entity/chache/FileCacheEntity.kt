@@ -14,6 +14,9 @@ class FileCacheEntity(
     @ColumnInfo(name = "name")
     var name: String,
 
+    @ColumnInfo(name = "hash")
+    var hash: String,
+
     @ColumnInfo(name = "type")
     var type: String,
 
