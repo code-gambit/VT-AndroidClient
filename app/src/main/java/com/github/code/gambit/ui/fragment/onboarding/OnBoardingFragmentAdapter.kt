@@ -1,4 +1,4 @@
-package com.github.code.gambit
+package com.github.code.gambit.ui.fragment.onboarding
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

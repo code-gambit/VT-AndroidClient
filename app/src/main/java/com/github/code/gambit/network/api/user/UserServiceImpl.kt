@@ -2,9 +2,11 @@ package com.github.code.gambit.network.api.user
 
 import com.github.code.gambit.data.entity.network.UserNetworkEntity
 import com.github.code.gambit.network.api.ApiService
-import javax.inject.Named
+import com.github.code.gambit.utility.UserManager
 
-class UserServiceImpl(val apiService: ApiService, @Named("UID") val userId: String) : UserService {
+class UserServiceImpl(val apiService: ApiService, private val userManager: UserManager) : UserService {
+
+    private val userId get() = userManager.getUserId()
 
     override suspend fun getUser(): UserNetworkEntity {
         return apiService.getUser(userId).body
@@ -14,7 +16,7 @@ class UserServiceImpl(val apiService: ApiService, @Named("UID") val userId: Stri
         return apiService.updateUser(userId, userNetworkEntity).body
     }
 
-    override suspend fun deleteUser(userId: String): UserNetworkEntity {
+    override suspend fun deleteUser(): UserNetworkEntity {
         return apiService.deleteUser(userId).body
     }
 }

@@ -1,4 +1,4 @@
-package com.github.code.gambit
+package com.github.code.gambit.data
 
 interface EntityMapper<Entity, DomainModel> {
 

@@ -7,9 +7,9 @@ import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentSplashBinding
+import com.github.code.gambit.utility.UserManager
 import com.github.code.gambit.utility.anim
 import com.github.code.gambit.utility.fullscreen
 import com.github.code.gambit.utility.hide
@@ -26,7 +26,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private lateinit var textViews: List<View>
 
     @Inject
-    lateinit var preferenceManager: PreferenceManager
+    lateinit var userManager: UserManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,9 +51,9 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun next() {
-        if (preferenceManager.isFirstLaunch()) {
+        if (userManager.isFirstLaunch()) {
             showWelcomeUI()
-        } else if (!preferenceManager.isAuthenticated()) {
+        } else if (!userManager.isAuthenticated()) {
             navigateToAuth()
         } else {
             navigateToHome()

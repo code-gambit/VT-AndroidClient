@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.github.code.gambit.OnBoardingFragmentAdapter
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentOnBoardingBinding
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
@@ -24,9 +22,6 @@ class OnBoardingFragment : Fragment(R.layout.fragment_on_boarding) {
     private val binding get() = _binding
 
     private val currentItem get() = binding.pageContainerView.currentItem
-
-    @Inject
-    lateinit var preferenceManager: PreferenceManager
 
     @Inject
     lateinit var first: FirstOnBoardingFragment

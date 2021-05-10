@@ -1,6 +1,6 @@
 package com.github.code.gambit.data.mapper.cache
 
-import com.github.code.gambit.EntityMapper
+import com.github.code.gambit.data.EntityMapper
 import com.github.code.gambit.data.entity.chache.UrlCacheEntity
 import com.github.code.gambit.data.model.Url
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.github.code.gambit.data.mapper.network
 
-import com.github.code.gambit.EntityMapper
+import com.github.code.gambit.data.EntityMapper
 import com.github.code.gambit.data.entity.network.UrlNetworkEntity
 import com.github.code.gambit.data.model.Url
 import javax.inject.Inject

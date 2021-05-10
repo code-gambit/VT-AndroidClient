@@ -1,13 +1,13 @@
 package com.github.code.gambit.di
 
 import com.cloudinary.android.MediaManager
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.network.auth.AuthService
 import com.github.code.gambit.network.auth.AuthServiceImpl
 import com.github.code.gambit.network.image.ImageService
 import com.github.code.gambit.network.image.ImageServiceImpl
 import com.github.code.gambit.repository.AuthRepository
+import com.github.code.gambit.utility.UserManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,9 +41,9 @@ object RepositoryModule {
     fun provideAuthRepository(
         authService: AuthService,
         imageService: ImageService,
-        preferenceManager: PreferenceManager,
+        userManager: UserManager,
         userAttributeMapper: UserAttributeMapper
     ): AuthRepository {
-        return AuthRepository(authService, imageService, preferenceManager, userAttributeMapper)
+        return AuthRepository(authService, imageService, userManager, userAttributeMapper)
     }
 }
