@@ -7,13 +7,13 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.VTransfer
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.network.FileUploadWorker
 import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.SystemManager
+import com.github.code.gambit.utility.UserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,7 +35,7 @@ constructor(
     lateinit var systemManager: SystemManager
 
     @Inject
-    lateinit var preferenceManager: PreferenceManager
+    lateinit var userManager: UserManager
 
     fun setEvent(event: MainEvent) {
         when (event) {
@@ -68,7 +68,7 @@ constructor(
         val path = systemManager.getFilePath(getApplication(), uri)
         val fileName = systemManager.getFileName(getApplication(), uri)
         val fileSize = systemManager.getFileSize(getApplication(), uri)
-        val userId = preferenceManager.getUserId()
+        val userId = userManager.getUserId()
         builder.let {
             it.putString(AppConstant.Worker.USER_ID, userId)
             it.putString(AppConstant.Worker.FILE_NAME_KEY, fileName)

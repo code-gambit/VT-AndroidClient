@@ -1,7 +1,11 @@
 package com.github.code.gambit.di
 
-import com.github.code.gambit.PreferenceManager
+import com.github.code.gambit.data.mapper.network.FileNetworkMapper
+import com.github.code.gambit.data.mapper.network.UrlNetworkMapper
+import com.github.code.gambit.data.mapper.network.UserNetworkMapper
 import com.github.code.gambit.network.api.ApiService
+import com.github.code.gambit.network.api.NetworkDataSource
+import com.github.code.gambit.network.api.NetworkDataSourceImpl
 import com.github.code.gambit.network.api.file.FileService
 import com.github.code.gambit.network.api.file.FileServiceImpl
 import com.github.code.gambit.network.api.url.UrlService
@@ -9,6 +13,7 @@ import com.github.code.gambit.network.api.url.UrlServiceImpl
 import com.github.code.gambit.network.api.user.UserService
 import com.github.code.gambit.network.api.user.UserServiceImpl
 import com.github.code.gambit.utility.AppConstant
+import com.github.code.gambit.utility.UserManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -43,8 +48,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideFileService(apiService: ApiService): FileService {
-        return FileServiceImpl(apiService)
+    fun provideFileService(apiService: ApiService, userManager: UserManager): FileService {
+        return FileServiceImpl(apiService, userManager)
     }
 
     @Singleton
@@ -55,9 +60,21 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideUserService(apiService: ApiService, preferenceManager: PreferenceManager): UserService {
-        val userId = preferenceManager.getUserId()!!
-        return UserServiceImpl(apiService, userId)
+    fun provideUserService(apiService: ApiService, userManager: UserManager): UserService {
+        return UserServiceImpl(apiService, userManager)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkDataSource(
+        fileService: FileService,
+        urlService: UrlService,
+        userService: UserService,
+        fileNetworkMapper: FileNetworkMapper,
+        urlNetworkMapper: UrlNetworkMapper,
+        userNetworkMapper: UserNetworkMapper
+    ): NetworkDataSource {
+        return NetworkDataSourceImpl(fileService, urlService, userService, fileNetworkMapper, urlNetworkMapper, userNetworkMapper)
     }
 
     @Singleton

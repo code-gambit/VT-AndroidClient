@@ -14,21 +14,21 @@ class NetworkDataSourceImpl(
     val fileService: FileService,
     val urlService: UrlService,
     val userService: UserService,
-    val fileNetworkMapper: FileNetworkMapper,
-    val urlNetworkMapper: UrlNetworkMapper,
-    val userNetworkMapper: UserNetworkMapper
+    private val fileNetworkMapper: FileNetworkMapper,
+    private val urlNetworkMapper: UrlNetworkMapper,
+    private val userNetworkMapper: UserNetworkMapper
 ) : NetworkDataSource {
 
-    override suspend fun getFiles(userId: String): List<File> {
-        return fileNetworkMapper.mapFromEntityList(fileService.getFiles(userId))
+    override suspend fun getFiles(): List<File> {
+        return fileNetworkMapper.mapFromEntityList(fileService.getFiles())
     }
 
-    override suspend fun uploadFile(userId: String, file: File): File {
-        return fileNetworkMapper.mapFromEntity(fileService.uploadFile(userId, fileNetworkMapper.mapToEntity(file)))
+    override suspend fun uploadFile(file: File): File {
+        return fileNetworkMapper.mapFromEntity(fileService.uploadFile(fileNetworkMapper.mapToEntity(file)))
     }
 
-    override suspend fun deleteFile(userId: String, fileId: String): File {
-        return fileNetworkMapper.mapFromEntity(fileService.deleteFile(userId, fileId))
+    override suspend fun deleteFile(fileId: String): File {
+        return fileNetworkMapper.mapFromEntity(fileService.deleteFile(fileId))
     }
 
     override suspend fun getUrls(fileId: String): List<Url> {
@@ -55,7 +55,7 @@ class NetworkDataSourceImpl(
         return userNetworkMapper.mapFromEntity(userService.updateUser(userNetworkMapper.mapToEntity(user)))
     }
 
-    override suspend fun deleteUser(userId: String): User {
-        return userNetworkMapper.mapFromEntity(userService.deleteUser(userId))
+    override suspend fun deleteUser(): User {
+        return userNetworkMapper.mapFromEntity(userService.deleteUser())
     }
 }

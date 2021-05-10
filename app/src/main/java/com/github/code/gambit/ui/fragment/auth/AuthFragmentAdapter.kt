@@ -1,11 +1,9 @@
-package com.github.code.gambit.ui
+package com.github.code.gambit.ui.fragment.auth
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.github.code.gambit.ui.fragment.auth.LoginFragment
-import com.github.code.gambit.ui.fragment.auth.SignUpFragment
 
 class AuthFragmentAdapter(
     fragmentManager: FragmentManager,

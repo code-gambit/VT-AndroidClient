@@ -16,14 +16,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.databinding.EmailVerificationLayoutBinding
 import com.github.code.gambit.databinding.FragmentAuthBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
-import com.github.code.gambit.ui.AuthFragmentAdapter
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.exitFullscreen
 import com.github.code.gambit.utility.setStatusColor
@@ -50,9 +48,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private lateinit var mOtpTextView: OtpTextView
     private lateinit var dialogView: View
     private lateinit var dialog: Dialog
-
-    @Inject
-    lateinit var preferenceManager: PreferenceManager
 
     @Inject
     lateinit var permissionManager: SystemManager

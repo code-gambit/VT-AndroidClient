@@ -18,6 +18,7 @@ import com.github.code.gambit.network.api.file.FileService
 import com.github.code.gambit.network.api.file.FileServiceImpl
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.utility.AppConstant
+import com.github.code.gambit.utility.UserManager
 import com.google.gson.GsonBuilder
 import io.ipfs.kotlin.defaults.InfuraIPFS
 import retrofit2.Retrofit
@@ -30,15 +31,13 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
     /**
      * @inputData filePath: String is the absolute file path
      * @inputData fileName: String name of the file
-     * @inputData userId: String Id of the user used for api call
      * @inputData fileSize: Int size of the file in Mb
      *
-     * @outputData data: Data toString of FileNetworkEntitiy
+     * @outputData data: Data toString of FileNetworkEntity
      */
     override suspend fun doWork(): Result {
         val filePath: String = inputData.getString(AppConstant.Worker.FILE_URI_KEY)!!
         val fileName: String = inputData.getString(AppConstant.Worker.FILE_NAME_KEY)!!
-        val userId: String = inputData.getString(AppConstant.Worker.USER_ID)!!
         val fileSize: Int = inputData.getInt(AppConstant.Worker.FILE_SIZE_KEY, -1)
         makeStatusNotification(1, "New file", "Uploading file $fileName of size $fileSize mb", true)
         val file = File(filePath)
@@ -46,7 +45,7 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
         // val res = "test-hash-to-avoid-unnecessary-server-call"
         Timber.tag("out").i(res)
         val fileService = getFileService()
-        val task = fileService.uploadFile(userId, FileNetworkEntity("", "", res, fileName, fileSize, fileName.split(".")[1]))
+        val task = fileService.uploadFile(FileNetworkEntity("", "", res, fileName, fileSize, fileName.split(".")[1]))
         val data = workDataOf(AppConstant.Worker.FILE_OUTPUT_KEY to task.toString())
         makeStatusNotification(1, "File Uploaded", task.toString(), false)
         return Result.success(data)
@@ -64,7 +63,7 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
     }
 
     private fun getFileService(): FileService {
-        return FileServiceImpl(getApiService())
+        return FileServiceImpl(getApiService(), UserManager(applicationContext))
     }
 
     /**

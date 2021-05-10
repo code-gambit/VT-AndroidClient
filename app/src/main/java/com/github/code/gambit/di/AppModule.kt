@@ -3,13 +3,13 @@ package com.github.code.gambit.di
 import android.Manifest
 import android.content.Context
 import com.cloudinary.android.MediaManager
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.VTransfer
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment
 import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.SystemManager
+import com.github.code.gambit.utility.UserManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,8 +30,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providePrefManager(@ApplicationContext context: Context): PreferenceManager {
-        return PreferenceManager(context)
+    fun provideUserManager(@ApplicationContext context: Context): UserManager {
+        return UserManager(context)
     }
 
     @Singleton

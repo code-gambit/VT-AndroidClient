@@ -16,12 +16,12 @@ import com.amplifyframework.auth.AuthChannelEventName
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.InitializationStatus
 import com.amplifyframework.hub.HubChannel
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.fragment.HomeFragment
 import com.github.code.gambit.utility.SystemManager
+import com.github.code.gambit.utility.UserManager
 import com.github.code.gambit.utility.bottomNavHide
 import com.github.code.gambit.utility.bottomNavShow
 import com.github.code.gambit.utility.snackbar
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     @Inject
-    lateinit var preferenceManager: PreferenceManager
+    lateinit var userManager: UserManager
 
     @Inject
     lateinit var systemManager: SystemManager
@@ -135,11 +135,11 @@ class MainActivity : AppCompatActivity() {
                     AuthChannelEventName.SIGNED_IN ->
                         Timber.tag("AuthQuickstart").i("Auth just became signed in")
                     AuthChannelEventName.SIGNED_OUT -> {
-                        preferenceManager.revokeAuthentication()
+                        userManager.revokeAuthentication()
                         Timber.tag("AuthQuickstart").i("Auth just became signed out")
                     }
                     AuthChannelEventName.SESSION_EXPIRED -> {
-                        preferenceManager.revokeAuthentication()
+                        userManager.revokeAuthentication()
                         Timber.tag("AuthQuickstart").i("Auth session just expired")
                     }
                     else ->

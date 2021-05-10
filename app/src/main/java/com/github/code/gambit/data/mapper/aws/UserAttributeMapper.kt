@@ -2,7 +2,7 @@ package com.github.code.gambit.data.mapper.aws
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
-import com.github.code.gambit.EntityMapper
+import com.github.code.gambit.data.EntityMapper
 import com.github.code.gambit.data.model.User
 import javax.inject.Inject
 import kotlin.Deprecated as KotlinDeprecated

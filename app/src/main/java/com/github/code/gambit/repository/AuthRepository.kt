@@ -2,26 +2,26 @@ package com.github.code.gambit.repository
 
 import android.net.Uri
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoJWTParser
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.ServiceResult
 import com.github.code.gambit.network.auth.AuthService
 import com.github.code.gambit.network.image.ImageService
+import com.github.code.gambit.utility.UserManager
 
 class AuthRepository
 
 constructor(
     private val authService: AuthService,
     private val imageService: ImageService,
-    private val preferenceManager: PreferenceManager,
+    private val userManager: UserManager,
     private val userAttributeMapper: UserAttributeMapper
 ) {
 
-    val isUserLoggedIn get() = preferenceManager.isAuthenticated()
-    val getToken get() = preferenceManager.getIdToken()
-    val revokeAuth = { preferenceManager.revokeAuthentication() }
+    val isUserLoggedIn get() = userManager.isAuthenticated()
+    val getToken get() = userManager.getIdToken()
+    val revokeAuth = { userManager.revokeAuthentication() }
 
     suspend fun login(authData: AuthData): ServiceResult<User> {
         val res = authService.login(authData)
@@ -36,7 +36,7 @@ constructor(
         }
         (userFetchResult as ServiceResult.Success)
         val user = userAttributeMapper.mapFromEntity(userFetchResult.data)
-        preferenceManager.setUser(user)
+        userManager.setUser(user)
 
         val idResult = authService.fetchIdToken()
         if (idResult is ServiceResult.Error) {
@@ -44,10 +44,10 @@ constructor(
         }
         (idResult as ServiceResult.Success)
         val id = CognitoJWTParser.getClaim(idResult.data, "sub")
-        preferenceManager.setUserId(id)
-        preferenceManager.updateIdToken(idResult.data)
-        preferenceManager.setAuthenticated(true)
-        preferenceManager.updateLaunchState()
+        userManager.setUserId(id)
+        userManager.updateIdToken(idResult.data)
+        userManager.setAuthenticated(true)
+        userManager.updateLaunchState()
 
         return ServiceResult.Success(user)
     }

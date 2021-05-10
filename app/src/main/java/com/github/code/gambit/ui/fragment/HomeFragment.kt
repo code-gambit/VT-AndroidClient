@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.github.code.gambit.PreferenceManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
@@ -25,7 +24,6 @@ import com.takusemba.spotlight.Spotlight
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.Circle
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -38,9 +36,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var _searchBinding: SearchLayoutBinding
     private val searchBinding get() = _searchBinding
-
-    @Inject
-    lateinit var preferenceManager: PreferenceManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
