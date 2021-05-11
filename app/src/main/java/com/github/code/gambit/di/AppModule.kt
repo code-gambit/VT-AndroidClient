@@ -9,7 +9,7 @@ import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardin
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment
 import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.SystemManager
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

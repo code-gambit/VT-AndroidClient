@@ -9,7 +9,7 @@ import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
 import com.github.code.gambit.helper.auth.ServiceResult
-import com.github.code.gambit.repository.AuthRepository
+import com.github.code.gambit.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

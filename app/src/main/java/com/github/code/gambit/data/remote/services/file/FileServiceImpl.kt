@@ -1,8 +1,8 @@
-package com.github.code.gambit.network.api.file
+package com.github.code.gambit.data.remote.services.file
 
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
-import com.github.code.gambit.network.api.ApiService
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.data.remote.services.ApiService
+import com.github.code.gambit.utility.sharedpreference.UserManager
 
 class FileServiceImpl(
     val apiService: ApiService,

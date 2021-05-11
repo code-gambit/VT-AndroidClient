@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentSplashBinding
-import com.github.code.gambit.utility.UserManager
-import com.github.code.gambit.utility.anim
-import com.github.code.gambit.utility.fullscreen
-import com.github.code.gambit.utility.hide
-import com.github.code.gambit.utility.show
+import com.github.code.gambit.utility.extention.anim
+import com.github.code.gambit.utility.extention.fullscreen
+import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.api.url
+package com.github.code.gambit.data.remote.services.url
 
 import com.github.code.gambit.data.entity.network.UrlNetworkEntity
 

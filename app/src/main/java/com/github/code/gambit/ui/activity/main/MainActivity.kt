@@ -21,11 +21,11 @@ import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.fragment.HomeFragment
 import com.github.code.gambit.utility.SystemManager
-import com.github.code.gambit.utility.UserManager
-import com.github.code.gambit.utility.bottomNavHide
-import com.github.code.gambit.utility.bottomNavShow
-import com.github.code.gambit.utility.snackbar
-import com.github.code.gambit.utility.toggleVisibility
+import com.github.code.gambit.utility.extention.bottomNavHide
+import com.github.code.gambit.utility.extention.bottomNavShow
+import com.github.code.gambit.utility.extention.snackbar
+import com.github.code.gambit.utility.extention.toggleVisibility
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

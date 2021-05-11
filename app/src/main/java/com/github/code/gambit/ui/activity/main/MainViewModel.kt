@@ -8,12 +8,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.github.code.gambit.VTransfer
+import com.github.code.gambit.backgroundtask.FileUploadWorker
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.helper.file.FileUploadState
-import com.github.code.gambit.network.FileUploadWorker
 import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.SystemManager
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject

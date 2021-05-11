@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.image
+package com.github.code.gambit.data.remote.services.image
 
 import android.net.Uri
 import com.cloudinary.android.MediaManager

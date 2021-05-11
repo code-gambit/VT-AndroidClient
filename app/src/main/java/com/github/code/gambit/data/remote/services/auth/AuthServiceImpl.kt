@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.auth
+package com.github.code.gambit.data.remote.services.auth
 
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttribute
@@ -8,7 +8,7 @@ import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.kotlin.core.Amplify
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.ServiceResult
-import com.github.code.gambit.utility.defaultBuilder
+import com.github.code.gambit.utility.extention.defaultBuilder
 
 class AuthServiceImpl : AuthService {
 

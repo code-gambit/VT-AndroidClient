@@ -1,4 +1,4 @@
-package com.github.code.gambit.utility
+package com.github.code.gambit.utility.sharedpreference
 
 import android.content.Context
 import com.github.code.gambit.data.model.User

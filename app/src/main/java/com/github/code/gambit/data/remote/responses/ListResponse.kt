@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.api
+package com.github.code.gambit.data.remote.responses
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

@@ -1,7 +1,7 @@
-package com.github.code.gambit.network.api.url
+package com.github.code.gambit.data.remote.services.url
 
 import com.github.code.gambit.data.entity.network.UrlNetworkEntity
-import com.github.code.gambit.network.api.ApiService
+import com.github.code.gambit.data.remote.services.ApiService
 
 class UrlServiceImpl(val apiService: ApiService) : UrlService {
 

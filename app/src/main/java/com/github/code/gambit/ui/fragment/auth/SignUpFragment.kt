@@ -11,7 +11,7 @@ import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentSignUpBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.utility.SystemManager
-import com.github.code.gambit.utility.snackbar
+import com.github.code.gambit.utility.extention.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
