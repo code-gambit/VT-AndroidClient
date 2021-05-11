@@ -13,9 +13,9 @@ import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
 import com.github.code.gambit.ui.activity.main.MainActivity
-import com.github.code.gambit.utility.exitFullscreen
-import com.github.code.gambit.utility.hide
-import com.github.code.gambit.utility.show
+import com.github.code.gambit.utility.extention.exitFullscreen
+import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.show
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.takusemba.spotlight.OnSpotlightListener

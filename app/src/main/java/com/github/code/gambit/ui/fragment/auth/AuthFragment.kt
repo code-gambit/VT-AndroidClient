@@ -23,10 +23,10 @@ import com.github.code.gambit.databinding.FragmentAuthBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
 import com.github.code.gambit.utility.SystemManager
-import com.github.code.gambit.utility.exitFullscreen
-import com.github.code.gambit.utility.setStatusColor
-import com.github.code.gambit.utility.show
-import com.github.code.gambit.utility.snackbar
+import com.github.code.gambit.utility.extention.exitFullscreen
+import com.github.code.gambit.utility.extention.setStatusColor
+import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.extention.snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

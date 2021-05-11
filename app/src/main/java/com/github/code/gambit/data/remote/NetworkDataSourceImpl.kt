@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.api
+package com.github.code.gambit.data.remote
 
 import com.github.code.gambit.data.mapper.network.FileNetworkMapper
 import com.github.code.gambit.data.mapper.network.UrlNetworkMapper
@@ -6,9 +6,9 @@ import com.github.code.gambit.data.mapper.network.UserNetworkMapper
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.data.model.User
-import com.github.code.gambit.network.api.file.FileService
-import com.github.code.gambit.network.api.url.UrlService
-import com.github.code.gambit.network.api.user.UserService
+import com.github.code.gambit.data.remote.services.file.FileService
+import com.github.code.gambit.data.remote.services.url.UrlService
+import com.github.code.gambit.data.remote.services.user.UserService
 
 class NetworkDataSourceImpl(
     val fileService: FileService,

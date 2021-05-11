@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.auth
+package com.github.code.gambit.data.remote.services.auth
 
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession

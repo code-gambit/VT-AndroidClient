@@ -1,8 +1,8 @@
-package com.github.code.gambit.network.api.user
+package com.github.code.gambit.data.remote.services.user
 
 import com.github.code.gambit.data.entity.network.UserNetworkEntity
-import com.github.code.gambit.network.api.ApiService
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.data.remote.services.ApiService
+import com.github.code.gambit.utility.sharedpreference.UserManager
 
 class UserServiceImpl(val apiService: ApiService, private val userManager: UserManager) : UserService {
 

@@ -1,4 +1,4 @@
-package com.github.code.gambit.network.api
+package com.github.code.gambit.data.remote
 
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url

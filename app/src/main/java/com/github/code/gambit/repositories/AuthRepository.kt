@@ -1,14 +1,14 @@
-package com.github.code.gambit.repository
+package com.github.code.gambit.repositories
 
 import android.net.Uri
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoJWTParser
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
+import com.github.code.gambit.data.remote.services.auth.AuthService
+import com.github.code.gambit.data.remote.services.image.ImageService
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.ServiceResult
-import com.github.code.gambit.network.auth.AuthService
-import com.github.code.gambit.network.image.ImageService
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.utility.sharedpreference.UserManager
 
 class AuthRepository
 

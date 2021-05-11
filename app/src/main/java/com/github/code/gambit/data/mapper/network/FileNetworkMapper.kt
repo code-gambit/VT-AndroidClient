@@ -3,8 +3,8 @@ package com.github.code.gambit.data.mapper.network
 import com.github.code.gambit.data.EntityMapper
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.data.model.File
-import com.github.code.gambit.utility.fromBase64
-import com.github.code.gambit.utility.toBase64
+import com.github.code.gambit.utility.extention.fromBase64
+import com.github.code.gambit.utility.extention.toBase64
 import javax.inject.Inject
 
 class FileNetworkMapper

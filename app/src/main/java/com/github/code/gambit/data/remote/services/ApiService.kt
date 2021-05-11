@@ -1,8 +1,10 @@
-package com.github.code.gambit.network.api
+package com.github.code.gambit.data.remote.services
 
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.data.entity.network.UrlNetworkEntity
 import com.github.code.gambit.data.entity.network.UserNetworkEntity
+import com.github.code.gambit.data.remote.responses.ListResponse
+import com.github.code.gambit.data.remote.responses.Response
 import com.github.code.gambit.utility.AppConstant
 import retrofit2.http.Body
 import retrofit2.http.DELETE

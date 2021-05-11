@@ -2,12 +2,12 @@ package com.github.code.gambit.di
 
 import com.cloudinary.android.MediaManager
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
-import com.github.code.gambit.network.auth.AuthService
-import com.github.code.gambit.network.auth.AuthServiceImpl
-import com.github.code.gambit.network.image.ImageService
-import com.github.code.gambit.network.image.ImageServiceImpl
-import com.github.code.gambit.repository.AuthRepository
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.data.remote.services.auth.AuthService
+import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
+import com.github.code.gambit.data.remote.services.image.ImageService
+import com.github.code.gambit.data.remote.services.image.ImageServiceImpl
+import com.github.code.gambit.repositories.AuthRepository
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

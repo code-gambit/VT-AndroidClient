@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentLoginBinding
 import com.github.code.gambit.helper.auth.AuthData
-import com.github.code.gambit.utility.snackbar
+import com.github.code.gambit.utility.extention.snackbar
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 

@@ -9,8 +9,8 @@ import com.github.code.gambit.databinding.FragmentOnBoardingBinding
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment
-import com.github.code.gambit.utility.hide
-import com.github.code.gambit.utility.show
+import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.show
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

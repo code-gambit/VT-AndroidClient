@@ -1,4 +1,4 @@
-package com.github.code.gambit.network
+package com.github.code.gambit.backgroundtask
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,12 +13,12 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.github.code.gambit.R
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
-import com.github.code.gambit.network.api.ApiService
-import com.github.code.gambit.network.api.file.FileService
-import com.github.code.gambit.network.api.file.FileServiceImpl
+import com.github.code.gambit.data.remote.services.ApiService
+import com.github.code.gambit.data.remote.services.file.FileService
+import com.github.code.gambit.data.remote.services.file.FileServiceImpl
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.utility.AppConstant
-import com.github.code.gambit.utility.UserManager
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import com.google.gson.GsonBuilder
 import io.ipfs.kotlin.defaults.InfuraIPFS
 import retrofit2.Retrofit
