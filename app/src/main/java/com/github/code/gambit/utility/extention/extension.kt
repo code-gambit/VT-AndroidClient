@@ -7,6 +7,7 @@ import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.utility.AppConstant
 import java.util.Base64
+import kotlin.math.pow
 
 fun String.toBase64(): String {
     val byteArray = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -42,8 +43,11 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(user: User): AuthSignUpOptions {
         mutableListOf
         (
             AuthUserAttribute(AuthUserAttributeKey.email(), user.email),
-            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), user.thumbnail),
             AuthUserAttribute(AuthUserAttributeKey.name(), user.name)
         )
     ).build()
+}
+
+fun Int.byteToMb(): String {
+    return String.format("%.2f", this.div(10.0.pow(6.0)))
 }

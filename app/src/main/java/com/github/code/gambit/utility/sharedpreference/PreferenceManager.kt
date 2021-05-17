@@ -2,6 +2,7 @@ package com.github.code.gambit.utility.sharedpreference
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.github.code.gambit.data.model.User
 import java.lang.IllegalStateException
 
 abstract class PreferenceManager(var context: Context) {
@@ -18,6 +19,7 @@ abstract class PreferenceManager(var context: Context) {
             is Boolean -> {
                 editor.putBoolean(key.value, value).apply()
             }
+            else -> editor.putString(key.value, value.toString()).apply()
         }
     }
 
@@ -32,6 +34,10 @@ abstract class PreferenceManager(var context: Context) {
             Int::class -> {
                 pref.getInt(key.value, -1) as T
             }
+            User::class -> {
+                val st = pref.getString(key.value, "")!!
+                User.fromString(st) as T
+            }
             else -> throw IllegalStateException("Only supports String, Boolean and Int")
         }
     }
@@ -41,6 +47,7 @@ enum class Key(val value: String) {
     LAUNCHSTATE("IS-FIRST-LAUNCH"),
     AUTHSTATE("IS-AUTHENTICATED"),
     EMAIL("EMAIL"),
+    USER("USER"),
     USERID("USER-ID"),
     USERNAME("USER-NAME"),
     TOKEN("ID-TOKEN")

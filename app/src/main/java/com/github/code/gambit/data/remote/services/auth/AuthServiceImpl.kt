@@ -2,12 +2,13 @@ package com.github.code.gambit.data.remote.services.auth
 
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttribute
+import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.auth.cognito.AWSCognitoUserPoolTokens
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.kotlin.core.Amplify
+import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.auth.AuthData
-import com.github.code.gambit.helper.auth.ServiceResult
 import com.github.code.gambit.utility.extention.defaultBuilder
 
 class AuthServiceImpl : AuthService {
@@ -35,6 +36,29 @@ class AuthServiceImpl : AuthService {
                 ServiceResult.Error(Exception("SignUp incomplete + ${result.nextStep}"))
             }
         } catch (e: AuthException) {
+            ServiceResult.Error(e)
+        }
+    }
+
+    override suspend fun resetPassword(oldPassword: String, newPassword: String): ServiceResult<Unit> {
+        return try {
+            val result = Amplify.Auth.updatePassword(oldPassword, newPassword)
+            ServiceResult.Success(result)
+        } catch (e: java.lang.Exception) {
+            ServiceResult.Error(e)
+        }
+    }
+
+    override suspend fun updateUserName(fullName: String): ServiceResult<String> {
+        return try {
+            val attribute = AuthUserAttribute(AuthUserAttributeKey.name(), fullName)
+            val result = Amplify.Auth.updateUserAttribute(attribute)
+            if (result.isUpdated) {
+                ServiceResult.Success(fullName)
+            } else {
+                ServiceResult.Error(AuthException("User name update failed", "Switch you internet connection"))
+            }
+        } catch (e: java.lang.Exception) {
             ServiceResult.Error(e)
         }
     }

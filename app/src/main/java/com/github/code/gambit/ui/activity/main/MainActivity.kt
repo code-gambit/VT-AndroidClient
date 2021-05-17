@@ -187,4 +187,8 @@ class MainActivity : AppCompatActivity() {
     fun showBottomNav() = binding.bottomNavContainer.bottomNavShow()
 
     fun hideBottomNav() = binding.bottomNavContainer.bottomNavHide()
+
+    fun showSnackBar(message: String) {
+        binding.root.snackbar(message, binding.bottomNavContainer)
+    }
 }

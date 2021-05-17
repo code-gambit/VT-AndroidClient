@@ -6,6 +6,10 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('apikey.properties').newDataInputStream())
+def apiKey = properties.getProperty('API_KEY')
+
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.2"
@@ -16,6 +20,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "API_KEY", apiKey
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +56,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     implementation "androidx.room:room-runtime:$versions.room"
     kapt "androidx.room:room-compiler:$versions.room"
@@ -98,4 +106,6 @@ dependencies {
 
     implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
     implementation 'androidx.documentfile:documentfile:1.0.1'
+
+    testImplementation "com.google.truth:truth:$versions.truth"
 }

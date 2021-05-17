@@ -1,4 +1,4 @@
-package com.github.code.gambit.helper.auth
+package com.github.code.gambit.helper
 
 sealed class ServiceResult<out R> {
     data class Success<out T>(val data: T) : ServiceResult<T>()

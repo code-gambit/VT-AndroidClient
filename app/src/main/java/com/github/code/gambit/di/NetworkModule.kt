@@ -1,11 +1,14 @@
 package com.github.code.gambit.di
 
+import android.content.Context
 import com.github.code.gambit.data.mapper.network.FileNetworkMapper
 import com.github.code.gambit.data.mapper.network.UrlNetworkMapper
 import com.github.code.gambit.data.mapper.network.UserNetworkMapper
+import com.github.code.gambit.data.remote.ApiGatewayInterceptor
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.NetworkDataSourceImpl
 import com.github.code.gambit.data.remote.services.ApiService
+import com.github.code.gambit.data.remote.services.NetworkInterceptor
 import com.github.code.gambit.data.remote.services.file.FileService
 import com.github.code.gambit.data.remote.services.file.FileServiceImpl
 import com.github.code.gambit.data.remote.services.url.UrlService
@@ -19,10 +22,11 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -35,14 +39,41 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetroFitBuilder(gson: Gson, @Named(AppConstant.Named.BASE_URL) baseUrl: String): Retrofit.Builder {
-        return Retrofit.Builder().baseUrl(baseUrl)
+    fun provideApiGatewayInterceptor(): ApiGatewayInterceptor {
+        return ApiGatewayInterceptor()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkInterceptor(
+        @ApplicationContext context: Context
+    ): NetworkInterceptor {
+        return NetworkInterceptor(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        apiGatewayInterceptor: ApiGatewayInterceptor,
+        networkInterceptor: NetworkInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(apiGatewayInterceptor)
+            .addInterceptor(networkInterceptor).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetroFitBuilder(
+        gson: Gson,
+        client: OkHttpClient
+    ): Retrofit.Builder {
+        return Retrofit.Builder().baseUrl(AppConstant.BASE_URL).client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
     @Singleton
     @Provides
-    fun provideApiService(retrofitBuilder: Retrofit.Builder): ApiService {
+    fun provideApiService(retrofitBuilder: Retrofit.Builder,): ApiService {
         return retrofitBuilder.build().create(ApiService::class.java)
     }
 
@@ -75,12 +106,5 @@ object NetworkModule {
         userNetworkMapper: UserNetworkMapper
     ): NetworkDataSource {
         return NetworkDataSourceImpl(fileService, urlService, userService, fileNetworkMapper, urlNetworkMapper, userNetworkMapper)
-    }
-
-    @Singleton
-    @Named(AppConstant.Named.BASE_URL)
-    @Provides
-    fun providesBaseUrl(): String {
-        return "https://mhv71te0rh.execute-api.ap-south-1.amazonaws.com/beta/"
     }
 }
