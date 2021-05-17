@@ -25,6 +25,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.io.File
+import kotlin.math.pow
 
 class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
 
@@ -39,7 +40,9 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
         val filePath: String = inputData.getString(AppConstant.Worker.FILE_URI_KEY)!!
         val fileName: String = inputData.getString(AppConstant.Worker.FILE_NAME_KEY)!!
         val fileSize: Int = inputData.getInt(AppConstant.Worker.FILE_SIZE_KEY, -1)
-        makeStatusNotification(1, "New file", "Uploading file $fileName of size $fileSize mb", true)
+        val uid = System.currentTimeMillis().toInt()
+        val size = String.format("%.2f", fileSize.div(10.0.pow(6.0)))
+        makeStatusNotification(uid, "New file", "Uploading file $fileName of size $size MB", true)
         val file = File(filePath)
         val res = InfuraIPFS().add.file(file, fileName, fileName).Hash
         // val res = "test-hash-to-avoid-unnecessary-server-call"
@@ -47,7 +50,7 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
         val fileService = getFileService()
         val task = fileService.uploadFile(FileNetworkEntity("", "", res, fileName, fileSize, fileName.split(".")[1]))
         val data = workDataOf(AppConstant.Worker.FILE_OUTPUT_KEY to task.toString())
-        makeStatusNotification(1, "File Uploaded", task.toString(), false)
+        makeStatusNotification(uid, "File Uploaded", task.toString(), false)
         return Result.success(data)
     }
 

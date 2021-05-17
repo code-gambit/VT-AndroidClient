@@ -4,7 +4,7 @@ import android.net.Uri
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
-import com.github.code.gambit.helper.auth.ServiceResult
+import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.utility.AppConstant
 import java.lang.Exception
 import kotlin.coroutines.Continuation

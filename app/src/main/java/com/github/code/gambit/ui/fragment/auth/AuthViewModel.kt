@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amazonaws.services.cognitoidentityprovider.model.CodeMismatchException
 import com.github.code.gambit.data.model.User
+import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
-import com.github.code.gambit.helper.auth.ServiceResult
 import com.github.code.gambit.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

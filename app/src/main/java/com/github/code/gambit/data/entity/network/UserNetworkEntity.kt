@@ -13,10 +13,6 @@ class UserNetworkEntity(
     @Expose
     var sk: String,
 
-    @SerializedName("name")
-    @Expose
-    var name: String,
-
     @SerializedName("type")
     @Expose
     var type: String,
@@ -25,7 +21,4 @@ class UserNetworkEntity(
     @Expose
     var storageUsed: Int,
 
-    @SerializedName("thumbnail")
-    @Expose
-    var thumbnail: String
 )

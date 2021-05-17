@@ -56,4 +56,11 @@
     <string name="you_can_upload_any_type_of_file">You can upload any type of file</string>
     <string name="or_you_can_filter_files_based_on_dates_they_were_uploaded">or you can filter files\nbased on dates they were uploaded</string>
     <string name="use_filters">Use filters</string>
+    <string name="storage_used">Storage Used</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="mb">MB</string>
 </resources>

@@ -13,18 +13,40 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
     fun getUserEmail() = get<String>(Key.EMAIL)
 
-    fun setUserId(id: String) = put(Key.USERID, id)
-
-    fun getUserId() = get<String>(Key.USERID)
-
-    private fun setUserName(name: String) = put(Key.USERNAME, name)
-
-    fun getUserName() = get<String>(Key.USERNAME)
-
-    fun setUser(user: User) {
-        setUserEmail(user.email)
-        setUserName(user.name)
+    fun setUserId(id: String) {
+        val user = getUser()
+        user.id = id
+        put(Key.USER, user)
     }
+
+    fun getUserId() = get<User>(Key.USER).id
+
+    fun setUserName(name: String) {
+        val user = getUser()
+        user.name = name
+        put(Key.USER, user)
+    }
+
+    fun getUserName() = getUser().name
+
+    fun mergeUser(user: User): User {
+        val localUser = getUser()
+        put(Key.USER, User.merge(localUser, user))
+        return getUser()
+    }
+
+    fun updateUser(user: User) {
+        put(Key.USER, user)
+    }
+
+    fun setUser(user: User, token: String) {
+        put(Key.USER, user)
+        updateIdToken(token)
+        setAuthenticated(true)
+        updateLaunchState()
+    }
+
+    fun getUser() = get<User>(Key.USER)
 
     fun isFirstLaunch() = get<Boolean>(Key.LAUNCHSTATE)
 

@@ -9,7 +9,9 @@ class UserServiceImpl(val apiService: ApiService, private val userManager: UserM
     private val userId get() = userManager.getUserId()
 
     override suspend fun getUser(): UserNetworkEntity {
-        return apiService.getUser(userId).body
+        val id = userId
+        val user = apiService.getUser(id)
+        return user.body
     }
 
     override suspend fun updateUser(userNetworkEntity: UserNetworkEntity): UserNetworkEntity {

@@ -16,6 +16,7 @@ object AppConstant {
         const val BASE_URL = "BRL"
     }
 
+    @Deprecated(level = DeprecationLevel.WARNING, message = "ImageService related constants no longer used")
     object Cloudinary {
         const val UPLOAD_PRESET = "mqlj7ft0"
         const val RESULT_URL_KEY = "url"

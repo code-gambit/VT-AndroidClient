@@ -21,9 +21,6 @@ constructor() : EntityMapper<List<AuthUserAttribute>, User> {
                 AuthUserAttributeKey.email() -> {
                     user.email = it.value
                 }
-                AuthUserAttributeKey.custom("custom:profile_image") -> {
-                    user.thumbnail = it.value
-                }
             }
         }
         return user
@@ -32,8 +29,7 @@ constructor() : EntityMapper<List<AuthUserAttribute>, User> {
     override fun mapToEntity(domainModel: User): List<AuthUserAttribute> {
         return listOf(
             AuthUserAttribute(AuthUserAttributeKey.email(), domainModel.email),
-            AuthUserAttribute(AuthUserAttributeKey.name(), domainModel.name),
-            AuthUserAttribute(AuthUserAttributeKey.custom("custom:profile_image"), domainModel.thumbnail)
+            AuthUserAttribute(AuthUserAttributeKey.name(), domainModel.name)
         )
     }
 

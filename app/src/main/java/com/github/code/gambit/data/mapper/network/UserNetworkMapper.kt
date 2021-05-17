@@ -11,22 +11,20 @@ constructor() : EntityMapper<UserNetworkEntity, User> {
 
     override fun mapFromEntity(entity: UserNetworkEntity): User {
         return User(
-            name = entity.name,
-            email = entity.pk.split("#")[2],
+            id = entity.pk.split("#")[1],
+            "",
+            "",
             type = entity.type,
-            thumbnail = entity.thumbnail,
             storageUsed = entity.storageUsed
         )
     }
 
     override fun mapToEntity(domainModel: User): UserNetworkEntity {
         return UserNetworkEntity(
-            pk = "USER#${domainModel.email}",
+            pk = "USER#${domainModel.id}",
             sk = "METADATA",
-            name = domainModel.name,
             type = domainModel.type,
-            storageUsed = domainModel.storageUsed,
-            thumbnail = domainModel.thumbnail
+            storageUsed = domainModel.storageUsed
         )
     }
 
