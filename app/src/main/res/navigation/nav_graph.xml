@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.github.code.gambit.ui.fragment.HomeFragment"
+        android:name="com.github.code.gambit.ui.fragment.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action

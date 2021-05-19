@@ -11,6 +11,9 @@ import java.io.File
 
 object FileUtil {
 
+    fun Uri.isSchemeTypeFile(): Boolean = "file".equals(this.scheme!!, ignoreCase = true)
+    fun Uri.isSchemeTypeContent(): Boolean = "content".equals(this.scheme!!, ignoreCase = true)
+
     fun getPathFromLocalUri(context: Context, uri: Uri): String? {
         // DocumentProvider
         when {
@@ -86,7 +89,7 @@ object FileUtil {
                 } // MediaProvider
                 // DownloadsProvider
             }
-            "content".equals(uri.scheme!!, ignoreCase = true) -> {
+            uri.isSchemeTypeContent() -> {
 
                 // Return the remote address
                 return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
@@ -96,7 +99,7 @@ object FileUtil {
                     null
                 )
             }
-            "file".equals(uri.scheme!!, ignoreCase = true) -> {
+            uri.isSchemeTypeFile() -> {
                 return uri.path
             }
         } // File

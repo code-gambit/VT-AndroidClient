@@ -3,6 +3,7 @@ package com.github.code.gambit.data.mapper.network
 import com.github.code.gambit.data.EntityMapper
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.data.model.File
+import com.github.code.gambit.utility.extention.byteToMb
 import com.github.code.gambit.utility.extention.fromBase64
 import com.github.code.gambit.utility.extention.toBase64
 import javax.inject.Inject
@@ -18,8 +19,8 @@ constructor() : EntityMapper<FileNetworkEntity, File> {
             hash = entity.hash,
             type = entity.type,
             timestamp = entity.sk.split("#")[1],
-            size = "${entity.size} Mb",
-            extension = entity.ls1_sk.split(".")[1]
+            size = entity.size.byteToMb(),
+            extension = ".${entity.type}"
         )
     }
 

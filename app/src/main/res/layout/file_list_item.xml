@@ -34,14 +34,17 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/file_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
                 android:textSize="18sp"
-                tools:text="Demo.pdf" />
+                tools:text="Demo.pdf"
+                android:textColor="@color/raw_black"/>
 
             <TextView
+                android:id="@+id/file_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="1"

@@ -34,6 +34,7 @@ object AppConstant {
         const val FILE_URI_KEY = "FILE_URI"
         const val FILE_NAME_KEY = "FILE_NAME"
         const val FILE_SIZE_KEY = "FILE_SIZE"
+        const val FILE_META_DATA = "FILE_META_DATA"
         const val USER_ID = "USER_ID"
         const val FILE_OUTPUT_KEY = "FILE_OUTPUT"
     }
@@ -42,5 +43,9 @@ object AppConstant {
         const val CHANNEL_ID = "com.github.code.gambit.utility.notification.channel.id"
         const val CHANNEL_NAME = "V Transfer Notification"
         const val CHANNEL_DESCRIPTION = "Default notification channel for all V Transfer notifications"
+    }
+
+    object Database {
+        const val DB_NAME = "V-TRANSFER-MAIN-DATABASE"
     }
 }
