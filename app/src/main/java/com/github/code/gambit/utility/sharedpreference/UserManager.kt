@@ -7,6 +7,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class UserManager
 constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
+    fun putFileLastEvaluatedKey(lastEvaluatedKey: String?) = put(Key.FILE_LEK, lastEvaluatedKey)
+
+    fun getFileLastEvaluatedKey() = get<String>(Key.FILE_LEK)
+
     fun setAuthenticated(value: Boolean) = put(Key.AUTHSTATE, value)
 
     private fun setUserEmail(email: String) = put(Key.EMAIL, email)

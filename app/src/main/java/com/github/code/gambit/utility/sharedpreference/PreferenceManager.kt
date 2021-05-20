@@ -11,7 +11,7 @@ abstract class PreferenceManager(var context: Context) {
     val pref: SharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor get() = pref.edit()
 
-    fun <T> put(key: Key, value: T) {
+    fun <T> put(key: Key, value: T?) {
         when (value) {
             is String -> {
                 editor.putString(key.value, value).apply()
@@ -48,7 +48,6 @@ enum class Key(val value: String) {
     AUTHSTATE("IS-AUTHENTICATED"),
     EMAIL("EMAIL"),
     USER("USER"),
-    USERID("USER-ID"),
-    USERNAME("USER-NAME"),
-    TOKEN("ID-TOKEN")
+    TOKEN("ID-TOKEN"),
+    FILE_LEK("FILE-LAST-EVALUATED-KEY")
 }
