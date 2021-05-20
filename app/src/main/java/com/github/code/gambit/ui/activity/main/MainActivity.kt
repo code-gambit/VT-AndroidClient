@@ -19,7 +19,7 @@ import com.amplifyframework.hub.HubChannel
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
-import com.github.code.gambit.ui.fragment.HomeFragment
+import com.github.code.gambit.ui.fragment.home.HomeFragment
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
 import com.github.code.gambit.utility.extention.bottomNavShow

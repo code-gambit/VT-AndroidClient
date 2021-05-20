@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HomeFragment">
+    tools:context=".ui.fragment.home.HomeFragment">
 
     <LinearLayout
         android:id="@+id/top_container"
@@ -71,6 +71,7 @@
         android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/file_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/root_side_margin"

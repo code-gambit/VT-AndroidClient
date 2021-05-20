@@ -1,20 +1,24 @@
-package com.github.code.gambit.ui.fragment
+package com.github.code.gambit.ui.fragment.home
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
+import com.github.code.gambit.repositories.HomeRepository
+import com.github.code.gambit.ui.FileListAdapter
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.show
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -24,6 +28,8 @@ import com.takusemba.spotlight.Spotlight
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.Circle
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -31,11 +37,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var _binding: FragmentHomeBinding
     private val binding get() = _binding
 
+    private val viewModel: HomeViewModel by viewModels()
+
     private lateinit var _filterBinding: FilterLayoutBinding
     private val filterBinding get() = _filterBinding
 
     private lateinit var _searchBinding: SearchLayoutBinding
     private val searchBinding get() = _searchBinding
+
+    @Inject
+    lateinit var homeRepository: HomeRepository
+
+    lateinit var adapter: FileListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,19 +74,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             requireMainActivity().onBackPressed()
         }
 
-        Handler().postDelayed(
-            {
-                requireMainActivity().showBottomNav()
-                binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.hide()
-                binding.topContainer.show()
-                binding.swipeRefresh.show()
-                binding.noFileIllustrationContainer.show()
-            },
-            5000
-        )
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.setEvent(HomeEvent.GetFiles)
+        }
 
+        binding.swipeRefresh.setOnDragListener { _, dragEvent ->
+            Timber.tag("home").i("drag: ${dragEvent.y}")
+            true
+        }
+
+        setUpFileRecyclerView()
+        registerEventCallbacks()
+        viewModel.setEvent(HomeEvent.GetFiles)
         // Handler().postDelayed({ spotlight() }, 6000)
+    }
+
+    private fun registerEventCallbacks() {
+        viewModel.homeState.observe(viewLifecycleOwner) {
+            when (it) {
+                is HomeState.Error -> longToast(it.message)
+                is HomeState.FilesLoaded -> {
+                    stopShimmer()
+                    adapter.addAll(it.files, true)
+                    binding.noFileIllustrationContainer.hide()
+                    binding.swipeRefresh.isRefreshing = false
+                }
+                HomeState.Loading -> showShimmer()
+            }
+        }
+    }
+
+    private fun setUpFileRecyclerView() {
+        adapter = FileListAdapter(requireContext(), ArrayList())
+        binding.fileList.layoutManager = LinearLayoutManager(requireContext())
+        binding.fileList.setHasFixedSize(false)
+        binding.fileList.adapter = adapter
     }
 
     private fun registerFilterComponents() {
@@ -93,6 +128,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 requireMainActivity().animateBottomNav(1 - slideOffset)
             }
         })
+    }
+
+    private fun stopShimmer() {
+        requireMainActivity().showBottomNav()
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.hide()
+        binding.topContainer.show()
+        binding.swipeRefresh.show()
+        binding.noFileIllustrationContainer.show()
+        binding.fileList.show()
+    }
+
+    private fun showShimmer() {
+        binding.shimmerLayout.startShimmer()
+        binding.shimmerLayout.show()
+        binding.fileList.hide()
+        binding.topContainer.visibility = View.INVISIBLE
     }
 
     private fun spotlight() {

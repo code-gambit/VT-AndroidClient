@@ -8,11 +8,18 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.github.code.gambit.R
+import com.github.code.gambit.data.entity.chache.FileCacheEntity
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
+import com.github.code.gambit.data.local.Database
+import com.github.code.gambit.data.local.FileDao
+import com.github.code.gambit.data.mapper.cache.FileCacheMapper
+import com.github.code.gambit.data.mapper.network.FileNetworkMapper
+import com.github.code.gambit.data.model.FileMetaData
 import com.github.code.gambit.data.remote.services.ApiService
 import com.github.code.gambit.data.remote.services.file.FileService
 import com.github.code.gambit.data.remote.services.file.FileServiceImpl
@@ -37,21 +44,37 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
      * @outputData data: Data toString of FileNetworkEntity
      */
     override suspend fun doWork(): Result {
-        val filePath: String = inputData.getString(AppConstant.Worker.FILE_URI_KEY)!!
-        val fileName: String = inputData.getString(AppConstant.Worker.FILE_NAME_KEY)!!
-        val fileSize: Int = inputData.getInt(AppConstant.Worker.FILE_SIZE_KEY, -1)
+        val fileMetaDataString = inputData.getString(AppConstant.Worker.FILE_META_DATA)!!
+        val fmd = FileMetaData.fromString(fileMetaDataString)
         val uid = System.currentTimeMillis().toInt()
-        val size = String.format("%.2f", fileSize.div(10.0.pow(6.0)))
-        makeStatusNotification(uid, "New file", "Uploading file $fileName of size $size MB", true)
-        val file = File(filePath)
-        val res = InfuraIPFS().add.file(file, fileName, fileName).Hash
+        val size = String.format("%.2f", fmd.size.div(10.0.pow(6.0)))
+        makeStatusNotification(uid, "New file", "Uploading file ${fmd.name} of size $size MB", true)
+        val file = File(fmd.path)
+        val a = System.currentTimeMillis()
+        val res = InfuraIPFS().add.file(file, fmd.name, fmd.name).Hash
+        val b = System.currentTimeMillis()
         // val res = "test-hash-to-avoid-unnecessary-server-call"
         Timber.tag("out").i(res)
+        Timber.tag("out").i("Took ${b - a} ms")
+        val fileDao = getFileDao()
         val fileService = getFileService()
-        val task = fileService.uploadFile(FileNetworkEntity("", "", res, fileName, fileSize, fileName.split(".")[1]))
+        val task = fileService.uploadFile(FileNetworkEntity("", "", res, fmd.name, fmd.size, fmd.name.split(".")[1]))
+        fileDao.insertFiles(getFileCacheEntityFromFileNetworkEntity(task))
         val data = workDataOf(AppConstant.Worker.FILE_OUTPUT_KEY to task.toString())
         makeStatusNotification(uid, "File Uploaded", task.toString(), false)
         return Result.success(data)
+    }
+
+    private fun getFileCacheEntityFromFileNetworkEntity(fileNetworkEntity: FileNetworkEntity): FileCacheEntity {
+        val networkMapper = FileNetworkMapper()
+        val cacheMapper = FileCacheMapper()
+        return cacheMapper.mapToEntity(networkMapper.mapFromEntity(fileNetworkEntity))
+    }
+
+    private fun getFileDao(): FileDao {
+        return Room.databaseBuilder(applicationContext, Database::class.java, AppConstant.Database.DB_NAME)
+            .fallbackToDestructiveMigration()
+            .build().fileDao()
     }
 
     private fun getApiService(): ApiService {
