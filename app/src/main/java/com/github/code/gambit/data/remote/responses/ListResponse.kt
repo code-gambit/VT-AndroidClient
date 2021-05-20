@@ -19,7 +19,7 @@ class BodyTemplate<T>(
     @Expose
     var items: List<T>,
 
-    @SerializedName("lastEvaluatedKey")
+    @SerializedName("LastEvaluatedKey")
     @Expose
-    var lastEvaluatedKey: String
+    var lastEvaluatedKey: String?
 )

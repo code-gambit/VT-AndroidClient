@@ -12,7 +12,13 @@ class FileServiceImpl(
     private val userId get() = userManager.getUserId()
 
     override suspend fun getFiles(): List<FileNetworkEntity> {
-        return apiService.getFiles(userId).body.items
+        var lek: String? = userManager.getFileLastEvaluatedKey()
+        if (lek == "") {
+            lek = null
+        }
+        val listResponse = apiService.getFiles(userId, lek)
+        userManager.putFileLastEvaluatedKey(listResponse.body.lastEvaluatedKey)
+        return listResponse.body.items
     }
 
     override suspend fun uploadFile(fileNetworkEntity: FileNetworkEntity): FileNetworkEntity {

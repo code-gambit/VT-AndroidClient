@@ -30,6 +30,10 @@ object AppConstant {
         const val URL_ID = "urlId"
     }
 
+    object API_QUERY {
+        const val FILE_LEK = "LastEvaluatedKey"
+    }
+
     object Worker {
         const val FILE_URI_KEY = "FILE_URI"
         const val FILE_NAME_KEY = "FILE_NAME"
