@@ -1,12 +1,16 @@
 package com.github.code.gambit.data.local
 
 import com.github.code.gambit.data.mapper.cache.FileCacheMapper
+import com.github.code.gambit.data.mapper.cache.UrlCacheMapper
 import com.github.code.gambit.data.model.File
+import com.github.code.gambit.data.model.Url
 
 class CacheDataSourceImpl
 constructor(
     val fileCacheMapper: FileCacheMapper,
-    val fileDao: FileDao
+    val urlCacheMapper: UrlCacheMapper,
+    val fileDao: FileDao,
+    val urlDao: UrlDao
 ) : CacheDataSource {
 
     override suspend fun getFiles(): List<File> {
@@ -20,5 +24,15 @@ constructor(
             c += fileDao.insertFiles(fileCacheMapper.mapToEntity(file))
         }
         return c
+    }
+
+    override suspend fun insertUrls(urls: List<Url>): Long {
+        val res = urlDao.insertUrls(urlCacheMapper.mapToEntityList(urls))
+        return res.size.toLong()
+    }
+
+    override suspend fun getUrls(fileId: String): List<Url> {
+        val urls = urlDao.getUrls(fileId)
+        return urlCacheMapper.mapFromEntityList(urls)
     }
 }

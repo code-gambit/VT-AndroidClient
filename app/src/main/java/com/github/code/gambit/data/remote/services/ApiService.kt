@@ -26,7 +26,10 @@ interface ApiService {
     suspend fun deleteUser(@Path("userId") userId: String): Response<UserNetworkEntity>
 
     @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
-    suspend fun getFiles(@Path("userId") userId: String, @Query(AppConstant.API_QUERY.FILE_LEK) lastEvalKey: String?): ListResponse<FileNetworkEntity>
+    suspend fun getFiles(@Path("userId") userId: String, @Query(AppConstant.API_QUERY.FILE_LEK) lastEvalKey: String): ListResponse<FileNetworkEntity>
+
+    @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
+    suspend fun getFiles(@Path("userId") userId: String): ListResponse<FileNetworkEntity>
 
     @POST("user/{${AppConstant.API_PATH.USER_ID}}/file")
     suspend fun uploadFiles(@Path("userId") userId: String, @Body fileNetworkEntity: FileNetworkEntity): Response<FileNetworkEntity>
@@ -38,7 +41,7 @@ interface ApiService {
     suspend fun getUrls(@Path(AppConstant.API_PATH.FILE_ID) fileId: String): ListResponse<UrlNetworkEntity>
 
     @POST("file/{${AppConstant.API_PATH.FILE_ID}}/url")
-    suspend fun generateUrl(@Path(AppConstant.API_PATH.FILE_ID) fileId: String): Response<UrlNetworkEntity>
+    suspend fun generateUrl(@Path(AppConstant.API_PATH.FILE_ID) fileId: String, @Body urlNetworkEntity: UrlNetworkEntity): Response<String>
 
     @PUT("file/{${AppConstant.API_PATH.FILE_ID}}/url/{${AppConstant.API_PATH.URL_ID}}")
     suspend fun updateUrl(

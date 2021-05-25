@@ -7,7 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class UserManager
 constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
-    fun putFileLastEvaluatedKey(lastEvaluatedKey: String?) = put(Key.FILE_LEK, lastEvaluatedKey)
+    fun putFileLastEvaluatedKey(lastEvaluatedKey: String) = put(Key.FILE_LEK, lastEvaluatedKey)
 
     fun getFileLastEvaluatedKey() = get<String>(Key.FILE_LEK)
 

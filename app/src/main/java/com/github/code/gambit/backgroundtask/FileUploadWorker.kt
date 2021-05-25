@@ -25,6 +25,7 @@ import com.github.code.gambit.data.remote.services.file.FileService
 import com.github.code.gambit.data.remote.services.file.FileServiceImpl
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.utility.AppConstant
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
 import com.google.gson.GsonBuilder
 import io.ipfs.kotlin.defaults.InfuraIPFS
@@ -89,7 +90,7 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
     }
 
     private fun getFileService(): FileService {
-        return FileServiceImpl(getApiService(), UserManager(applicationContext))
+        return FileServiceImpl(getApiService(), UserManager(applicationContext), LastEvaluatedKeyManager(applicationContext))
     }
 
     /**

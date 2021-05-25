@@ -63,4 +63,6 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="mb">MB</string>
+    <string name="default_click_count">50</string>
+    <string name="title_domain">Domain</string>
 </resources>

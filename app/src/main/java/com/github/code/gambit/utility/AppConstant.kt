@@ -3,6 +3,7 @@ package com.github.code.gambit.utility
 object AppConstant {
     const val AUTH_ATTRIBUTE_CUSTOM_PROFILE = "custom:profile_image"
     const val BASE_URL = "https://mhv71te0rh.execute-api.ap-south-1.amazonaws.com/beta/"
+    const val SHARE_URL = "https://vt-webclient.herokuapp.com/"
     object RequestCode {
         const val PERMISSIONS = 101
         const val GALLERY = 100

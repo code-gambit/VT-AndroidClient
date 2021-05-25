@@ -1,12 +1,10 @@
 package com.github.code.gambit.repositories
 
-import android.net.Uri
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoJWTParser
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
-import com.github.code.gambit.data.remote.services.image.ImageService
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.utility.sharedpreference.UserManager
@@ -15,7 +13,6 @@ class AuthRepository
 
 constructor(
     private val authService: AuthService,
-    private val imageService: ImageService,
     private val networkDataSource: NetworkDataSource,
     private val userManager: UserManager,
     private val userAttributeMapper: UserAttributeMapper
@@ -51,11 +48,6 @@ constructor(
         val update = userManager.getUser()
 
         return ServiceResult.Success(user)
-    }
-
-    @Deprecated(level = DeprecationLevel.WARNING, message = "This service is no longer supported")
-    private suspend fun uploadProfileImage(imageUri: Uri): ServiceResult<String> {
-        return imageService.uploadImage(imageUri)
     }
 
     suspend fun signUp(authData: AuthData): ServiceResult<Unit> {

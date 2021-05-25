@@ -12,18 +12,20 @@ constructor() : EntityMapper<UrlNetworkEntity, Url> {
     override fun mapFromEntity(entity: UrlNetworkEntity): Url {
         return Url(
             id = entity.gs1_pk,
-            file = entity.pk,
+            fileId = entity.pk,
+            hash = entity.hash,
             timestamp = entity.sk.split("#")[1],
-            visible = entity.visible
+            visible = entity.visible == "true",
+            clicksLeft = entity.clicks_left
         )
     }
 
     override fun mapToEntity(domainModel: Url): UrlNetworkEntity {
         return UrlNetworkEntity(
-            pk = domainModel.file,
-            sk = "URL#${domainModel.timestamp}",
+            hash = domainModel.hash,
             gs1_pk = domainModel.id,
-            visible = domainModel.visible
+            visible = domainModel.visible.toString(),
+            clicks_left = domainModel.clicksLeft
         )
     }
 

@@ -1,6 +1,7 @@
 package com.github.code.gambit.di
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.github.code.gambit.data.mapper.network.FileNetworkMapper
 import com.github.code.gambit.data.mapper.network.UrlNetworkMapper
 import com.github.code.gambit.data.mapper.network.UserNetworkMapper
@@ -16,6 +17,7 @@ import com.github.code.gambit.data.remote.services.url.UrlServiceImpl
 import com.github.code.gambit.data.remote.services.user.UserService
 import com.github.code.gambit.data.remote.services.user.UserServiceImpl
 import com.github.code.gambit.utility.AppConstant
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -53,12 +55,19 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun provideChuckerInterceptor(@ApplicationContext context: Context): ChuckerInterceptor {
+        return ChuckerInterceptor(context)
+    }
+
+    @Singleton
+    @Provides
     fun provideOkHttpClient(
         apiGatewayInterceptor: ApiGatewayInterceptor,
-        networkInterceptor: NetworkInterceptor
+        networkInterceptor: NetworkInterceptor,
+        chuckerInterceptor: ChuckerInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(apiGatewayInterceptor)
-            .addInterceptor(networkInterceptor).build()
+            .addInterceptor(networkInterceptor).addInterceptor(chuckerInterceptor).build()
     }
 
     @Singleton
@@ -79,14 +88,14 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideFileService(apiService: ApiService, userManager: UserManager): FileService {
-        return FileServiceImpl(apiService, userManager)
+    fun provideFileService(apiService: ApiService, userManager: UserManager, lekManager: LastEvaluatedKeyManager): FileService {
+        return FileServiceImpl(apiService, userManager, lekManager)
     }
 
     @Singleton
     @Provides
-    fun provideUrlService(apiService: ApiService): UrlService {
-        return UrlServiceImpl(apiService)
+    fun provideUrlService(apiService: ApiService, lekManager: LastEvaluatedKeyManager): UrlService {
+        return UrlServiceImpl(apiService, lekManager)
     }
 
     @Singleton

@@ -11,7 +11,7 @@ abstract class PreferenceManager(var context: Context) {
     val pref: SharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor get() = pref.edit()
 
-    fun <T> put(key: Key, value: T?) {
+    fun <T> put(key: Key, value: T) {
         when (value) {
             is String -> {
                 editor.putString(key.value, value).apply()
@@ -26,7 +26,8 @@ abstract class PreferenceManager(var context: Context) {
     inline fun <reified T> get(key: Key): T {
         return when (T::class) {
             String::class -> {
-                pref.getString(key.value, "") as T
+                val a = pref.getString(key.value, "") as T
+                a
             }
             Boolean::class -> {
                 pref.getBoolean(key.value, false) as T
@@ -49,5 +50,6 @@ enum class Key(val value: String) {
     EMAIL("EMAIL"),
     USER("USER"),
     TOKEN("ID-TOKEN"),
-    FILE_LEK("FILE-LAST-EVALUATED-KEY")
+    FILE_LEK("FILE-LAST-EVALUATED-KEY"),
+    URL_LEK("URL-LAST-EVALUATED-KEY")
 }
