@@ -10,14 +10,20 @@ class UrlCacheEntity(
     @ColumnInfo(name = "id")
     var id: String,
 
-    @ColumnInfo(name = "file")
-    var file: String,
+    @ColumnInfo(name = "fileId")
+    var fileId: String,
+
+    @ColumnInfo(name = "hash")
+    var hash: String,
 
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "timestamp")
     var timestamp: String,
 
     @ColumnInfo(name = "visible")
-    var visible: Boolean
+    var visible: Boolean,
+
+    @ColumnInfo(name = "clicks_left")
+    val clicksLeft: Int
 
 )

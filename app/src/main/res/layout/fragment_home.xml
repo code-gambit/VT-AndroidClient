@@ -137,4 +137,9 @@
         android:id="@+id/search_layout"
         layout="@layout/search_layout"
         android:visibility="gone" />
+
+    <include
+        android:id="@+id/file_url_layout"
+        layout="@layout/file_url_layout"
+        android:visibility="gone"/>
 </RelativeLayout>

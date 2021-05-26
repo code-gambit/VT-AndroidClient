@@ -51,3 +51,5 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(user: User): AuthSignUpOptions {
 fun Int.byteToMb(): String {
     return String.format("%.2f", this.div(10.0.pow(6.0)))
 }
+
+fun String.toSharableUrl(): String = "${AppConstant.SHARE_URL}$this"

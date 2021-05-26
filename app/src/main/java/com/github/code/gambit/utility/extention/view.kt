@@ -1,6 +1,8 @@
 package com.github.code.gambit.utility.extention
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
 import android.view.Window
@@ -10,6 +12,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.github.code.gambit.R
@@ -125,4 +128,13 @@ fun Fragment.shortToast(message: String) {
 
 fun Fragment.longToast(message: String) {
     Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.copyToClipboard(text: String) {
+    val clipboard: ClipboardManager? =
+        requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+    val url = text.toSharableUrl()
+    val clip = ClipData.newPlainText("COPIED", url)
+    clipboard?.setPrimaryClip(clip)
+    shortToast("Url copied")
 }

@@ -10,15 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.code.gambit.R
+import com.github.code.gambit.data.model.File
+import com.github.code.gambit.data.model.Url
+import com.github.code.gambit.databinding.FileUrlLayoutBinding
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
 import com.github.code.gambit.repositories.HomeRepository
-import com.github.code.gambit.ui.FileListAdapter
 import com.github.code.gambit.ui.activity.main.MainActivity
+import com.github.code.gambit.ui.fragment.BottomNavController
+import com.github.code.gambit.utility.extention.copyToClipboard
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.hide
 import com.github.code.gambit.utility.extention.longToast
+import com.github.code.gambit.utility.extention.shortToast
 import com.github.code.gambit.utility.extention.show
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -32,7 +37,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, BottomNavController {
 
     private lateinit var _binding: FragmentHomeBinding
     private val binding get() = _binding
@@ -45,9 +50,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var _searchBinding: SearchLayoutBinding
     private val searchBinding get() = _searchBinding
 
+    private lateinit var _urlBinding: FileUrlLayoutBinding
+    private val urlBinding get() = _urlBinding
+
     @Inject
     lateinit var homeRepository: HomeRepository
 
+    @Inject
     lateinit var adapter: FileListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,8 +64,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.bind(view)
         _filterBinding = binding.filterLayout
         _searchBinding = binding.searchLayout
+        _urlBinding = binding.fileUrlLayout
         activity?.window?.exitFullscreen()
         registerFilterComponents()
+        registerUrlComponent()
 
         binding.filterButton.setOnClickListener {
             showFilter()
@@ -68,6 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.overlay.setOnClickListener {
             closeFilter()
+            closeFileUrl()
         }
 
         searchBinding.homeButton.setOnClickListener {
@@ -100,15 +112,47 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     binding.swipeRefresh.isRefreshing = false
                 }
                 HomeState.Loading -> showShimmer()
+                HomeState.LoadingUrl -> shortToast("Loading Url")
+                is HomeState.UrlGenerated -> {
+                    stopShimmer()
+                    Timber.tag("home").i("${it.url.id}, ${it.url.fileId}")
+                    adapter.addUrl(it.url)
+                }
+                is HomeState.UrlsLoaded -> {
+                    if (it.urls.isEmpty()) {
+                        shortToast("No Urls")
+                        return@observe
+                    }
+                    adapter.addUrls(it.urls)
+                }
             }
         }
     }
 
     private fun setUpFileRecyclerView() {
-        adapter = FileListAdapter(requireContext(), ArrayList())
         binding.fileList.layoutManager = LinearLayoutManager(requireContext())
         binding.fileList.setHasFixedSize(false)
         binding.fileList.adapter = adapter
+        adapter.listener = this
+    }
+
+    private fun registerUrlComponent() {
+        val bottomSheetBehavior = BottomSheetBehavior.from(urlBinding.bottomSheetContainer)
+        bottomSheetBehavior.peekHeight = 0
+        bottomSheetBehavior.isHideable = true
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    binding.overlay.hide()
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.animate().alpha(slideOffset).setDuration(0).start()
+                animateBottomNav(1 - slideOffset)
+            }
+        })
     }
 
     private fun registerFilterComponents() {
@@ -125,18 +169,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 binding.overlay.animate().alpha(slideOffset).setDuration(0).start()
-                requireMainActivity().animateBottomNav(1 - slideOffset)
+                animateBottomNav(1 - slideOffset)
             }
         })
     }
 
     private fun stopShimmer() {
-        requireMainActivity().showBottomNav()
+        showBottomNav()
         binding.shimmerLayout.stopShimmer()
         binding.shimmerLayout.hide()
         binding.topContainer.show()
         binding.swipeRefresh.show()
-        binding.noFileIllustrationContainer.show()
         binding.fileList.show()
     }
 
@@ -200,36 +243,58 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun showFilter() {
-        requireMainActivity().animateBottomNav(0f)
+        animateBottomNav(0f)
         binding.overlay.show()
         filterBinding.root.show()
-        setState(true)
+        setState(true, filterBinding.bottomSheetContainer)
     }
 
     fun closeFilter() {
-        setState(false)
-        requireMainActivity().animateBottomNav(1f)
-        binding.overlay.hide()
-        filterBinding.root.hide()
+        if (isFilterEnable()) {
+            setState(false, filterBinding.bottomSheetContainer)
+            animateBottomNav(1f)
+            binding.overlay.hide()
+            filterBinding.root.hide()
+        }
     }
 
     private fun showSearch() {
-        requireMainActivity().hideBottomNav()
+        hideBottomNav()
         searchBinding.root.show()
     }
 
     fun closeSearch() {
         searchBinding.root.hide()
-        requireMainActivity().showBottomNav()
+        showBottomNav()
     }
 
-    private fun setState(show: Boolean) {
+    private fun showFileUrl(file: File) {
+        animateBottomNav(0f)
+        binding.overlay.show()
+        urlBinding.root.show()
+        setState(true, urlBinding.bottomSheetContainer)
+        val fileListItemBinding = urlBinding.fileDetailLayout
+        fileListItemBinding.fileName.text = file.name
+        fileListItemBinding.fileDate.text = file.timestamp
+        fileListItemBinding.fileSize.text = file.size
+    }
+
+    fun closeFileUrl() {
+        if (isFileUrlEnable()) {
+            setState(false, urlBinding.bottomSheetContainer)
+            animateBottomNav(1f)
+            binding.overlay.hide()
+            urlBinding.root.hide()
+        }
+    }
+
+    private fun setState(show: Boolean, bottomSheetContainer: View) {
         val state = if (show) {
             BottomSheetBehavior.STATE_EXPANDED
         } else {
             BottomSheetBehavior.STATE_COLLAPSED
         }
-        BottomSheetBehavior.from(filterBinding.bottomSheetContainer).state = state
+        BottomSheetBehavior.from(bottomSheetContainer).state = state
     }
 
     private fun requireMainActivity() = (activity as MainActivity)
@@ -237,5 +302,49 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     fun isFilterEnable() =
         BottomSheetBehavior.from(filterBinding.bottomSheetContainer).state == BottomSheetBehavior.STATE_EXPANDED
 
+    fun isFileUrlEnable() =
+        BottomSheetBehavior.from(urlBinding.bottomSheetContainer).state == BottomSheetBehavior.STATE_EXPANDED
+
     fun isSearchEnable() = searchBinding.root.isVisible
+
+//    override fun onItemClick(item: File) {
+//        //showFileUrl(item)
+//        adapter.addUrl(item, Url("sdfb", item.id, "24-02-12", true, 50))
+//    }
+
+    override fun hideBottomNav() = requireMainActivity().hideBottomNav()
+
+    override fun showBottomNav() = requireMainActivity().showBottomNav()
+
+    override fun animateBottomNav(offset: Float) = requireMainActivity().animateBottomNav(offset)
+
+    override fun onFileLongClick(file: File) {
+        Timber.tag("home").i("LongClickFile: ${file.name}")
+    }
+
+    override fun onCreateNewUrl(file: File) {
+        viewModel.setEvent(HomeEvent.GenerateUrl(file))
+        Timber.tag("home").i("CreateNewUrl: ${file.name}, ${file.id}")
+    }
+
+    override fun onLoadMoreUrl(file: File) {
+        Timber.tag("home").i("LoadMoreUrl: ${file.name}")
+    }
+
+    override fun onUrlLongClick(url: Url, file: File) {
+        copyToClipboard(url.id)
+    }
+
+    override fun onUrlClick(url: Url, file: File) {
+        Timber.tag("home").i("UrlClick: ${file.name}, ${url.id}")
+    }
+
+    override fun onItemClick(item: File) {
+        viewModel.setEvent(HomeEvent.GetUrls(item))
+        Timber.tag("home").i("FileClick: ${item.name}")
+    }
+
+    override fun onItemLongClick(item: File) {
+        Timber.tag("home").i("LongClickFile: ${item.name}")
+    }
 }

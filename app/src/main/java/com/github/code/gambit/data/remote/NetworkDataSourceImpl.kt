@@ -32,11 +32,14 @@ class NetworkDataSourceImpl(
     }
 
     override suspend fun getUrls(fileId: String): List<Url> {
-        return urlNetworkMapper.mapFromEntityList(urlService.getUrls(fileId))
+        val res = urlService.getUrls(fileId)
+        return urlNetworkMapper.mapFromEntityList(res)
     }
 
-    override suspend fun generateUrl(fileId: String): Url {
-        return urlNetworkMapper.mapFromEntity(urlService.generateUrl(fileId))
+    override suspend fun generateUrl(url: Url): Url {
+        val id = urlService.generateUrl(url.fileId, urlNetworkMapper.mapToEntity(url))
+        url.id = id
+        return url
     }
 
     override suspend fun updateUrl(fileId: String, urlId: String, url: Url): Url {

@@ -4,11 +4,13 @@ import android.Manifest
 import android.content.Context
 import com.cloudinary.android.MediaManager
 import com.github.code.gambit.VTransfer
+import com.github.code.gambit.ui.fragment.home.FileListAdapter
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.ThirdOnBoardingFragment
 import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.SystemManager
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.Module
 import dagger.Provides
@@ -32,6 +34,12 @@ object AppModule {
     @Provides
     fun provideUserManager(@ApplicationContext context: Context): UserManager {
         return UserManager(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLastEvaluatedKeyManager(@ApplicationContext context: Context): LastEvaluatedKeyManager {
+        return LastEvaluatedKeyManager(context)
     }
 
     @Singleton
@@ -75,5 +83,10 @@ object AppModule {
         @Named(AppConstant.Named.PERMISSION_ARRAY) permission: List<String>
     ): SystemManager {
         return SystemManager(ctx, permission)
+    }
+
+    @Provides
+    fun provideFileListAdapter(): FileListAdapter {
+        return FileListAdapter()
     }
 }

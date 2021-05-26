@@ -19,6 +19,7 @@ import com.amplifyframework.hub.HubChannel
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
+import com.github.code.gambit.ui.fragment.BottomNavController
 import com.github.code.gambit.ui.fragment.home.HomeFragment
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
@@ -32,7 +33,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavController {
 
     private lateinit var _binding: ActivityMainBinding
     private val binding get() = _binding
@@ -161,6 +162,9 @@ class MainActivity : AppCompatActivity() {
                         fragment.isSearchEnable() -> {
                             fragment.closeSearch()
                         }
+                        fragment.isFileUrlEnable() -> {
+                            fragment.closeFileUrl()
+                        }
                         else -> {
                             finish()
                         }
@@ -177,16 +181,16 @@ class MainActivity : AppCompatActivity() {
         return binding.addFileButton
     }
 
-    fun animateBottomNav(offset: Float) {
+    override fun animateBottomNav(offset: Float) {
         if (this::_binding.isInitialized && offset.isFinite()) {
             binding.bottomLayout.animate().alpha(offset).scaleX(offset).scaleY(offset)
                 .setDuration(0).start()
         }
     }
 
-    fun showBottomNav() = binding.bottomNavContainer.bottomNavShow()
+    override fun showBottomNav() = binding.bottomNavContainer.bottomNavShow()
 
-    fun hideBottomNav() = binding.bottomNavContainer.bottomNavHide()
+    override fun hideBottomNav() = binding.bottomNavContainer.bottomNavHide()
 
     fun showSnackBar(message: String) {
         binding.root.snackbar(message, binding.bottomNavContainer)

@@ -1,23 +1,32 @@
 package com.github.code.gambit.data.remote.services.file
 
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
+import com.github.code.gambit.data.remote.responses.ListResponse
 import com.github.code.gambit.data.remote.services.ApiService
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
 
 class FileServiceImpl(
     val apiService: ApiService,
-    private val userManager: UserManager
+    private val userManager: UserManager,
+    private val lekManager: LastEvaluatedKeyManager
 ) : FileService {
 
     private val userId get() = userManager.getUserId()
 
     override suspend fun getFiles(): List<FileNetworkEntity> {
-        var lek: String? = userManager.getFileLastEvaluatedKey()
-        if (lek == "") {
-            lek = null
+        val lek: String = lekManager.getLastEvalKey(LastEvaluatedKeyManager.KeyType.FILE)
+        val listResponse: ListResponse<FileNetworkEntity> = if (lek == "") {
+            apiService.getFiles(userId)
+        } else {
+            apiService.getFiles(userId, lek)
         }
-        val listResponse = apiService.getFiles(userId, lek)
-        userManager.putFileLastEvaluatedKey(listResponse.body.lastEvaluatedKey)
+        if (listResponse.body.lastEvaluatedKey != null) {
+            lekManager.putLastEvalKey(
+                listResponse.body.lastEvaluatedKey!!,
+                LastEvaluatedKeyManager.KeyType.FILE
+            )
+        }
         return listResponse.body.items
     }
 

@@ -7,5 +7,6 @@ data class File(
     var type: String,
     var timestamp: String,
     var size: String,
-    var extension: String
+    var extension: String,
+    val urls: ArrayList<Url> = ArrayList()
 )

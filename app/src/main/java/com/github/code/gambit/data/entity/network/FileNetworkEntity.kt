@@ -7,11 +7,11 @@ class FileNetworkEntity(
 
     @SerializedName("PK")
     @Expose
-    var pk: String,
+    var pk: String = "",
 
     @SerializedName("SK")
     @Expose
-    var sk: String,
+    var sk: String = "",
 
     @SerializedName("hash")
     @Expose

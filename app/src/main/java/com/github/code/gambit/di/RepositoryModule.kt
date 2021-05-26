@@ -1,13 +1,10 @@
 package com.github.code.gambit.di
 
-import com.cloudinary.android.MediaManager
 import com.github.code.gambit.data.local.CacheDataSource
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
 import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
-import com.github.code.gambit.data.remote.services.image.ImageService
-import com.github.code.gambit.data.remote.services.image.ImageServiceImpl
 import com.github.code.gambit.repositories.AuthRepository
 import com.github.code.gambit.repositories.HomeRepository
 import com.github.code.gambit.repositories.HomeRepositoryImpl
@@ -38,20 +35,13 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideImageService(mediaManager: MediaManager): ImageService {
-        return ImageServiceImpl(mediaManager)
-    }
-
-    @Singleton
-    @Provides
     fun provideAuthRepository(
         authService: AuthService,
-        imageService: ImageService,
         networkDataSource: NetworkDataSource,
         userManager: UserManager,
         userAttributeMapper: UserAttributeMapper
     ): AuthRepository {
-        return AuthRepository(authService, imageService, networkDataSource, userManager, userAttributeMapper)
+        return AuthRepository(authService, networkDataSource, userManager, userAttributeMapper)
     }
 
     @Singleton

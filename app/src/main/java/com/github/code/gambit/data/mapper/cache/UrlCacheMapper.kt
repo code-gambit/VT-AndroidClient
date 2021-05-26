@@ -12,22 +12,30 @@ constructor() : EntityMapper<UrlCacheEntity, Url> {
     override fun mapFromEntity(entity: UrlCacheEntity): Url {
         return Url(
             id = entity.id,
-            file = entity.file,
+            fileId = entity.fileId,
+            hash = entity.hash,
             timestamp = entity.timestamp,
-            visible = entity.visible
+            visible = entity.visible,
+            clicksLeft = entity.clicksLeft
         )
     }
 
     override fun mapToEntity(domainModel: Url): UrlCacheEntity {
         return UrlCacheEntity(
             id = domainModel.id,
-            file = domainModel.file,
+            fileId = domainModel.fileId,
+            hash = domainModel.hash,
             timestamp = domainModel.timestamp,
-            visible = domainModel.visible
+            visible = domainModel.visible,
+            clicksLeft = domainModel.clicksLeft
         )
     }
 
     override fun mapFromEntityList(entities: List<UrlCacheEntity>): List<Url> {
         return entities.map { mapFromEntity(it) }
+    }
+
+    fun mapToEntityList(domainModels: List<Url>): List<UrlCacheEntity> {
+        return domainModels.map { mapToEntity(it) }
     }
 }

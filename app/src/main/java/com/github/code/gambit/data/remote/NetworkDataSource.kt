@@ -10,7 +10,7 @@ interface NetworkDataSource {
     suspend fun deleteFile(fileId: String): File
 
     suspend fun getUrls(fileId: String): List<Url>
-    suspend fun generateUrl(fileId: String): Url
+    suspend fun generateUrl(url: Url): Url
     suspend fun updateUrl(fileId: String, urlId: String, url: Url): Url
     suspend fun deleteUrl(fileId: String, urlId: String): Url
 
