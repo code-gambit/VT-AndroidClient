@@ -13,12 +13,6 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Lint check
-        run: ./gradlew lint
-
-      - name: Ktlint check
-        run: ./gradlew ktlintcheck
-
       - name: Run test
         run: ./gradlew test
 
