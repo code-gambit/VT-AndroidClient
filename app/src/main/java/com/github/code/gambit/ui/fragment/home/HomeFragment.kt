@@ -22,9 +22,11 @@ import com.github.code.gambit.ui.fragment.BottomNavController
 import com.github.code.gambit.utility.extention.copyToClipboard
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.hideKeyboard
 import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.shortToast
 import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.extention.snackbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.takusemba.spotlight.OnSpotlightListener
@@ -58,6 +60,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     @Inject
     lateinit var adapter: FileListAdapter
+
+    lateinit var fileSearchComponent: FileSearchComponent
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,12 +110,22 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
             when (it) {
                 is HomeState.Error -> longToast(it.message)
                 is HomeState.FilesLoaded -> {
-                    stopShimmer()
-                    adapter.addAll(it.files, true)
-                    binding.noFileIllustrationContainer.hide()
-                    binding.swipeRefresh.isRefreshing = false
+                    if (!it.isSearchResult) {
+                        stopShimmer()
+                        adapter.addAll(it.files, true)
+                        binding.noFileIllustrationContainer.hide()
+                        binding.swipeRefresh.isRefreshing = false
+                        return@observe
+                    }
+                    fileSearchComponent.setFileLoaded(it.files)
                 }
-                HomeState.Loading -> showShimmer()
+                is HomeState.Loading -> {
+                    if (!it.isSearchResultLoading) {
+                        showShimmer()
+                        return@observe
+                    }
+                    fileSearchComponent.setRefreshing()
+                }
                 HomeState.LoadingUrl -> shortToast("Loading Url")
                 is HomeState.UrlGenerated -> {
                     stopShimmer()
@@ -172,6 +186,26 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 animateBottomNav(1 - slideOffset)
             }
         })
+    }
+
+    private fun registerSearchComponents() {
+        adapter.backup()
+        if (this::fileSearchComponent.isInitialized) {
+            fileSearchComponent.show()
+            return
+        }
+        fileSearchComponent = FileSearchComponentImpl.bind(binding.searchLayout, adapter, requireContext()) { closeSearch() }
+        fileSearchComponent.getRequests().observe(
+            viewLifecycleOwner
+        ) {
+            if (it != null) {
+                if (it == "") {
+                    binding.root.snackbar("Feature not implemented")
+                    return@observe
+                }
+                viewModel.setEvent(HomeEvent.SearchFile(it))
+            }
+        }
     }
 
     private fun stopShimmer() {
@@ -259,24 +293,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun showSearch() {
+        registerSearchComponents()
         hideBottomNav()
         searchBinding.root.show()
     }
 
     fun closeSearch() {
+        hideKeyboard()
+        adapter.restore()
         searchBinding.root.hide()
         showBottomNav()
-    }
-
-    private fun showFileUrl(file: File) {
-        animateBottomNav(0f)
-        binding.overlay.show()
-        urlBinding.root.show()
-        setState(true, urlBinding.bottomSheetContainer)
-        val fileListItemBinding = urlBinding.fileDetailLayout
-        fileListItemBinding.fileName.text = file.name
-        fileListItemBinding.fileDate.text = file.timestamp
-        fileListItemBinding.fileSize.text = file.size
     }
 
     fun closeFileUrl() {

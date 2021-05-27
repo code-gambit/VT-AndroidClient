@@ -26,7 +26,11 @@ interface ApiService {
     suspend fun deleteUser(@Path("userId") userId: String): Response<UserNetworkEntity>
 
     @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
-    suspend fun getFiles(@Path("userId") userId: String, @Query(AppConstant.API_QUERY.FILE_LEK) lastEvalKey: String): ListResponse<FileNetworkEntity>
+    suspend fun getFiles(
+        @Path("userId") userId: String,
+        @Query(AppConstant.API_QUERY.FILE_LEK) lastEvalKey: String?,
+        @Query(AppConstant.API_QUERY.FILE_SEARCH) searchParam: String?
+    ): ListResponse<FileNetworkEntity>
 
     @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
     suspend fun getFiles(@Path("userId") userId: String): ListResponse<FileNetworkEntity>

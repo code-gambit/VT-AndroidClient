@@ -6,6 +6,7 @@ import com.github.code.gambit.data.model.User
 
 interface NetworkDataSource {
     suspend fun getFiles(): List<File>
+    suspend fun searchFiles(searchParam: String): List<File>
     suspend fun uploadFile(file: File): File
     suspend fun deleteFile(fileId: String): File
 
