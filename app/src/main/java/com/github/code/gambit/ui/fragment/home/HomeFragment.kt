@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
@@ -144,10 +145,30 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun setUpFileRecyclerView() {
-        binding.fileList.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.fileList.layoutManager = layoutManager
         binding.fileList.setHasFixedSize(false)
         binding.fileList.adapter = adapter
         adapter.listener = this
+        binding.fileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (searchBinding.root.isVisible) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    return
+                }
+                if (dy > 0) {
+                    hideBottomNav()
+                } else {
+                    showBottomNav()
+                }
+                if (!recyclerView.canScrollVertically(1) && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1) {
+                    // shortToast("End of list")
+                    println()
+                }
+                Timber.tag("home").i("(dx: $dx, dy: $dy)")
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
 
     private fun registerUrlComponent() {
