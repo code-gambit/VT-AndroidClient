@@ -1,8 +1,10 @@
 package com.github.code.gambit.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -17,8 +19,10 @@ import androidx.viewbinding.ViewBinding
 abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(private var layoutId: Int) :
     RecyclerView.Adapter<BaseAdapter.BaseViewHolder<B>>() {
 
+    private val backupData = ArrayList<T>()
     private var dataList = ArrayList<T>()
     var listener: LS? = null
+    var counterView: TextView? = null
 
     /**
      * Adds the clickListener to the root view of [BaseViewHolder.binding], which calls the abstract
@@ -72,6 +76,7 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
     fun add(data: T) {
         dataList.add(data)
         notifyDataSetChanged()
+        updateCounterText()
     }
 
     /**
@@ -85,6 +90,22 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         }
         dataList.addAll(dataItems)
         notifyDataSetChanged()
+        updateCounterText()
+    }
+
+    /**
+     * Sets the counter text view which is used for displaying the live item count
+     */
+    fun bindCounterView(view: TextView) {
+        counterView = view
+    }
+
+    /**
+     * updates the [counterView] with latest item count from [getItemCount]
+     */
+    @SuppressLint("SetTextI18n")
+    private fun updateCounterText() {
+        counterView?.text = "$itemCount Results"
     }
 
     /**
@@ -113,6 +134,26 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
      */
     fun setDataList(dataItems: ArrayList<T>) {
         dataList = dataItems
+    }
+
+    /**
+     * stores the current item for later user and clears the [dataList]
+     */
+    fun backup() {
+        backupData.addAll(dataList)
+        dataList.clear()
+        updateCounterText()
+        notifyDataSetChanged()
+    }
+
+    /**
+     * restores the [dataList] to the latest [backupData]
+     */
+    fun restore() {
+        dataList.clear()
+        dataList.addAll(backupData)
+        backupData.clear()
+        notifyDataSetChanged()
     }
 
     /**

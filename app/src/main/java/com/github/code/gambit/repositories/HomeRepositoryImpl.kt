@@ -33,6 +33,19 @@ constructor(
         }
     }
 
+    override suspend fun searchFile(searchString: String): Flow<ServiceResult<List<File>>> {
+        return flow {
+            try {
+                val data = networkDataSource.searchFiles(searchString)
+                emit(ServiceResult.Success(data))
+            } catch (internet: NoInternetException) {
+                emit(ServiceResult.Error(internet))
+            } catch (exception: Exception) {
+                emit(ServiceResult.Error(exception))
+            }
+        }
+    }
+
     override suspend fun generateUrl(file: File): Flow<ServiceResult<Url>> {
         val url = Url("", file.id, file.hash, "", true, 50)
         return flow {

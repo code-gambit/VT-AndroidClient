@@ -15,6 +15,7 @@
         android:padding="32dp">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_input"
             style="@style/search_input_theme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -62,10 +64,22 @@
 
     </LinearLayout>
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/login_signup_button_color"
+        android:layout_margin="@dimen/root_side_margin"
+        android:layout_gravity="center_horizontal"/>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/file_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/file_list_item"
         android:paddingStart="@dimen/root_side_margin"
         android:paddingEnd="@dimen/root_side_margin"/>
+
 </LinearLayout>

@@ -33,6 +33,7 @@ object AppConstant {
 
     object API_QUERY {
         const val FILE_LEK = "LastEvaluatedKey"
+        const val FILE_SEARCH = "searchParam"
     }
 
     object Worker {

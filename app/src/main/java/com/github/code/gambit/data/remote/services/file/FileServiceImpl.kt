@@ -16,11 +16,7 @@ class FileServiceImpl(
 
     override suspend fun getFiles(): List<FileNetworkEntity> {
         val lek: String = lekManager.getLastEvalKey(LastEvaluatedKeyManager.KeyType.FILE)
-        val listResponse: ListResponse<FileNetworkEntity> = if (lek == "") {
-            apiService.getFiles(userId)
-        } else {
-            apiService.getFiles(userId, lek)
-        }
+        val listResponse: ListResponse<FileNetworkEntity> = apiService.getFiles(userId, lek, null)
         if (listResponse.body.lastEvaluatedKey != null) {
             lekManager.putLastEvalKey(
                 listResponse.body.lastEvaluatedKey!!,
@@ -28,6 +24,11 @@ class FileServiceImpl(
             )
         }
         return listResponse.body.items
+    }
+
+    override suspend fun searchFile(searchParam: String): List<FileNetworkEntity> {
+        val response = apiService.getFiles(userId, null, searchParam)
+        return response.body.items
     }
 
     override suspend fun uploadFile(fileNetworkEntity: FileNetworkEntity): FileNetworkEntity {

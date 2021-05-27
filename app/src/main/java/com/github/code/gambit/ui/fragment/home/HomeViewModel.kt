@@ -26,16 +26,20 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
         viewModelScope.launch {
             when (event) {
                 HomeEvent.GetFiles -> {
-                    _homeState.postValue(HomeState.Loading)
+                    _homeState.postValue(HomeState.Loading())
                     getFile()
                 }
                 is HomeEvent.GenerateUrl -> {
-                    _homeState.postValue(HomeState.Loading)
+                    _homeState.postValue(HomeState.Loading())
                     generateUrl(event.file)
                 }
                 is HomeEvent.GetUrls -> {
                     _homeState.postValue(HomeState.LoadingUrl)
                     getUrls(event.file.id)
+                }
+                is HomeEvent.SearchFile -> {
+                    _homeState.postValue(HomeState.Loading(true))
+                    searchFile(event.searchString)
                 }
             }
         }
@@ -70,19 +74,37 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
         }
     }
 
+    private suspend fun searchFile(searchString: String) {
+        homeRepository.searchFile(searchString).collect {
+            when (it) {
+                is ServiceResult.Error -> postError(it.exception)
+                is ServiceResult.Success -> _homeState.postValue(
+                    HomeState.FilesLoaded(
+                        it.data,
+                        true
+                    )
+                )
+            }
+        }
+    }
+
     private fun postError(exception: Exception) {
         _homeState.postValue(HomeState.Error(exception.message!!))
     }
 }
+
 sealed class HomeEvent {
     object GetFiles : HomeEvent()
     data class GetUrls(val file: File) : HomeEvent()
     data class GenerateUrl(val file: File) : HomeEvent()
+    data class SearchFile(val searchString: String) : HomeEvent()
+    object LOADING : HomeEvent()
 }
+
 sealed class HomeState {
-    object Loading : HomeState()
     object LoadingUrl : HomeState()
-    data class FilesLoaded(val files: List<File>) : HomeState()
+    data class Loading(val isSearchResultLoading: Boolean = false) : HomeState()
+    data class FilesLoaded(val files: List<File>, val isSearchResult: Boolean = false) : HomeState()
     data class UrlsLoaded(val urls: List<Url>) : HomeState()
     data class UrlGenerated(val url: Url) : HomeState()
     data class Error(val message: String) : HomeState()
