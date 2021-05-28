@@ -28,6 +28,7 @@ import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.shortToast
 import com.github.code.gambit.utility.extention.show
 import com.github.code.gambit.utility.extention.snackbar
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.takusemba.spotlight.OnSpotlightListener
@@ -56,11 +57,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     private lateinit var _urlBinding: FileUrlLayoutBinding
     private val urlBinding get() = _urlBinding
 
+    private var isFirstLoading = true
+
     @Inject
     lateinit var homeRepository: HomeRepository
 
     @Inject
     lateinit var adapter: FileListAdapter
+
+    @Inject
+    lateinit var lekManager: LastEvaluatedKeyManager
 
     lateinit var fileSearchComponent: FileSearchComponent
 
@@ -71,9 +77,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         _searchBinding = binding.searchLayout
         _urlBinding = binding.fileUrlLayout
         activity?.window?.exitFullscreen()
+        lekManager.flush()
         registerFilterComponents()
         registerUrlComponent()
-
+        binding.linearProgress.hide()
         binding.filterButton.setOnClickListener {
             showFilter()
         }
@@ -92,6 +99,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         }
 
         binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
             viewModel.setEvent(HomeEvent.GetFiles)
         }
 
@@ -112,7 +120,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 is HomeState.Error -> longToast(it.message)
                 is HomeState.FilesLoaded -> {
                     if (!it.isSearchResult) {
-                        stopShimmer()
+                        if (isFirstLoading) {
+                            stopShimmer()
+                        } else {
+                            binding.linearProgress.hide()
+                        }
                         adapter.addAll(it.files, true)
                         binding.noFileIllustrationContainer.hide()
                         binding.swipeRefresh.isRefreshing = false
@@ -122,7 +134,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 }
                 is HomeState.Loading -> {
                     if (!it.isSearchResultLoading) {
-                        showShimmer()
+                        if (isFirstLoading) {
+                            showShimmer()
+                        } else {
+                            binding.linearProgress.show()
+                        }
                         return@observe
                     }
                     fileSearchComponent.setRefreshing()
@@ -151,6 +167,18 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         binding.fileList.adapter = adapter
         adapter.listener = this
         binding.fileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                if (!recyclerView.canScrollVertically(1) &&
+                    newState == RecyclerView.SCROLL_STATE_IDLE &&
+                    pastVisibleItem + visibleItemCount >= totalItemCount
+                ) {
+                    viewModel.setEvent(HomeEvent.GetFiles)
+                }
+            }
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (searchBinding.root.isVisible) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -161,11 +189,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 } else {
                     showBottomNav()
                 }
-                if (!recyclerView.canScrollVertically(1) && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1) {
-                    // shortToast("End of list")
-                    println()
-                }
-                Timber.tag("home").i("(dx: $dx, dy: $dy)")
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
@@ -230,6 +253,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun stopShimmer() {
+        isFirstLoading = false
         showBottomNav()
         binding.shimmerLayout.stopShimmer()
         binding.shimmerLayout.hide()

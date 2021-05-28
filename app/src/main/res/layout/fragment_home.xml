@@ -63,11 +63,20 @@
 
     </LinearLayout>
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/linear_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_container"
+        android:indeterminate="true"
+        app:indicatorColor="@color/secondary"
+        android:visibility="gone" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top_container"
+        android:layout_below="@id/linear_progress"
         android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -114,7 +123,8 @@
         android:id="@+id/shimmer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:shimmer_duration="800">
+        app:shimmer_duration="800"
+        android:visibility="visible">
 
         <include layout="@layout/home_placeholder_layout" />
 

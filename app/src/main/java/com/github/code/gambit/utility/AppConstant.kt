@@ -4,25 +4,11 @@ object AppConstant {
     const val AUTH_ATTRIBUTE_CUSTOM_PROFILE = "custom:profile_image"
     const val BASE_URL = "https://mhv71te0rh.execute-api.ap-south-1.amazonaws.com/beta/"
     const val SHARE_URL = "https://vt-webclient.herokuapp.com/"
-    object RequestCode {
-        const val PERMISSIONS = 101
-        const val GALLERY = 100
-        const val CAMERA = 102
-        const val DOCUMENT = 103
-    }
 
     object Named {
         const val PERMISSION_ARRAY = "PERMISSION"
         const val USER_ID = "UID"
         const val BASE_URL = "BRL"
-    }
-
-    @Deprecated(level = DeprecationLevel.WARNING, message = "ImageService related constants no longer used")
-    object Cloudinary {
-        const val UPLOAD_PRESET = "mqlj7ft0"
-        const val RESULT_URL_KEY = "url"
-        const val BASE_URL =
-            "http://res.cloudinary.com/code-gambit/image/upload/v1619956278/Profile%20Image/"
     }
 
     object API_PATH {
