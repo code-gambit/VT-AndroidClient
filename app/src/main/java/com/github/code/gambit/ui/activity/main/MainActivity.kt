@@ -20,10 +20,12 @@ import com.github.code.gambit.R
 import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.fragment.BottomNavController
-import com.github.code.gambit.ui.fragment.home.HomeFragment
+import com.github.code.gambit.ui.fragment.home.main.HomeFragment
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
 import com.github.code.gambit.utility.extention.bottomNavShow
+import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.show
 import com.github.code.gambit.utility.extention.snackbar
 import com.github.code.gambit.utility.extention.toggleVisibility
 import com.github.code.gambit.utility.sharedpreference.UserManager
@@ -162,9 +164,6 @@ class MainActivity : AppCompatActivity(), BottomNavController {
                         fragment.isSearchEnable() -> {
                             fragment.closeSearch()
                         }
-                        fragment.isFileUrlEnable() -> {
-                            fragment.closeFileUrl()
-                        }
                         else -> {
                             finish()
                         }
@@ -183,6 +182,11 @@ class MainActivity : AppCompatActivity(), BottomNavController {
 
     override fun animateBottomNav(offset: Float) {
         if (this::_binding.isInitialized && offset.isFinite()) {
+            if (offset == 0f) {
+                binding.bottomLayout.hide()
+            } else {
+                binding.bottomLayout.show()
+            }
             binding.bottomLayout.animate().alpha(offset).scaleX(offset).scaleY(offset)
                 .setDuration(0).start()
         }

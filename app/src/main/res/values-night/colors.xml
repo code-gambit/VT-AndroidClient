@@ -13,6 +13,8 @@
 
     <color name="login_signup_button_color">#EB6D6D</color>
 
+    <color name="filter_icon">@color/secondary</color>
+
     <color name="white">#000</color>
     <color name="black">#fff</color>
 </resources>

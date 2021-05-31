@@ -40,15 +40,19 @@ fun View.anim(delay: Long) {
         .setStartDelay(delay).setDuration(700).start()
 }
 
-fun View.hide() {
-    if (visibility != View.GONE) {
-        this.visibility = View.GONE
+fun View?.hide() {
+    this?.apply {
+        if (visibility != View.GONE) {
+            this.visibility = View.GONE
+        }
     }
 }
 
-fun View.show() {
-    if (visibility != View.VISIBLE) {
-        this.visibility = View.VISIBLE
+fun View?.show() {
+    this?.apply {
+        if (visibility != View.VISIBLE) {
+            this.visibility = View.VISIBLE
+        }
     }
 }
 

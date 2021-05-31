@@ -18,6 +18,8 @@
 
     <color name="bottom_nav_bar">#4C4C4C</color>
 
+    <color name="filter_icon">@color/secondary</color>
+
     <!-- info: below are the raw colors and appears same in every theme-->
     <color name="raw_white">#fff</color>
     <color name="raw_black">#000</color>

@@ -1,4 +1,4 @@
-package com.github.code.gambit.ui.fragment.home
+package com.github.code.gambit.ui.fragment.home.main
 
 import android.os.Bundle
 import android.view.View
@@ -13,13 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
-import com.github.code.gambit.databinding.FileUrlLayoutBinding
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
 import com.github.code.gambit.repositories.HomeRepository
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.ui.fragment.BottomNavController
+import com.github.code.gambit.ui.fragment.home.FileListAdapter
+import com.github.code.gambit.ui.fragment.home.FileUrlClickCallback
+import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
+import com.github.code.gambit.ui.fragment.home.filtercomponent.FilterComponent
+import com.github.code.gambit.ui.fragment.home.searchcomponent.FileSearchComponent
 import com.github.code.gambit.utility.extention.copyToClipboard
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.hide
@@ -54,9 +58,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     private lateinit var _searchBinding: SearchLayoutBinding
     private val searchBinding get() = _searchBinding
 
-    private lateinit var _urlBinding: FileUrlLayoutBinding
-    private val urlBinding get() = _urlBinding
-
     private var isFirstLoading = true
 
     @Inject
@@ -68,18 +69,17 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     @Inject
     lateinit var lekManager: LastEvaluatedKeyManager
 
-    lateinit var fileSearchComponent: FileSearchComponent
+    private lateinit var fileSearchComponent: FileSearchComponent
+    private lateinit var filterComponent: FilterComponent
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
         _filterBinding = binding.filterLayout
         _searchBinding = binding.searchLayout
-        _urlBinding = binding.fileUrlLayout
         activity?.window?.exitFullscreen()
         lekManager.flush()
         registerFilterComponents()
-        registerUrlComponent()
         binding.linearProgress.hide()
         binding.filterButton.setOnClickListener {
             showFilter()
@@ -91,7 +91,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
         binding.overlay.setOnClickListener {
             closeFilter()
-            closeFileUrl()
         }
 
         searchBinding.homeButton.setOnClickListener {
@@ -106,6 +105,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         binding.swipeRefresh.setOnDragListener { _, dragEvent ->
             Timber.tag("home").i("drag: ${dragEvent.y}")
             true
+        }
+
+        binding.clearFilter.setOnClickListener {
+            filterComponent.clearFilter()
+            adapter.restore()
+            it.hide()
+            binding.headerTitle.text = getString(R.string.recently)
+            binding.headerSubtitle.text = getString(R.string.added)
         }
 
         setUpFileRecyclerView()
@@ -156,6 +163,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                     }
                     adapter.addUrls(it.urls)
                 }
+                is HomeState.FilterResult -> {
+                    adapter.backup()
+                    binding.clearFilter.show()
+                    binding.linearProgress.hide()
+                    binding.headerTitle.text = "Uploaded"
+                    binding.headerSubtitle.text = it.header
+                    adapter.addAll(it.files, true)
+                }
             }
         }
     }
@@ -179,6 +194,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                     viewModel.setEvent(HomeEvent.GetFiles)
                 }
             }
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (searchBinding.root.isVisible) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -194,31 +210,13 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         })
     }
 
-    private fun registerUrlComponent() {
-        val bottomSheetBehavior = BottomSheetBehavior.from(urlBinding.bottomSheetContainer)
-        bottomSheetBehavior.peekHeight = 0
-        bottomSheetBehavior.isHideable = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    binding.overlay.hide()
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                binding.overlay.animate().alpha(slideOffset).setDuration(0).start()
-                animateBottomNav(1 - slideOffset)
-            }
-        })
-    }
-
     private fun registerFilterComponents() {
-        val bottomSheetBehavior = BottomSheetBehavior.from(filterBinding.bottomSheetContainer)
-        bottomSheetBehavior.peekHeight = 0
-        bottomSheetBehavior.isHideable = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
+        filterComponent = FilterComponent.bind(
+            filterBinding,
+            requireContext(),
+            requireMainActivity().supportFragmentManager
+        )
+        filterComponent.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN) {
                     binding.overlay.hide()
@@ -230,6 +228,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 animateBottomNav(1 - slideOffset)
             }
         })
+
+        filterComponent.getFilterRequest().observe(viewLifecycleOwner) {
+            Timber.tag("filter").i(it.type.toString())
+            closeFilter()
+            applyFilter(it)
+        }
     }
 
     private fun registerSearchComponents() {
@@ -238,7 +242,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
             fileSearchComponent.show()
             return
         }
-        fileSearchComponent = FileSearchComponentImpl.bind(binding.searchLayout, adapter, requireContext()) { closeSearch() }
+        fileSearchComponent = FileSearchComponent.bind(
+            binding.searchLayout,
+            adapter,
+            requireContext()
+        ) { closeSearch() }
         fileSearchComponent.getRequests().observe(
             viewLifecycleOwner
         ) {
@@ -250,6 +258,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 viewModel.setEvent(HomeEvent.SearchFile(it))
             }
         }
+    }
+
+    private fun applyFilter(filter: Filter) {
+        viewModel.setEvent(HomeEvent.FilterFiles(filter))
     }
 
     private fun stopShimmer() {
@@ -278,7 +290,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
             .setAnchor(requireMainActivity().getAddFab())
             .setShape(Circle(120f))
             .setOverlay(first)
-            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} })
+            .setOnTargetListener(object : OnTargetListener {
+                override fun onEnded() {}
+                override fun onStarted() {}
+            })
             .build()
 
         val secondRoot = FrameLayout(requireContext())
@@ -287,13 +302,19 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
             .setAnchor(binding.searchButton)
             .setShape(Circle(50f))
             .setOverlay(second)
-            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} }).build()
+            .setOnTargetListener(object : OnTargetListener {
+                override fun onEnded() {}
+                override fun onStarted() {}
+            }).build()
 
         val thirdTarget = Target.Builder()
             .setAnchor(binding.filterButton)
             .setShape(Circle(50f))
             .setOverlay(second)
-            .setOnTargetListener(object : OnTargetListener { override fun onEnded() {} override fun onStarted() {} }).build()
+            .setOnTargetListener(object : OnTargetListener {
+                override fun onEnded() {}
+                override fun onStarted() {}
+            }).build()
 
         targets.add(firstTarget)
         targets.add(secondTarget)
@@ -304,7 +325,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
             .setBackgroundColorRes(R.color.spotlightBackground)
             .setDuration(1000L)
             .setAnimation(DecelerateInterpolator(2f))
-            .setOnSpotlightListener(object : OnSpotlightListener { override fun onStarted() {} override fun onEnded() {} }).build()
+            .setOnSpotlightListener(object : OnSpotlightListener {
+                override fun onStarted() {}
+                override fun onEnded() {}
+            }).build()
 
         spotlight.start()
 
@@ -316,7 +340,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         second.findViewById<View>(R.id.next_button).setOnClickListener {
             spotlight.next()
             second.findViewById<TextView>(R.id.title_text).text = getString(R.string.use_filters)
-            second.findViewById<TextView>(R.id.info_text).text = getString(R.string.or_you_can_filter_files_based_on_dates_they_were_uploaded)
+            second.findViewById<TextView>(R.id.info_text).text =
+                getString(R.string.or_you_can_filter_files_based_on_dates_they_were_uploaded)
             second.findViewById<View>(R.id.arrow).animate().rotation(105f).setDuration(500).start()
         }
     }
@@ -324,16 +349,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     private fun showFilter() {
         animateBottomNav(0f)
         binding.overlay.show()
-        filterBinding.root.show()
-        setState(true, filterBinding.bottomSheetContainer)
+        filterComponent.show()
     }
 
     fun closeFilter() {
-        if (isFilterEnable()) {
-            setState(false, filterBinding.bottomSheetContainer)
+        if (filterComponent.isFilterEnabled()) {
+            filterComponent.hide()
             animateBottomNav(1f)
             binding.overlay.hide()
-            filterBinding.root.hide()
         }
     }
 
@@ -350,38 +373,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         showBottomNav()
     }
 
-    fun closeFileUrl() {
-        if (isFileUrlEnable()) {
-            setState(false, urlBinding.bottomSheetContainer)
-            animateBottomNav(1f)
-            binding.overlay.hide()
-            urlBinding.root.hide()
-        }
-    }
-
-    private fun setState(show: Boolean, bottomSheetContainer: View) {
-        val state = if (show) {
-            BottomSheetBehavior.STATE_EXPANDED
-        } else {
-            BottomSheetBehavior.STATE_COLLAPSED
-        }
-        BottomSheetBehavior.from(bottomSheetContainer).state = state
-    }
-
     private fun requireMainActivity() = (activity as MainActivity)
 
-    fun isFilterEnable() =
-        BottomSheetBehavior.from(filterBinding.bottomSheetContainer).state == BottomSheetBehavior.STATE_EXPANDED
-
-    fun isFileUrlEnable() =
-        BottomSheetBehavior.from(urlBinding.bottomSheetContainer).state == BottomSheetBehavior.STATE_EXPANDED
+    fun isFilterEnable() = filterComponent.isFilterEnabled()
 
     fun isSearchEnable() = searchBinding.root.isVisible
-
-//    override fun onItemClick(item: File) {
-//        //showFileUrl(item)
-//        adapter.addUrl(item, Url("sdfb", item.id, "24-02-12", true, 50))
-//    }
 
     override fun hideBottomNav() = requireMainActivity().hideBottomNav()
 
