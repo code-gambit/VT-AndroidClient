@@ -65,4 +65,13 @@
     <string name="mb">MB</string>
     <string name="default_click_count">50</string>
     <string name="title_domain">Domain</string>
+    <string name="tick_mark">tick mark</string>
+    <string name="illustration_icon">Illustration icon</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="last_week">Last Week</string>
+    <string name="last_month">Last Month</string>
+    <string name="custom_range">Custom Range</string>
+    <string name="select_date_range">Select Date Range</string>
+    <string name="clear_filter">Clear Filter</string>
 </resources>

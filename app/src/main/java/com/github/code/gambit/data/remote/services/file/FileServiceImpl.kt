@@ -26,6 +26,11 @@ class FileServiceImpl(
         return listResponse.body.items
     }
 
+    override suspend fun filterFiles(start: String, end: String): List<FileNetworkEntity> {
+        val response = apiService.filterFiles(userId, null, start, end)
+        return response.body.items
+    }
+
     override suspend fun searchFile(searchParam: String): List<FileNetworkEntity> {
         val response = apiService.getFiles(userId, null, searchParam)
         return response.body.items

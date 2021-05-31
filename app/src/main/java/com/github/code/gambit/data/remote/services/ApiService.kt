@@ -33,6 +33,14 @@ interface ApiService {
     ): ListResponse<FileNetworkEntity>
 
     @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
+    suspend fun filterFiles(
+        @Path("userId") userId: String,
+        @Query(AppConstant.API_QUERY.FILE_LEK) lastEvalKey: String?,
+        @Query(AppConstant.API_QUERY.FILTER_START) start: String?,
+        @Query(AppConstant.API_QUERY.FILTER_END) end: String?
+    ): ListResponse<FileNetworkEntity>
+
+    @GET("user/{${AppConstant.API_PATH.USER_ID}}/file")
     suspend fun getFiles(@Path("userId") userId: String): ListResponse<FileNetworkEntity>
 
     @POST("user/{${AppConstant.API_PATH.USER_ID}}/file")

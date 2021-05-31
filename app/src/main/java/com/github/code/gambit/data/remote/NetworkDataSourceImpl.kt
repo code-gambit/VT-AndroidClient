@@ -23,6 +23,10 @@ class NetworkDataSourceImpl(
         return fileNetworkMapper.mapFromEntityList(fileService.getFiles())
     }
 
+    override suspend fun filterFiles(start: String, end: String): List<File> {
+        return fileNetworkMapper.mapFromEntityList(fileService.filterFiles(start, end))
+    }
+
     override suspend fun searchFiles(searchParam: String): List<File> {
         return fileNetworkMapper.mapFromEntityList(fileService.searchFile(searchParam))
     }

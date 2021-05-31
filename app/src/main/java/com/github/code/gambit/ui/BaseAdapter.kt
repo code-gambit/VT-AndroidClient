@@ -10,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 
 /**
  * Use as a base class for all the adapters in this project
- * @author Danish Jamal <https://github.com/danishjamal104>
+ * @author Danish Jamal [https://github.com/danishjamal104]
  * @param [T] It describes the model class
  * @param [B] It describes the view binding class
  * @param [LS] It describes the listener class

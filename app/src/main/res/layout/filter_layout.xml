@@ -4,40 +4,63 @@
     android:id="@+id/bottom_sheet_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/root_side_margin">
+    android:layout_marginBottom="32dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/bottom_sheet_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="@dimen/root_side_margin"
+        android:layout_height="370dp"
+        android:layout_marginStart="@dimen/root_side_margin"
+        android:layout_marginEnd="@dimen/root_side_margin"
         app:cardCornerRadius="10dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/close_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="@dimen/root_side_margin"
-                android:layout_marginTop="@dimen/root_side_margin"
-                android:background="@color/transparent"
-                android:contentDescription="@string/close"
-                android:rotation="45"
-                android:src="@drawable/ic_plus"
-                android:tint="@color/black" />
-
             <TextView
+                android:id="@+id/filter_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="36dp"
                 android:text="@string/filter_by_date"
                 android:textStyle="bold" />
 
+            <include
+                android:id="@+id/today"
+                layout="@layout/filter_item"
+                android:layout_below="@id/filter_heading"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="32dp"/>
+            <include
+                android:id="@+id/yesterday"
+                layout="@layout/filter_item"
+                android:layout_below="@id/today"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/filter_item_top_margin" />
+            <include
+                android:id="@+id/last_week"
+                layout="@layout/filter_item"
+                android:layout_below="@id/yesterday"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/filter_item_top_margin"/>
+            <include
+                android:id="@+id/last_month"
+                layout="@layout/filter_item"
+                android:layout_below="@id/last_week"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/filter_item_top_margin"/>
+            <include
+                android:id="@+id/custom_range"
+                layout="@layout/filter_item"
+                android:layout_below="@id/last_month"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/filter_item_top_margin"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

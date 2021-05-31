@@ -1,4 +1,4 @@
-package com.github.code.gambit.ui.fragment.home
+package com.github.code.gambit.ui.fragment.home.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.repositories.HomeRepository
+import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,6 +42,10 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
                     _homeState.postValue(HomeState.Loading(true))
                     searchFile(event.searchString)
                 }
+                is HomeEvent.FilterFiles -> {
+                    _homeState.postValue(HomeState.Loading())
+                    filterFiles(event.filter)
+                }
             }
         }
     }
@@ -51,6 +56,17 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
                 is ServiceResult.Error -> postError(it.exception)
                 is ServiceResult.Success -> {
                     _homeState.postValue(HomeState.FilesLoaded(it.data))
+                }
+            }
+        }
+    }
+
+    private suspend fun filterFiles(filter: Filter) {
+        homeRepository.searchFileByFilter(filter).collect {
+            when (it) {
+                is ServiceResult.Error -> postError(it.exception)
+                is ServiceResult.Success -> {
+                    _homeState.postValue(HomeState.FilterResult(it.data, filter.type.toString()))
                 }
             }
         }
@@ -95,16 +111,17 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
 
 sealed class HomeEvent {
     object GetFiles : HomeEvent()
+    data class FilterFiles(val filter: Filter) : HomeEvent()
     data class GetUrls(val file: File) : HomeEvent()
     data class GenerateUrl(val file: File) : HomeEvent()
     data class SearchFile(val searchString: String) : HomeEvent()
-    object LOADING : HomeEvent()
 }
 
 sealed class HomeState {
     object LoadingUrl : HomeState()
     data class Loading(val isSearchResultLoading: Boolean = false) : HomeState()
     data class FilesLoaded(val files: List<File>, val isSearchResult: Boolean = false) : HomeState()
+    data class FilterResult(val files: List<File>, val header: String) : HomeState()
     data class UrlsLoaded(val urls: List<Url>) : HomeState()
     data class UrlGenerated(val url: Url) : HomeState()
     data class Error(val message: String) : HomeState()

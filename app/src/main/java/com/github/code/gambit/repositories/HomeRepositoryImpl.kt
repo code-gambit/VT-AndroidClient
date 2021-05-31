@@ -5,10 +5,14 @@ import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.helper.ServiceResult
+import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
+import com.github.code.gambit.utility.AppConstant
 import com.github.code.gambit.utility.NoInternetException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class HomeRepositoryImpl
 constructor(
@@ -29,6 +33,22 @@ constructor(
             } finally {
                 val files = cacheDataSource.getFiles()
                 emit(ServiceResult.Success(files))
+            }
+        }
+    }
+
+    override suspend fun searchFileByFilter(filter: Filter): Flow<ServiceResult<List<File>>> {
+        val sdf = SimpleDateFormat(AppConstant.FILTER_DATE_TEMPLATE, Locale.getDefault())
+        val start = sdf.format(filter.start)
+        val end = sdf.format(filter.end)
+        return flow {
+            try {
+                val data = networkDataSource.filterFiles(start, end)
+                emit(ServiceResult.Success(data))
+            } catch (internet: NoInternetException) {
+                emit(ServiceResult.Error(internet))
+            } catch (exception: Exception) {
+                emit(ServiceResult.Error(exception))
             }
         }
     }

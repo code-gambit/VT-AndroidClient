@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="156dp"
+    android:height="144dp"
+    android:viewportWidth="156"
+    android:viewportHeight="144">
+  <path
+      android:pathData="M18,5L138,5A13,13 0,0 1,151 18L151,126A13,13 0,0 1,138 139L18,139A13,13 0,0 1,5 126L5,18A13,13 0,0 1,18 5z"
+      android:strokeWidth="10"
+      android:fillColor="#00000000"
+      android:strokeColor="@color/filter_icon"/>
+  <path
+      android:pathData="M29.687,29.49L127.314,29.49"
+      android:strokeWidth="10"
+      android:fillColor="#00000000"
+      android:strokeColor="@color/filter_icon"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M36,63m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+      android:fillColor="@color/filter_icon"/>
+  <path
+      android:pathData="M80,63m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+      android:fillColor="@color/filter_icon"/>
+  <path
+      android:pathData="M124,63m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+      android:fillColor="@color/filter_icon"/>
+  <path
+      android:pathData="M80,107m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+      android:fillColor="@color/filter_icon"/>
+  <path
+      android:pathData="M124,107m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+      android:fillColor="@color/filter_icon"/>
+</vector>

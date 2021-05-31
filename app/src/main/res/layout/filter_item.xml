@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/illustration"
+        android:layout_width="@dimen/filter_icon_size"
+        android:layout_height="@dimen/filter_icon_size"
+        android:src="@drawable/ic_calendar_custom"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/filter_side_margin"
+        android:contentDescription="@string/illustration_icon" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/illustration"
+        android:paddingStart="@dimen/filter_side_margin"
+        android:paddingEnd="0dp"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/helper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Today"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/secondary"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="May 29"
+            android:textSize="12sp"
+            android:textColor="@color/raw_dark_grey"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/check"
+        android:layout_width="@dimen/filter_icon_size"
+        android:layout_height="@dimen/filter_icon_size"
+        android:src="@drawable/ic_tick"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/filter_side_margin"
+        android:contentDescription="@string/tick_mark"
+        android:visibility="gone"/>
+
+</RelativeLayout>
