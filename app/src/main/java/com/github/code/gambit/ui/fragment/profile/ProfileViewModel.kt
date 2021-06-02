@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.profile.ProfileState
-import com.github.code.gambit.repositories.ProfileRepository
+import com.github.code.gambit.repositories.profile.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

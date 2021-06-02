@@ -1,4 +1,4 @@
-package com.github.code.gambit.repositories
+package com.github.code.gambit.repositories.profile
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.services.cognitoidentityprovider.model.InvalidParameterException

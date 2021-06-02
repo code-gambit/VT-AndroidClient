@@ -32,6 +32,7 @@ object AppConstant {
         const val FILE_META_DATA = "FILE_META_DATA"
         const val USER_ID = "USER_ID"
         const val FILE_OUTPUT_KEY = "FILE_OUTPUT"
+        const val FILE_UPLOAD_TAG = "FILE-UPLOAD-TAG"
     }
 
     object Notification {

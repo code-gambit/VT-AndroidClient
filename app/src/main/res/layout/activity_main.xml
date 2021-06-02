@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/activity_main_scene"
     tools:context=".ui.activity.main.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -11,99 +12,146 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="@dimen/drag_down_width"
+        android:layout_height="@dimen/drag_down_height"
+        android:clickable="false"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/drag_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.2"
+            android:contentDescription="@string/drag_down_from_here"
+            android:scaleY="0.5"
+            android:src="@drawable/ic_down_arrow"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_nav_container_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <RelativeLayout
+            android:id="@+id/bottom_nav_container"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/transparent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:background="@drawable/bottom_bar_bg"
+                    android:elevation="1dp"
+                    app:itemIconTint="@color/bottom_bar_color"
+                    app:labelVisibilityMode="unlabeled"
+                    app:menu="@menu/bottom_navigation_menu" />
+
+            </FrameLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_file_button"
+                style="@style/bottom_nav_fab_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="28dp"
+                android:contentDescription="@string/add_file"
+                android:src="@drawable/ic_plus" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/file_upload_container_root"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_container_root"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:id="@+id/bottom_layout"
+            android:id="@+id/file_upload_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:visibility="gone"
+            >
 
-            <LinearLayout
-                android:id="@+id/file_upload_container"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center"
-                android:padding="8dp"
-                android:visibility="gone">
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/gallery_button"
-                    style="@style/Widget.App.FloatingActionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/gallery"
-                    android:src="@drawable/ic_gallery" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/camera_button"
-                    style="@style/Widget.App.FloatingActionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/root_side_margin"
-                    android:layout_marginEnd="@dimen/root_side_margin"
-                    android:contentDescription="@string/camera"
-                    android:src="@drawable/ic_camera" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/document_button"
-                    style="@style/Widget.App.FloatingActionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/document"
-                    android:src="@drawable/ic_folder" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/bottom_nav_container"
-                android:layout_width="match_parent"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/gallery_button"
+                style="@style/Widget.App.FloatingActionButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:contentDescription="@string/gallery"
+                android:src="@drawable/ic_gallery" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/camera_button"
+                style="@style/Widget.App.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/root_side_margin"
                 android:layout_marginEnd="@dimen/root_side_margin"
-                android:layout_marginBottom="@dimen/root_side_margin"
-                android:background="@color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                android:contentDescription="@string/camera"
+                android:src="@drawable/ic_camera" />
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/document_button"
+                style="@style/Widget.App.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/document"
+                android:src="@drawable/ic_folder" />
 
-                    <com.google.android.material.bottomnavigation.BottomNavigationView
-                        android:id="@+id/bottom_navigation"
-                        android:layout_width="match_parent"
-                        android:layout_height="82dp"
-                        android:background="@drawable/bottom_bar_bg"
-                        android:elevation="1dp"
-                        app:itemIconTint="@color/bottom_bar_color"
-                        app:labelVisibilityMode="unlabeled"
-                        app:menu="@menu/bottom_navigation_menu" />
-
-                </FrameLayout>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/add_file_button"
-                    style="@style/bottom_nav_fab_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="28dp"
-                    android:contentDescription="@string/add_file"
-                    android:src="@drawable/ic_plus" />
-            </RelativeLayout>
         </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/secondary_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/constraint_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/file_meta_data_list_item"
+        android:paddingTop="32dp"
+        android:scaleX="1.1"
+        android:scaleY="1.1"/>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -74,4 +74,5 @@
     <string name="custom_range">Custom Range</string>
     <string name="select_date_range">Select Date Range</string>
     <string name="clear_filter">Clear Filter</string>
+    <string name="drag_down_from_here">drag down from here</string>
 </resources>

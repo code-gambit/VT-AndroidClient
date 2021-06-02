@@ -18,4 +18,6 @@
     <dimen name="filter_icon_size">18dp</dimen>
     <dimen name="filter_side_margin">36dp</dimen>
     <dimen name="filter_item_top_margin">16dp</dimen>
+    <dimen name="drag_down_width">232dp</dimen>
+    <dimen name="drag_down_height">52dp</dimen>
 </resources>

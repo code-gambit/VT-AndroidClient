@@ -1,4 +1,4 @@
-package com.github.code.gambit.repositories
+package com.github.code.gambit.repositories.home
 
 import com.github.code.gambit.data.local.CacheDataSource
 import com.github.code.gambit.data.model.File

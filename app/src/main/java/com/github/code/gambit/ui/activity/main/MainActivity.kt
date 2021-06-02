@@ -1,5 +1,6 @@
 package com.github.code.gambit.ui.activity.main
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,13 +13,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amplifyframework.auth.AuthChannelEventName
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.InitializationStatus
 import com.amplifyframework.hub.HubChannel
 import com.github.code.gambit.R
+import com.github.code.gambit.data.model.FileUploadStatus
 import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
+import com.github.code.gambit.ui.OnItemClickListener
 import com.github.code.gambit.ui.fragment.BottomNavController
 import com.github.code.gambit.ui.fragment.home.main.HomeFragment
 import com.github.code.gambit.utility.SystemManager
@@ -48,6 +52,9 @@ class MainActivity : AppCompatActivity(), BottomNavController {
     @Inject
     lateinit var systemManager: SystemManager
 
+    @Inject
+    lateinit var adapter: FileMetaDataAdapter
+
     private lateinit var navController: NavController
 
     private lateinit var launcher: ActivityResultLauncher<Intent>
@@ -65,17 +72,20 @@ class MainActivity : AppCompatActivity(), BottomNavController {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.splashFragment -> {
-                    binding.bottomNavContainer.bottomNavHide()
+                    binding.root.getTransition(R.id.start_to_end).setEnable(false)
+                    hideBottomNav()
                 }
                 R.id.onBoardingFragment -> {
-                    binding.bottomNavContainer.bottomNavHide()
+                    hideBottomNav()
                 }
                 R.id.homeFragment -> {
                     // info bottomNav is hiddent until data is loading in homeFragment
                     // binding.bottomNavContainer.bottomNavShow()
+                    binding.root.getTransition(R.id.start_to_end).setEnable(true)
+                    binding.dragIcon.show()
                 }
                 R.id.authFragment -> {
-                    binding.bottomNavContainer.bottomNavHide()
+                    hideBottomNav()
                 }
             }
         }
@@ -93,8 +103,39 @@ class MainActivity : AppCompatActivity(), BottomNavController {
                     Toast.makeText(this, it.file.toString(), Toast.LENGTH_LONG).show()
                     binding.root.snackbar("File successfully uploaded")
                 }
+                is FileUploadState.NewFileUpload -> {
+                    adapter.add(it.fileUploadStatus)
+                }
+                is FileUploadState.UpdateFileState -> {
+                    adapter.updateStatus(it.uuid, it.newState)
+                }
             }
         }
+        setUpRecyclerView()
+        viewModel.setEvent(MainEvent.ObserveFileStatus)
+    }
+
+    private fun setUpRecyclerView() {
+        adapter.listener = object : OnItemClickListener<FileUploadStatus> {
+            override fun onItemClick(item: FileUploadStatus) {
+                val alertDialog = AlertDialog.Builder(this@MainActivity)
+                    .setTitle("Confirmation")
+                    .setMessage("Are you sure you want to cancel file upload?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        adapter.remove(item)
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }.create()
+                alertDialog.show()
+            }
+
+            override fun onItemLongClick(item: FileUploadStatus) {}
+        }
+        val layoutManager = LinearLayoutManager(this)
+        binding.secondaryContainer.layoutManager = layoutManager
+        binding.secondaryContainer.setHasFixedSize(false)
+        binding.secondaryContainer.adapter = adapter
     }
 
     private fun setupClickListeners() {
@@ -183,11 +224,11 @@ class MainActivity : AppCompatActivity(), BottomNavController {
     override fun animateBottomNav(offset: Float) {
         if (this::_binding.isInitialized && offset.isFinite()) {
             if (offset == 0f) {
-                binding.bottomLayout.hide()
+                binding.bottomNavContainer.hide()
             } else {
-                binding.bottomLayout.show()
+                binding.bottomNavContainer.show()
             }
-            binding.bottomLayout.animate().alpha(offset).scaleX(offset).scaleY(offset)
+            binding.bottomNavContainer.animate().alpha(offset).scaleX(offset).scaleY(offset)
                 .setDuration(0).start()
         }
     }

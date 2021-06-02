@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    xmlns:app="urn:oasis:names:tc:xliff:document:1.2">
+
+    <Transition
+        android:id="@+id/start_to_end"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <OnSwipe
+            motion:touchRegionId="@+id/constraint_layout"
+            motion:touchAnchorId="@+id/constraint_layout"
+            motion:touchAnchorSide="top" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/constraint_layout"
+            android:rotationX="180"/>
+        <Constraint
+            android:id="@+id/nav_host_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:scaleY="0.9"
+            android:scaleX="0.9"/>
+        <Constraint
+            android:id="@+id/bottom_nav_container_root"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            motion:layout_constraintVertical_bias="1.0"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:visibility="invisible"
+            android:scaleY="0.9"
+            android:scaleX="0.9"/>
+        <Constraint
+            android:id="@+id/secondary_container"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:scaleY="1"
+            android:scaleX="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toTopOf="@id/constraint_layout"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/file_upload_container_root"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            motion:layout_constraintBottom_toTopOf="@+id/bottom_nav_container_root"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:visibility="invisible"
+            android:scaleY="0.9"
+            android:scaleX="0.9"/>
+    </ConstraintSet>
+</MotionScene>
