@@ -1,16 +1,22 @@
 package com.github.code.gambit.data.local
 
+import com.github.code.gambit.data.entity.chache.FileMetaDataCacheEntity
 import com.github.code.gambit.data.mapper.cache.FileCacheMapper
+import com.github.code.gambit.data.mapper.cache.FileMetaDataMapper
 import com.github.code.gambit.data.mapper.cache.UrlCacheMapper
 import com.github.code.gambit.data.model.File
+import com.github.code.gambit.data.model.FileMetaData
 import com.github.code.gambit.data.model.Url
+import java.util.Calendar
 
 class CacheDataSourceImpl
 constructor(
-    val fileCacheMapper: FileCacheMapper,
-    val urlCacheMapper: UrlCacheMapper,
-    val fileDao: FileDao,
-    val urlDao: UrlDao
+    private val fileCacheMapper: FileCacheMapper,
+    private val urlCacheMapper: UrlCacheMapper,
+    private val fileMetaDataMapper: FileMetaDataMapper,
+    private val fileDao: FileDao,
+    private val urlDao: UrlDao,
+    private val fileWorkerDao: FileMetaDataDao
 ) : CacheDataSource {
 
     override suspend fun getFiles(): List<File> {
@@ -34,5 +40,28 @@ constructor(
     override suspend fun getUrls(fileId: String): List<Url> {
         val urls = urlDao.getUrls(fileId)
         return urlCacheMapper.mapFromEntityList(urls)
+    }
+
+    override suspend fun insertFileMetaData(fileMetaData: FileMetaData, uuid: String) {
+        val data: FileMetaDataCacheEntity = fileMetaDataMapper.mapToEntity(fileMetaData)
+        data.timestamp = Calendar.getInstance().timeInMillis
+        return fileWorkerDao.insertFileMetaData(data)
+    }
+
+    override suspend fun getFileMetaData(uuid: String): FileMetaData {
+        val res = fileWorkerDao.getFileMetaData(uuid)[0]
+        return FileMetaData(res.path, res.name, res.size)
+    }
+
+    override suspend fun getAllFileMetaData(): List<FileMetaData> {
+        return fileMetaDataMapper.mapFromEntityList(fileWorkerDao.getAllFileMetaData())
+    }
+
+    override suspend fun deleteFileMetaData(uuid: String) {
+        return fileWorkerDao.deleteFileMetaData(uuid)
+    }
+
+    override suspend fun clearAllFileMetaData() {
+        return fileWorkerDao.deleteAll()
     }
 }

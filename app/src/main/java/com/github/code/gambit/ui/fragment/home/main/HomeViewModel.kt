@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.helper.ServiceResult
-import com.github.code.gambit.repositories.HomeRepository
+import com.github.code.gambit.repositories.home.HomeRepository
 import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect

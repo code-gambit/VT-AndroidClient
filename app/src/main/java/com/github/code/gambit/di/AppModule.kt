@@ -2,8 +2,10 @@ package com.github.code.gambit.di
 
 import android.Manifest
 import android.content.Context
+import androidx.work.WorkManager
 import com.cloudinary.android.MediaManager
 import com.github.code.gambit.VTransfer
+import com.github.code.gambit.ui.activity.main.FileMetaDataAdapter
 import com.github.code.gambit.ui.fragment.home.FileListAdapter
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.FirstOnBoardingFragment
 import com.github.code.gambit.ui.fragment.onboarding.infoscreens.SecondOnBoardingFragment
@@ -68,6 +70,12 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
+        return WorkManager.getInstance(context)
+    }
+
+    @Singleton
+    @Provides
     @Named(AppConstant.Named.PERMISSION_ARRAY)
     fun providePermissionArray(): List<String> {
         return listOf(
@@ -88,5 +96,10 @@ object AppModule {
     @Provides
     fun provideFileListAdapter(): FileListAdapter {
         return FileListAdapter()
+    }
+
+    @Provides
+    fun provideFileMetaDataAdapter(@ApplicationContext context: Context): FileMetaDataAdapter {
+        return FileMetaDataAdapter(context)
     }
 }

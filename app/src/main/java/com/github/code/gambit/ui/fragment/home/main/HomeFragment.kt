@@ -16,7 +16,7 @@ import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.databinding.FilterLayoutBinding
 import com.github.code.gambit.databinding.FragmentHomeBinding
 import com.github.code.gambit.databinding.SearchLayoutBinding
-import com.github.code.gambit.repositories.HomeRepository
+import com.github.code.gambit.repositories.home.HomeRepository
 import com.github.code.gambit.ui.activity.main.MainActivity
 import com.github.code.gambit.ui.fragment.BottomNavController
 import com.github.code.gambit.ui.fragment.home.FileListAdapter

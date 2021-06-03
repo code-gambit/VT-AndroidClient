@@ -6,10 +6,12 @@ import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
 import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
 import com.github.code.gambit.repositories.AuthRepository
-import com.github.code.gambit.repositories.HomeRepository
-import com.github.code.gambit.repositories.HomeRepositoryImpl
-import com.github.code.gambit.repositories.ProfileRepository
-import com.github.code.gambit.repositories.ProfileRepositoryImpl
+import com.github.code.gambit.repositories.fileupload.FileUploadRepository
+import com.github.code.gambit.repositories.fileupload.FileUploadRepositoryImpl
+import com.github.code.gambit.repositories.home.HomeRepository
+import com.github.code.gambit.repositories.home.HomeRepositoryImpl
+import com.github.code.gambit.repositories.profile.ProfileRepository
+import com.github.code.gambit.repositories.profile.ProfileRepositoryImpl
 import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.Module
 import dagger.Provides
@@ -61,5 +63,11 @@ object RepositoryModule {
         networkDataSource: NetworkDataSource
     ): HomeRepository {
         return HomeRepositoryImpl(cacheDataSource, networkDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideFileUploadRepository(cacheDataSource: CacheDataSource): FileUploadRepository {
+        return FileUploadRepositoryImpl(cacheDataSource)
     }
 }

@@ -82,8 +82,8 @@ constructor(private val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)
         launcher.launch(intent)
     }
 
-    fun getFileName(context: Context, uri: Uri): String {
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
+    fun getFileName(uri: Uri): String {
+        val cursor = ctx.contentResolver.query(uri, null, null, null, null)
         val nameIndex = cursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         cursor.moveToFirst()
         val name = cursor.getString(nameIndex)
@@ -91,8 +91,8 @@ constructor(private val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)
         return name
     }
 
-    fun getFileSize(context: Context, uri: Uri): Int {
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
+    fun getFileSize(uri: Uri): Int {
+        val cursor = ctx.contentResolver.query(uri, null, null, null, null)
         val sizeIndex = cursor!!.getColumnIndex(OpenableColumns.SIZE)
         cursor.moveToFirst()
         val size = cursor.getInt(sizeIndex)
@@ -100,13 +100,13 @@ constructor(private val ctx: Context, @Named(AppConstant.Named.PERMISSION_ARRAY)
         return size
     }
 
-    fun getFilePath(context: Context, uri: Uri): String {
-        val path = FileUtil.getPathFromLocalUri(context, uri)
+    fun getFilePath(uri: Uri): String {
+        val path = FileUtil.getPathFromLocalUri(ctx, uri)
         if (path != null) {
             return path
         }
-        val ins = context.contentResolver.openInputStream(uri)
-        val file = File(context.externalCacheDir!!.absolutePath + "/test")
+        val ins = ctx.contentResolver.openInputStream(uri)
+        val file = File(ctx.externalCacheDir!!.absolutePath + "/test")
         file.writeBytes(ins!!.readBytes())
         return file.absolutePath
     }

@@ -1,4 +1,4 @@
-package com.github.code.gambit.repositories
+package com.github.code.gambit.repositories.profile
 
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.helper.ServiceResult
