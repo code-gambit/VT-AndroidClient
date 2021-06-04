@@ -8,7 +8,11 @@ class Response<T>(
     @Expose
     var statusCode: Int,
 
+    @SerializedName("error")
+    @Expose
+    var error: String?,
+
     @SerializedName("body")
     @Expose
-    var body: T
+    var body: T?
 )

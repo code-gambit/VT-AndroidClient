@@ -14,25 +14,25 @@ class UrlServiceImpl(val apiService: ApiService, private val lekManager: LastEva
         } else {
             apiService.getUrls(fileId.split("#")[1])
         }
-        if (listResponse.body.lastEvaluatedKey != null) {
+        if (listResponse.body?.lastEvaluatedKey != null) {
             lekManager.putLastEvalKey(
-                listResponse.body.lastEvaluatedKey!!,
+                listResponse.body?.lastEvaluatedKey!!,
                 LastEvaluatedKeyManager.KeyType.URL
             )
         }
-        return listResponse.body.items
+        return listResponse.body?.items!!
     }
 
     override suspend fun generateUrl(fileId: String, urlNetworkEntity: UrlNetworkEntity): String {
         val id = fileId.split("#")[1]
-        return apiService.generateUrl(id, urlNetworkEntity).body
+        return apiService.generateUrl(id, urlNetworkEntity).body!!
     }
 
     override suspend fun updateUrl(fileId: String, urlId: String, urlNetworkEntity: UrlNetworkEntity): UrlNetworkEntity {
-        return apiService.updateUrl(fileId, urlId, urlNetworkEntity).body
+        return apiService.updateUrl(fileId, urlId, urlNetworkEntity).body!!
     }
 
     override suspend fun deleteUrl(fileId: String, urlId: String): UrlNetworkEntity {
-        return apiService.deleteUrl(fileId, urlId).body
+        return apiService.deleteUrl(fileId, urlId).body!!
     }
 }
