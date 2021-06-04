@@ -1,6 +1,5 @@
 package com.github.code.gambit.ui.activity.main
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +29,7 @@ import com.github.code.gambit.utility.extention.bottomNavHide
 import com.github.code.gambit.utility.extention.bottomNavShow
 import com.github.code.gambit.utility.extention.hide
 import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.extention.showDefaultMaterialAlert
 import com.github.code.gambit.utility.extention.snackbar
 import com.github.code.gambit.utility.extention.toggleVisibility
 import com.github.code.gambit.utility.sharedpreference.UserManager
@@ -118,16 +118,9 @@ class MainActivity : AppCompatActivity(), BottomNavController {
     private fun setUpRecyclerView() {
         adapter.listener = object : OnItemClickListener<FileUploadStatus> {
             override fun onItemClick(item: FileUploadStatus) {
-                val alertDialog = AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Confirmation")
-                    .setMessage("Are you sure you want to cancel file upload?")
-                    .setPositiveButton("Yes") { _, _ ->
-                        adapter.remove(item)
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.dismiss()
-                    }.create()
-                alertDialog.show()
+                showDefaultMaterialAlert(
+                    "Confirmation", "Are you sure you want to cancel file upload?"
+                ) { adapter.remove(item) }
             }
 
             override fun onItemLongClick(item: FileUploadStatus) {}

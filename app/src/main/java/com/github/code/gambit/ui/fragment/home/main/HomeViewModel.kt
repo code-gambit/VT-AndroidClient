@@ -46,6 +46,10 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
                     _homeState.postValue(HomeState.Loading())
                     filterFiles(event.filter)
                 }
+                is HomeEvent.DeleteFile -> {
+                    _homeState.postValue(HomeState.Loading())
+                    deleteFile(event.file)
+                }
             }
         }
     }
@@ -57,6 +61,15 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
                 is ServiceResult.Success -> {
                     _homeState.postValue(HomeState.FilesLoaded(it.data))
                 }
+            }
+        }
+    }
+
+    private suspend fun deleteFile(file: File) {
+        homeRepository.deleteFile(file).collect {
+            when (it) {
+                is ServiceResult.Error -> postError(it.exception)
+                is ServiceResult.Success -> _homeState.postValue(HomeState.FileDeleted(file))
             }
         }
     }
@@ -112,6 +125,7 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
 sealed class HomeEvent {
     object GetFiles : HomeEvent()
     data class FilterFiles(val filter: Filter) : HomeEvent()
+    data class DeleteFile(val file: File) : HomeEvent()
     data class GetUrls(val file: File) : HomeEvent()
     data class GenerateUrl(val file: File) : HomeEvent()
     data class SearchFile(val searchString: String) : HomeEvent()
@@ -121,6 +135,7 @@ sealed class HomeState {
     object LoadingUrl : HomeState()
     data class Loading(val isSearchResultLoading: Boolean = false) : HomeState()
     data class FilesLoaded(val files: List<File>, val isSearchResult: Boolean = false) : HomeState()
+    data class FileDeleted(val file: File) : HomeState()
     data class FilterResult(val files: List<File>, val header: String) : HomeState()
     data class UrlsLoaded(val urls: List<Url>) : HomeState()
     data class UrlGenerated(val url: Url) : HomeState()

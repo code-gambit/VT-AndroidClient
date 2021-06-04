@@ -1,6 +1,7 @@
 package com.github.code.gambit.utility.extention
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.github.code.gambit.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
@@ -141,4 +143,17 @@ fun Fragment.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText("COPIED", url)
     clipboard?.setPrimaryClip(clip)
     shortToast("Url copied")
+}
+
+fun Context.showDefaultAlert(title: String, message: String, positiveButtonPress: () -> Unit) {
+    AlertDialog.Builder(this)
+        .setTitle(title).setMessage(message)
+        .setPositiveButton("Yes") { _, _ -> positiveButtonPress() }
+        .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create().show()
+}
+
+fun Context.showDefaultMaterialAlert(title: String, message: String, positiveButtonPress: () -> Unit) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title).setMessage(message).setPositiveButton("Yes") { _, _ -> positiveButtonPress() }
+        .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create().show()
 }

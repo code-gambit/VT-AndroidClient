@@ -9,7 +9,7 @@ interface NetworkDataSource {
     suspend fun searchFiles(searchParam: String): List<File>
     suspend fun filterFiles(start: String, end: String): List<File>
     suspend fun uploadFile(file: File): File
-    suspend fun deleteFile(fileId: String): File
+    suspend fun deleteFile(fileId: String): Boolean
 
     suspend fun getUrls(fileId: String): List<Url>
     suspend fun generateUrl(url: Url): Url

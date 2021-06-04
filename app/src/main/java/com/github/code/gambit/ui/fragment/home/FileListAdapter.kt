@@ -71,7 +71,7 @@ class FileListAdapter :
         }
         binding.createNewUrlButton.setOnClickListener { listener?.onCreateNewUrl(file) }
         binding.root.setOnLongClickListener {
-            listener?.onFileLongClick(file)
+            listener?.onItemLongClick(file)
             true
         }
     }

@@ -47,7 +47,7 @@ interface ApiService {
     suspend fun uploadFiles(@Path("userId") userId: String, @Body fileNetworkEntity: FileNetworkEntity): Response<FileNetworkEntity>
 
     @DELETE("user/{${AppConstant.API_PATH.USER_ID}}/file/{${AppConstant.API_PATH.FILE_ID}}")
-    suspend fun deleteFile(@Path(AppConstant.API_PATH.USER_ID) userId: String, @Path(AppConstant.API_PATH.FILE_ID) fileId: String): Response<FileNetworkEntity>
+    suspend fun deleteFile(@Path(AppConstant.API_PATH.USER_ID) userId: String, @Path(AppConstant.API_PATH.FILE_ID) fileId: String): Response<String>
 
     @GET("file/{${AppConstant.API_PATH.FILE_ID}}/url")
     suspend fun getUrls(@Path(AppConstant.API_PATH.FILE_ID) fileId: String): ListResponse<UrlNetworkEntity>

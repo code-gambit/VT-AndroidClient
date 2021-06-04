@@ -42,9 +42,4 @@ class FileMetaDataAdapter(val context: Context) :
         item?.state = state
         notifyDataSetChanged()
     }
-
-    fun remove(item: FileUploadStatus) {
-        getDataList.remove(item)
-        notifyDataSetChanged()
-    }
 }
