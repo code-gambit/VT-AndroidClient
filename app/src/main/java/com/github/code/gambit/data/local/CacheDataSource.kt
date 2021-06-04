@@ -9,6 +9,7 @@ interface CacheDataSource {
     suspend fun insertFiles(files: List<File>): Long
     suspend fun getFiles(): List<File>
     suspend fun deleteFile(fileId: String): Int
+    suspend fun deleteFiles(): Int
     suspend fun insertUrls(urls: List<Url>): Long
     suspend fun getUrls(fileId: String): List<Url>
     suspend fun insertFileMetaData(fileMetaData: FileMetaData, uuid: String)

@@ -26,6 +26,12 @@ constructor(private val profileRepository: ProfileRepository) : ViewModel() {
     fun setEvent(event: ProfileEvent) {
         viewModelScope.launch {
             when (event) {
+                ProfileEvent.LogOut -> {
+                    when (val it = profileRepository.logOut()) {
+                        is ServiceResult.Error -> postError(it.exception)
+                        is ServiceResult.Success -> postError(Exception("LOG OUT SUCCESS"))
+                    }
+                }
                 ProfileEvent.GetUserInfoEvent -> {
                     _profileState.postValue(ProfileState.Loading)
                     profileRepository.getUser().onEach {
@@ -67,6 +73,7 @@ constructor(private val profileRepository: ProfileRepository) : ViewModel() {
 }
 
 sealed class ProfileEvent {
+    object LogOut : ProfileEvent()
     object GetUserInfoEvent : ProfileEvent()
     data class UpdatePasswordEvent(val oldPassword: String, val newPassword: String) : ProfileEvent()
     data class UpdateDisplayNameEvent(val name: String) : ProfileEvent()

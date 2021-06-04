@@ -40,6 +40,15 @@ class AuthServiceImpl : AuthService {
         }
     }
 
+    override suspend fun logOut(): ServiceResult<Unit> {
+        return try {
+            Amplify.Auth.signOut()
+            ServiceResult.Success(Unit)
+        } catch (e: AuthException) {
+            ServiceResult.Error(e)
+        }
+    }
+
     override suspend fun resetPassword(oldPassword: String, newPassword: String): ServiceResult<Unit> {
         return try {
             val result = Amplify.Auth.updatePassword(oldPassword, newPassword)

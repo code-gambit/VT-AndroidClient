@@ -36,6 +36,10 @@ constructor(
         return fileDao.deleteFile(fileId)
     }
 
+    override suspend fun deleteFiles(): Int {
+        return fileDao.deleteFiles()
+    }
+
     override suspend fun insertUrls(urls: List<Url>): Long {
         val res = urlDao.insertUrls(urlCacheMapper.mapToEntityList(urls))
         return res.size.toLong()
