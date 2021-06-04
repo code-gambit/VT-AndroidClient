@@ -8,9 +8,13 @@ class ListResponse<T>(
     @Expose
     var statusCode: Int,
 
+    @SerializedName("error")
+    @Expose
+    var error: String?,
+
     @SerializedName("body")
     @Expose
-    var body: BodyTemplate<T>
+    var body: BodyTemplate<T>?
 )
 
 class BodyTemplate<T>(
