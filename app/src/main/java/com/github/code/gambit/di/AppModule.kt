@@ -94,8 +94,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideFileListAdapter(): FileListAdapter {
-        return FileListAdapter()
+    fun provideFileListAdapter(@ApplicationContext context: Context): FileListAdapter {
+        return FileListAdapter(context)
     }
 
     @Provides

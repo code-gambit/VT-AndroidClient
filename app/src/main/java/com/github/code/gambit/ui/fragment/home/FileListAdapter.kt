@@ -1,7 +1,9 @@
 package com.github.code.gambit.ui.fragment.home
 
+import android.content.Context
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.code.gambit.R
@@ -10,10 +12,11 @@ import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.databinding.FileListItemBinding
 import com.github.code.gambit.ui.BaseAdapter
 import com.github.code.gambit.ui.OnItemClickListener
+import com.github.code.gambit.utility.extention.getIcon
 import com.github.code.gambit.utility.extention.hide
 import com.github.code.gambit.utility.extention.show
 
-class FileListAdapter :
+class FileListAdapter(val context: Context) :
     BaseAdapter<File, FileListItemBinding, FileUrlClickCallback>(R.layout.file_list_item) {
 
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -27,6 +30,7 @@ class FileListAdapter :
         binding.fileName.text = file.name
         binding.fileDate.text = file.timestamp
         binding.fileSize.text = file.size
+        binding.fileIcon.setImageDrawable(ContextCompat.getDrawable(context, file.getIcon()))
         map[file.id] = UrlListAdapter(file.urls).apply {
             listener = object : OnItemClickListener<Url> {
                 override fun onItemClick(item: Url) {

@@ -6,6 +6,22 @@ object AppConstant {
     const val SHARE_URL = "https://vt-webclient.herokuapp.com/"
     const val FILTER_DATE_TEMPLATE = "yyyy-MM-dd"
 
+    object FileType {
+        const val PDF = "pdf"
+        const val EPUB = "epub"
+        const val TXT = "txt"
+        const val RTF = "rtf"
+        val ANDROID = listOf("apk")
+        val DOC = listOf("doc", "docx")
+        val EXCEL = listOf("xls", "xlsx")
+        val PPT = listOf("ppt", "pptx")
+        val IMAGE = listOf("gif", "jpeg", "jpg", "png", "svg")
+        val AUDIO = listOf("m4a", "mp3", "flac", "wav", "wma", "aac")
+        val VIDEO = listOf("mp4", "m4v", "mov", "mkv", "avi", "mpg", "mpeg")
+        val SCRIPT = listOf("py", "kt", "java", "cpp", "c", "sh", "html", "htm", "xml", "js", "dart", "asp", "aspx", "vb", "php", "class")
+        val COMPRESS = listOf("7z", "arj", "deb", "pkg", "rar", "rpm", "tar", "gz", "z", "zip", "tar.gz")
+    }
+
     object Named {
         const val PERMISSION_ARRAY = "PERMISSION"
         const val USER_ID = "UID"

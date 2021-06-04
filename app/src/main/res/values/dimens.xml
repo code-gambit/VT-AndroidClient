@@ -20,4 +20,6 @@
     <dimen name="filter_item_top_margin">16dp</dimen>
     <dimen name="drag_down_width">232dp</dimen>
     <dimen name="drag_down_height">52dp</dimen>
+
+    <dimen name="file_type_icon_size">32dp</dimen>
 </resources>
