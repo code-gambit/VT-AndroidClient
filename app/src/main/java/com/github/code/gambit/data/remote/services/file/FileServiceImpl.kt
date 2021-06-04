@@ -40,7 +40,11 @@ class FileServiceImpl(
         return apiService.uploadFiles(userId, fileNetworkEntity).body
     }
 
-    override suspend fun deleteFile(fileId: String): FileNetworkEntity {
-        return apiService.deleteFile(userId, fileId).body
+    override suspend fun deleteFile(fileId: String): Boolean {
+        var id = fileId
+        if (fileId.contains("FILE#")) {
+            id = fileId.split("#")[1]
+        }
+        return apiService.deleteFile(userId, id).statusCode == 200
     }
 }

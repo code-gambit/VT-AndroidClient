@@ -65,8 +65,6 @@ class FileSearchComponentImpl(
         return fileSearchRequest
     }
 
-    override fun onFileLongClick(file: File) = fileSearchRequest.postValue("")
-
     override fun onCreateNewUrl(file: File) = fileSearchRequest.postValue("")
 
     override fun onLoadMoreUrl(file: File) = fileSearchRequest.postValue("")

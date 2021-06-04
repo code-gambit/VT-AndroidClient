@@ -31,6 +31,7 @@ import com.github.code.gambit.utility.extention.hideKeyboard
 import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.shortToast
 import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.extention.showDefaultMaterialAlert
 import com.github.code.gambit.utility.extention.snackbar
 import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -170,6 +171,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                     binding.headerTitle.text = "Uploaded"
                     binding.headerSubtitle.text = it.header
                     adapter.addAll(it.files, true)
+                }
+                is HomeState.FileDeleted -> {
+                    requireMainActivity().showSnackBar("${it.file.name} deleted successfully")
+                    adapter.remove(it.file)
+                    binding.linearProgress.hide()
                 }
             }
         }
@@ -385,10 +391,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     override fun animateBottomNav(offset: Float) = requireMainActivity().animateBottomNav(offset)
 
-    override fun onFileLongClick(file: File) {
-        Timber.tag("home").i("LongClickFile: ${file.name}")
-    }
-
     override fun onCreateNewUrl(file: File) {
         viewModel.setEvent(HomeEvent.GenerateUrl(file))
         Timber.tag("home").i("CreateNewUrl: ${file.name}, ${file.id}")
@@ -412,6 +414,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     override fun onItemLongClick(item: File) {
-        Timber.tag("home").i("LongClickFile: ${item.name}")
+        Timber.tag("home").i("FileLongClick: ${item.name}")
+        val title = "Confirmation"
+        val message = "Are you sure you want to permanently delete ${item.name}?"
+        activity?.showDefaultMaterialAlert(
+            title,
+            message
+        ) { viewModel.setEvent(HomeEvent.DeleteFile(item)) }
     }
 }

@@ -17,4 +17,7 @@ interface FileDao {
 
     @Query("SELECT * FROM files WHERE id = :id")
     suspend fun getFile(id: String): List<FileCacheEntity>
+
+    @Query("DELETE FROM files WHERE id = :id")
+    suspend fun deleteFile(id: String): Int
 }

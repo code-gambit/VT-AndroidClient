@@ -66,6 +66,28 @@ constructor(
         }
     }
 
+    override suspend fun deleteFile(file: File): Flow<ServiceResult<Boolean>> {
+        return flow {
+            try {
+                val success = networkDataSource.deleteFile(file.id)
+                if (success) {
+                    val dels = cacheDataSource.deleteFile(file.id)
+                    if (dels == 1) {
+                        emit(ServiceResult.Success(true))
+                    } else {
+                        emit(ServiceResult.Success(false))
+                    }
+                } else {
+                    emit(ServiceResult.Success(false))
+                }
+            } catch (internet: NoInternetException) {
+                emit(ServiceResult.Error(internet))
+            } catch (exception: Exception) {
+                emit(ServiceResult.Error(exception))
+            }
+        }
+    }
+
     override suspend fun generateUrl(file: File): Flow<ServiceResult<Url>> {
         val url = Url("", file.id, file.hash, "", true, 50)
         return flow {

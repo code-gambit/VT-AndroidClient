@@ -93,6 +93,11 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         updateCounterText()
     }
 
+    fun remove(item: T) {
+        dataList.remove(item)
+        notifyDataSetChanged()
+    }
+
     /**
      * Sets the counter text view which is used for displaying the live item count
      */
