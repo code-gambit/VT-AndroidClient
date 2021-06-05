@@ -1,0 +1,17 @@
+name: Priority Tracking
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  Move_Labeled_Issue_On_Project_Board:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+        with:
+          action-token: "${{ secrets.token }}"
+          project-url: "https://github.com/code-gambit/VT-AndroidClient/projects/2"
+          column-name: "Priority Task"
+          label-name: ":star2:  Priority"
+          columns-to-ignore: "Done"
