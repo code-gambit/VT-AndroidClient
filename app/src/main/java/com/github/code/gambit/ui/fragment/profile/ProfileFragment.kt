@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.databinding.FragmentProfileBinding
@@ -38,6 +39,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         viewModel.profileState.observe(viewLifecycleOwner) {
             when (it) {
                 is ProfileState.Loading -> binding.progressBar.show()
+                is ProfileState.LogOutSuccess -> {
+                    showSnack("Log out success")
+                    findNavController().navigate(R.id.action_profileFragment_to_authFragment)
+                }
                 is ProfileState.PasswordUpdated -> binding.apply {
                     this.progressBar.hide()
                     showSnack("Password updated")
@@ -94,6 +99,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
         binding.logOutButton.setOnClickListener {
+            binding.logOutButton.isEnabled = false
             viewModel.setEvent(ProfileEvent.LogOut)
         }
         changePasswordListener1 = View.OnClickListener {

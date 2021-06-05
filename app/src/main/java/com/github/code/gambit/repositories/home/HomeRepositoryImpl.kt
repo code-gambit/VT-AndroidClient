@@ -26,13 +26,12 @@ constructor(
             try {
                 data = networkDataSource.getFiles()
                 cacheDataSource.insertFiles(data)
+                val files = cacheDataSource.getFiles()
+                emit(ServiceResult.Success(files))
             } catch (internet: NoInternetException) {
                 emit(ServiceResult.Error(internet))
             } catch (exception: Exception) {
                 emit(ServiceResult.Error(exception))
-            } finally {
-                val files = cacheDataSource.getFiles()
-                emit(ServiceResult.Success(files))
             }
         }
     }

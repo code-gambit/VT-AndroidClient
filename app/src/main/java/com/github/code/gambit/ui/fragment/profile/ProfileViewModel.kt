@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.profile.ProfileState
+import com.github.code.gambit.repositories.auth.AuthRepository
 import com.github.code.gambit.repositories.profile.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -17,7 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel
 @Inject
-constructor(private val profileRepository: ProfileRepository) : ViewModel() {
+constructor(
+    private val profileRepository: ProfileRepository,
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _profileState = MutableLiveData<ProfileState>()
 
@@ -27,9 +31,9 @@ constructor(private val profileRepository: ProfileRepository) : ViewModel() {
         viewModelScope.launch {
             when (event) {
                 ProfileEvent.LogOut -> {
-                    when (val it = profileRepository.logOut()) {
+                    when (val it = authRepository.logOut()) {
                         is ServiceResult.Error -> postError(it.exception)
-                        is ServiceResult.Success -> postError(Exception("LOG OUT SUCCESS"))
+                        is ServiceResult.Success -> _profileState.postValue(ProfileState.LogOutSuccess)
                     }
                 }
                 ProfileEvent.GetUserInfoEvent -> {
@@ -47,12 +51,21 @@ constructor(private val profileRepository: ProfileRepository) : ViewModel() {
                     _profileState.postValue(ProfileState.Loading)
                     when (val res = profileRepository.updateUserName(event.name)) {
                         is ServiceResult.Error -> postError(res.exception)
-                        is ServiceResult.Success -> _profileState.postValue(ProfileState.UserNameUpdated(res.data))
+                        is ServiceResult.Success -> _profileState.postValue(
+                            ProfileState.UserNameUpdated(
+                                res.data
+                            )
+                        )
                     }
                 }
                 is ProfileEvent.UpdatePasswordEvent -> {
                     _profileState.postValue(ProfileState.Loading)
-                    when (val res = profileRepository.updateUserPassword(event.oldPassword, event.newPassword)) {
+                    when (
+                        val res = profileRepository.updateUserPassword(
+                            event.oldPassword,
+                            event.newPassword
+                        )
+                    ) {
                         is ServiceResult.Error -> postError(res.exception)
                         is ServiceResult.Success -> {
                             if (res.data) {
@@ -75,6 +88,8 @@ constructor(private val profileRepository: ProfileRepository) : ViewModel() {
 sealed class ProfileEvent {
     object LogOut : ProfileEvent()
     object GetUserInfoEvent : ProfileEvent()
-    data class UpdatePasswordEvent(val oldPassword: String, val newPassword: String) : ProfileEvent()
+    data class UpdatePasswordEvent(val oldPassword: String, val newPassword: String) :
+        ProfileEvent()
+
     data class UpdateDisplayNameEvent(val name: String) : ProfileEvent()
 }

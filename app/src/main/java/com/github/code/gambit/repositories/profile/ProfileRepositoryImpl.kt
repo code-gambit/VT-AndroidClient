@@ -49,7 +49,10 @@ constructor(
         }
     }
 
-    override suspend fun updateUserPassword(oldPassword: String, newPassword: String): ServiceResult<Boolean> {
+    override suspend fun updateUserPassword(
+        oldPassword: String,
+        newPassword: String
+    ): ServiceResult<Boolean> {
         return try {
             val result = authService.resetPassword(oldPassword, newPassword)
             if (result is ServiceResult.Error) {
@@ -71,15 +74,6 @@ constructor(
             ServiceResult.Error(NoInternetException("Internet!!"))
         } catch (e: Exception) {
             ServiceResult.Error(e)
-        }
-    }
-
-    override suspend fun logOut(): ServiceResult<Unit> {
-        return try {
-            authService.logOut()
-            return ServiceResult.Success(Unit)
-        } catch (exception: Exception) {
-            ServiceResult.Error(exception)
         }
     }
 }

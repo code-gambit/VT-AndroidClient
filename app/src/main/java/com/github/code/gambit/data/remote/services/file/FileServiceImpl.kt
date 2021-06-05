@@ -5,6 +5,7 @@ import com.github.code.gambit.data.remote.responses.ListResponse
 import com.github.code.gambit.data.remote.services.ApiService
 import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
+import java.lang.Exception
 
 class FileServiceImpl(
     val apiService: ApiService,
@@ -17,6 +18,9 @@ class FileServiceImpl(
     override suspend fun getFiles(): List<FileNetworkEntity> {
         val lek: String = lekManager.getLastEvalKey(LastEvaluatedKeyManager.KeyType.FILE)
         val listResponse: ListResponse<FileNetworkEntity> = apiService.getFiles(userId, lek, null)
+        if (listResponse.body == null) {
+            throw Exception(listResponse.error)
+        }
         if (listResponse.body?.lastEvaluatedKey != null) {
             lekManager.putLastEvalKey(
                 listResponse.body?.lastEvaluatedKey!!,

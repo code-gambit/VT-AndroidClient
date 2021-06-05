@@ -4,6 +4,7 @@ import com.github.code.gambit.data.model.User
 
 sealed class ProfileState {
     object Loading : ProfileState()
+    object LogOutSuccess : ProfileState()
     data class Error(val message: String) : ProfileState()
     data class ProfileLoaded(val user: User) : ProfileState()
     object PasswordUpdated : ProfileState()

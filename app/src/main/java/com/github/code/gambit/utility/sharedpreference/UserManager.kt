@@ -7,22 +7,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 class UserManager
 constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
-    fun putFileLastEvaluatedKey(lastEvaluatedKey: String) = put(Key.FILE_LEK, lastEvaluatedKey)
-
-    fun getFileLastEvaluatedKey() = get<String>(Key.FILE_LEK)
-
-    fun setAuthenticated(value: Boolean) = put(Key.AUTHSTATE, value)
-
-    private fun setUserEmail(email: String) = put(Key.EMAIL, email)
-
-    fun getUserEmail() = get<String>(Key.EMAIL)
-
-    fun setUserId(id: String) {
-        val user = getUser()
-        user.id = id
-        put(Key.USER, user)
-    }
-
     fun getUserId() = get<User>(Key.USER).id
 
     fun setUserName(name: String) {
@@ -54,16 +38,18 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
     fun isFirstLaunch() = get<Boolean>(Key.LAUNCHSTATE)
 
-    fun updateLaunchState() = put(Key.LAUNCHSTATE, false)
+    private fun updateLaunchState() = put(Key.LAUNCHSTATE, false)
 
-    fun updateIdToken(token: String?) = put(Key.TOKEN, token)
+    private fun updateIdToken(token: String?) = put(Key.TOKEN, token)
 
     fun getIdToken() = get<String>(Key.TOKEN)
+
+    private fun setAuthenticated(value: Boolean) = put(Key.AUTHSTATE, value)
 
     fun isAuthenticated() = get<Boolean>(Key.AUTHSTATE)
 
     fun revokeAuthentication() {
         updateIdToken(null)
-        put(Key.AUTHSTATE, false)
+        setAuthenticated(false)
     }
 }
