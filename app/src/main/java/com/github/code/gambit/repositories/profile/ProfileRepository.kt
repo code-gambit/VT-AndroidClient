@@ -9,4 +9,5 @@ interface ProfileRepository {
     suspend fun getUser(): Flow<ServiceResult<User>>
     suspend fun updateUserName(name: String): ServiceResult<String>
     suspend fun updateUserPassword(oldPassword: String, newPassword: String): ServiceResult<Boolean>
+    suspend fun logOut(): ServiceResult<Unit>
 }

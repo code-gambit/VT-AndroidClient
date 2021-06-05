@@ -93,6 +93,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 viewModel.setEvent(ProfileEvent.UpdateDisplayNameEvent(newName))
             }
         }
+        binding.logOutButton.setOnClickListener {
+            viewModel.setEvent(ProfileEvent.LogOut)
+        }
         changePasswordListener1 = View.OnClickListener {
             binding.passwordContainer.show()
             binding.cancelButton.show()

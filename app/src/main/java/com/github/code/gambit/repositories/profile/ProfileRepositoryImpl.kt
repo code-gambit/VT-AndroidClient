@@ -73,4 +73,13 @@ constructor(
             ServiceResult.Error(e)
         }
     }
+
+    override suspend fun logOut(): ServiceResult<Unit> {
+        return try {
+            authService.logOut()
+            return ServiceResult.Success(Unit)
+        } catch (exception: Exception) {
+            ServiceResult.Error(exception)
+        }
+    }
 }
