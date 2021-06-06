@@ -84,6 +84,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }.attach()
 
         binding.buttonSubmit.setOnClickListener {
+            disableInteraction()
             val fg = (binding.fragmentContainer.adapter as AuthFragmentAdapter).getFragment(
                 currentPage
             )
@@ -91,10 +92,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 val data = (fg as SignUpFragment).validate()
                 if (data != null) {
                     signUp(data)
-                }
+                } else { enableInteraction() }
             } else {
                 val data = (fg as LoginFragment).validate()
-                logIn(data)
+                if (data != null) {
+                    logIn(data)
+                } else { enableInteraction() }
             }
         }
 
@@ -119,6 +122,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         }
                     }
                     is AuthState.Error -> {
+                        enableInteraction()
                         binding.progressBar.hide()
                         if (this::dialog.isInitialized && dialog.isShowing) {
                             revealShow(false, exit = true)
@@ -230,4 +234,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private fun navigateToHome() =
         findNavController().navigate(R.id.action_authFragment_to_homeFragment)
+
+    private fun disableInteraction() {
+        binding.buttonSubmit.isEnabled = false
+    }
+
+    private fun enableInteraction() {
+        binding.buttonSubmit.isEnabled = true
+    }
 }
