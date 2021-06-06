@@ -103,7 +103,7 @@ class FilterComponentImpl(val binding: FilterLayoutBinding, val context: Context
     private fun registerBottomSheet() {
         bottomSheetBehavior.peekHeight = 0
         bottomSheetBehavior.isHideable = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     /**
