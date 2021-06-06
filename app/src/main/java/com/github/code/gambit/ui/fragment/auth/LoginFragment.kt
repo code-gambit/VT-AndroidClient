@@ -22,10 +22,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     // validates the input fields
-    fun validate(): AuthData {
-        val error = false
+    fun validate(): AuthData? {
+        var error = false
         if (username == "") {
             binding.usernameInput.error = "Username can't be empty"
+            error = true
         } else {
             if (binding.usernameInput.isErrorEnabled) {
                 binding.usernameInput.isErrorEnabled = false
@@ -33,6 +34,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
         if (password == "") {
             binding.passwordInput.error = "Invalid password"
+            error = true
         } else {
             if (binding.passwordInput.isErrorEnabled) {
                 binding.passwordInput.isErrorEnabled = false
@@ -40,6 +42,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
         if (error) {
             binding.root.snackbar("Validation error!!")
+            return null
         }
         return AuthData("", username, password, null, null)
     }
