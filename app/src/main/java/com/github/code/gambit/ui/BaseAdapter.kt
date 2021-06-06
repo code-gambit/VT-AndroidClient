@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.show
 
 /**
  * Use as a base class for all the adapters in this project
@@ -22,7 +24,8 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
     private val backupData = ArrayList<T>()
     private var dataList = ArrayList<T>()
     var listener: LS? = null
-    var counterView: TextView? = null
+    private var counterView: TextView? = null
+    private var emptyIndicatorView: View? = null
 
     /**
      * Adds the clickListener to the root view of [BaseViewHolder.binding], which calls the abstract
@@ -77,6 +80,7 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         dataList.add(data)
         notifyDataSetChanged()
         updateCounterText()
+        refreshEmptyIndicatorState()
     }
 
     /**
@@ -91,10 +95,13 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         dataList.addAll(dataItems)
         notifyDataSetChanged()
         updateCounterText()
+        refreshEmptyIndicatorState()
     }
 
     fun remove(item: T) {
         dataList.remove(item)
+        updateCounterText()
+        refreshEmptyIndicatorState()
         notifyDataSetChanged()
     }
 
@@ -106,6 +113,13 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
     }
 
     /**
+     * Sets the view which is displayed when list is empty
+     */
+    fun bindEmptyListView(view: View) {
+        emptyIndicatorView = view
+    }
+
+    /**
      * updates the [counterView] with latest item count from [getItemCount]
      */
     @SuppressLint("SetTextI18n")
@@ -114,12 +128,25 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
     }
 
     /**
+     * updates the [emptyIndicatorView] visibility based on latest item count from [getItemCount]
+     */
+    private fun refreshEmptyIndicatorState() {
+        emptyIndicatorView?.let {
+            if (itemCount == 0) {
+                it.show()
+            } else {
+                it.hide()
+            }
+        }
+    }
+
+    /**
      * Returns the item <T> from [dataList] at specific position
      * @param position : position of item in [dataList]
      *
      * @return : element at [position] in [dataList]
      */
-    fun getItem(position: Int) = dataList[position]
+    private fun getItem(position: Int) = dataList[position]
 
     /**
      * @return : current size of [dataList]
@@ -148,6 +175,7 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         backupData.addAll(dataList)
         dataList.clear()
         updateCounterText()
+        refreshEmptyIndicatorState()
         notifyDataSetChanged()
     }
 
@@ -158,6 +186,8 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
         dataList.clear()
         dataList.addAll(backupData)
         backupData.clear()
+        updateCounterText()
+        refreshEmptyIndicatorState()
         notifyDataSetChanged()
     }
 
