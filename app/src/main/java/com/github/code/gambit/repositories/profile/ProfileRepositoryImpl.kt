@@ -2,6 +2,7 @@ package com.github.code.gambit.repositories.profile
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.services.cognitoidentityprovider.model.InvalidParameterException
+import com.amazonaws.services.cognitoidentityprovider.model.LimitExceededException
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
@@ -57,6 +58,9 @@ constructor(
             val result = authService.resetPassword(oldPassword, newPassword)
             if (result is ServiceResult.Error) {
                 when (result.exception.cause) {
+                    is LimitExceededException -> {
+                        ServiceResult.Error(result.exception)
+                    }
                     is InvalidParameterException -> {
                         ServiceResult.Error(Exception("Invalid old password"))
                     }

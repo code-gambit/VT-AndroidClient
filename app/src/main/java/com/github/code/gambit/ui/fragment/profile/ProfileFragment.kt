@@ -109,8 +109,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.changePasswordButton.setOnClickListener(changePasswordListener2)
         }
         changePasswordListener2 = View.OnClickListener {
-            binding.changePasswordButton.text = getString(R.string.change_password)
-
             val oldPassword = binding.oldPassword.editText!!.text.toString().trim()
             val newPassword = binding.newPassword.editText!!.text.toString().trim()
             if (!isValidatePassword(oldPassword, newPassword)) {

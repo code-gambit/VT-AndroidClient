@@ -160,6 +160,7 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/secondary</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
