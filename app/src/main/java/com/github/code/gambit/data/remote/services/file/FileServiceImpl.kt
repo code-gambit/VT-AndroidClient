@@ -1,11 +1,10 @@
 package com.github.code.gambit.data.remote.services.file
 
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
-import com.github.code.gambit.data.remote.responses.ListResponse
+import com.github.code.gambit.data.remote.apiRequest
 import com.github.code.gambit.data.remote.services.ApiService
 import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
-import java.lang.Exception
 
 class FileServiceImpl(
     val apiService: ApiService,
@@ -16,32 +15,25 @@ class FileServiceImpl(
     private val userId get() = userManager.getUserId()
 
     override suspend fun getFiles(): List<FileNetworkEntity> {
-        val lek: String = lekManager.getLastEvalKey(LastEvaluatedKeyManager.KeyType.FILE)
-        val listResponse: ListResponse<FileNetworkEntity> = apiService.getFiles(userId, lek, null)
-        if (listResponse.body == null) {
-            throw Exception(listResponse.error)
+        return apiRequest(lekManager, LastEvaluatedKeyManager.KeyType.FILE) { lek ->
+            apiService.getFiles(userId, lek, null)
         }
-        if (listResponse.body?.lastEvaluatedKey != null) {
-            lekManager.putLastEvalKey(
-                listResponse.body?.lastEvaluatedKey!!,
-                LastEvaluatedKeyManager.KeyType.FILE
-            )
-        }
-        return listResponse.body?.items!!
     }
 
     override suspend fun filterFiles(start: String, end: String): List<FileNetworkEntity> {
-        val response = apiService.filterFiles(userId, null, start, end)
-        return response.body?.items!!
+        return apiRequest(lekManager, LastEvaluatedKeyManager.KeyType.FILTER_FILE) {
+            apiService.filterFiles(userId, null, start, end)
+        }
     }
 
     override suspend fun searchFile(searchParam: String): List<FileNetworkEntity> {
-        val response = apiService.getFiles(userId, null, searchParam)
-        return response.body?.items!!
+        return apiRequest(lekManager, LastEvaluatedKeyManager.KeyType.SEARCH_FILE) {
+            apiService.getFiles(userId, null, searchParam)
+        }
     }
 
     override suspend fun uploadFile(fileNetworkEntity: FileNetworkEntity): FileNetworkEntity {
-        return apiService.uploadFiles(userId, fileNetworkEntity).body!!
+        return apiRequest { apiService.uploadFiles(userId, fileNetworkEntity) }
     }
 
     override suspend fun deleteFile(fileId: String): Boolean {
@@ -49,6 +41,7 @@ class FileServiceImpl(
         if (fileId.contains("FILE#")) {
             id = fileId.split("#")[1]
         }
-        return apiService.deleteFile(userId, id).statusCode == 200
+        val response = apiRequest { apiService.deleteFile(userId, id) }
+        return true
     }
 }

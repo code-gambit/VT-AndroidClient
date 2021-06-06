@@ -4,7 +4,6 @@ import com.github.code.gambit.data.local.CacheDataSource
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
-import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
 import com.github.code.gambit.repositories.auth.AuthRepository
 import com.github.code.gambit.repositories.auth.AuthRepositoryImpl
 import com.github.code.gambit.repositories.fileupload.FileUploadRepository
@@ -29,12 +28,6 @@ object RepositoryModule {
     @Provides
     fun provideUserAttributeMapper(): UserAttributeMapper {
         return UserAttributeMapper()
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthService(): AuthService {
-        return AuthServiceImpl()
     }
 
     @Singleton
