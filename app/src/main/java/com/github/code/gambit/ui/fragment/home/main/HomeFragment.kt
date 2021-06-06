@@ -137,7 +137,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                             binding.linearProgress.hide()
                         }
                         adapter.addAll(it.files, true)
-                        binding.noFileIllustrationContainer.hide()
                         binding.swipeRefresh.isRefreshing = false
                         return@observe
                     }
@@ -185,6 +184,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun setUpFileRecyclerView() {
+        adapter.bindEmptyListView(binding.noFileIllustrationContainer)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.fileList.layoutManager = layoutManager
         binding.fileList.setHasFixedSize(false)
