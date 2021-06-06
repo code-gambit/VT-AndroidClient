@@ -21,7 +21,7 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
     }
 
     fun flush() {
-        putLastEvalKey("", KeyType.URL)
+        putLastEvalKey("", KeyType.FILE)
         putLastEvalKey("", KeyType.URL)
     }
 

@@ -1,24 +1,29 @@
-package com.github.code.gambit.repositories
+package com.github.code.gambit.repositories.auth
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.util.CognitoJWTParser
+import com.github.code.gambit.data.local.CacheDataSource
 import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.model.User
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.auth.AuthData
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
+import java.lang.Exception
 
-class AuthRepository
+class AuthRepositoryImpl
 
 constructor(
     private val authService: AuthService,
     private val networkDataSource: NetworkDataSource,
+    private val cacheDataSource: CacheDataSource,
     private val userManager: UserManager,
+    private val lastEvaluatedKeyManager: LastEvaluatedKeyManager,
     private val userAttributeMapper: UserAttributeMapper
-) {
+) : AuthRepository {
 
-    suspend fun login(authData: AuthData): ServiceResult<User> {
+    override suspend fun login(authData: AuthData): ServiceResult<User> {
         val res = authService.login(authData)
         if (res is ServiceResult.Error) {
             return res
@@ -45,12 +50,10 @@ constructor(
 
         userManager.updateUser(User.merge(user, user_in_db))
 
-        val update = userManager.getUser()
-
         return ServiceResult.Success(user)
     }
 
-    suspend fun signUp(authData: AuthData): ServiceResult<Unit> {
+    override suspend fun signUp(authData: AuthData): ServiceResult<Unit> {
         val signUpRes = authService.signUp(authData)
         if (signUpRes is ServiceResult.Error) {
             return signUpRes
@@ -59,7 +62,19 @@ constructor(
         return signUpRes
     }
 
-    suspend fun signUpConfirmation(authData: AuthData): ServiceResult<User> {
+    override suspend fun logOut(): ServiceResult<Unit> {
+        return try {
+            authService.logOut()
+            userManager.revokeAuthentication()
+            lastEvaluatedKeyManager.flush()
+            cacheDataSource.deleteFiles()
+            return ServiceResult.Success(Unit)
+        } catch (exception: Exception) {
+            ServiceResult.Error(exception)
+        }
+    }
+
+    override suspend fun signUpConfirmation(authData: AuthData): ServiceResult<User> {
         val confirmationResult = authService.confirmSignUp(authData)
         if (confirmationResult is ServiceResult.Error) {
             return confirmationResult

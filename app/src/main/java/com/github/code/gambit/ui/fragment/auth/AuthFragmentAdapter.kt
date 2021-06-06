@@ -13,12 +13,8 @@ class AuthFragmentAdapter(
     private var fragments: List<Fragment> = listOf(SignUpFragment(), LoginFragment())
 
     companion object {
-        private var adapter: AuthFragmentAdapter? = null
         fun getInstance(fragmentManager: FragmentManager, lifecycle: Lifecycle): AuthFragmentAdapter {
-            if (adapter == null) {
-                adapter = AuthFragmentAdapter(fragmentManager, lifecycle)
-            }
-            return adapter as AuthFragmentAdapter
+            return AuthFragmentAdapter(fragmentManager, lifecycle)
         }
     }
 

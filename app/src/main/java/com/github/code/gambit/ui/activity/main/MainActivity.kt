@@ -81,8 +81,7 @@ class MainActivity : AppCompatActivity(), BottomNavController {
                 R.id.homeFragment -> {
                     // info bottomNav is hiddent until data is loading in homeFragment
                     // binding.bottomNavContainer.bottomNavShow()
-                    binding.root.getTransition(R.id.start_to_end).setEnable(true)
-                    binding.dragIcon.show()
+                    showMotionLayout()
                 }
                 R.id.authFragment -> {
                     hideBottomNav()
@@ -161,6 +160,16 @@ class MainActivity : AppCompatActivity(), BottomNavController {
         viewModel.setEvent(MainEvent.UploadFileEvent(fileUri!!))
     }
 
+    private fun showMotionLayout() {
+        binding.root.getTransition(R.id.start_to_end).setEnable(true)
+        binding.dragIcon.show()
+    }
+
+    private fun hideMotionLayout() {
+        binding.root.getTransition(R.id.start_to_end).setEnable(false)
+        binding.dragIcon.hide()
+    }
+
     private fun registerAmplifyCallback() {
         Amplify.Hub.subscribe(HubChannel.AUTH) { event ->
             when (event.name) {
@@ -172,8 +181,8 @@ class MainActivity : AppCompatActivity(), BottomNavController {
                     AuthChannelEventName.SIGNED_IN ->
                         Timber.tag("AuthQuickstart").i("Auth just became signed in")
                     AuthChannelEventName.SIGNED_OUT -> {
-                        userManager.revokeAuthentication()
                         Timber.tag("AuthQuickstart").i("Auth just became signed out")
+                        runOnUiThread { hideMotionLayout() }
                     }
                     AuthChannelEventName.SESSION_EXPIRED -> {
                         userManager.revokeAuthentication()
@@ -187,6 +196,10 @@ class MainActivity : AppCompatActivity(), BottomNavController {
     }
 
     override fun onBackPressed() {
+        if (!userManager.isAuthenticated()) {
+            super.onBackPressed()
+            return
+        }
         val hostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
         if (hostFragment is NavHostFragment) {
             when (val fragment = hostFragment.childFragmentManager.fragments.first()) {

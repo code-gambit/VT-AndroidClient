@@ -5,13 +5,15 @@ import com.github.code.gambit.data.mapper.aws.UserAttributeMapper
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.services.auth.AuthService
 import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
-import com.github.code.gambit.repositories.AuthRepository
+import com.github.code.gambit.repositories.auth.AuthRepository
+import com.github.code.gambit.repositories.auth.AuthRepositoryImpl
 import com.github.code.gambit.repositories.fileupload.FileUploadRepository
 import com.github.code.gambit.repositories.fileupload.FileUploadRepositoryImpl
 import com.github.code.gambit.repositories.home.HomeRepository
 import com.github.code.gambit.repositories.home.HomeRepositoryImpl
 import com.github.code.gambit.repositories.profile.ProfileRepository
 import com.github.code.gambit.repositories.profile.ProfileRepositoryImpl
+import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
 import com.github.code.gambit.utility.sharedpreference.UserManager
 import dagger.Module
 import dagger.Provides
@@ -40,10 +42,19 @@ object RepositoryModule {
     fun provideAuthRepository(
         authService: AuthService,
         networkDataSource: NetworkDataSource,
+        cacheDataSource: CacheDataSource,
         userManager: UserManager,
+        lastEvaluatedKeyManager: LastEvaluatedKeyManager,
         userAttributeMapper: UserAttributeMapper
     ): AuthRepository {
-        return AuthRepository(authService, networkDataSource, userManager, userAttributeMapper)
+        return AuthRepositoryImpl(
+            authService,
+            networkDataSource,
+            cacheDataSource,
+            userManager,
+            lastEvaluatedKeyManager,
+            userAttributeMapper
+        )
     }
 
     @Singleton
