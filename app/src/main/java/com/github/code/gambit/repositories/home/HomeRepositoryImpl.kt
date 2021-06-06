@@ -30,6 +30,8 @@ constructor(
                 emit(ServiceResult.Success(files))
             } catch (internet: NoInternetException) {
                 emit(ServiceResult.Error(internet))
+                val files = cacheDataSource.getFiles()
+                emit(ServiceResult.Success(files))
             } catch (exception: Exception) {
                 emit(ServiceResult.Error(exception))
             }

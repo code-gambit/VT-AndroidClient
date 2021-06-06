@@ -10,6 +10,8 @@ import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.NetworkDataSourceImpl
 import com.github.code.gambit.data.remote.services.ApiService
 import com.github.code.gambit.data.remote.services.NetworkInterceptor
+import com.github.code.gambit.data.remote.services.auth.AuthService
+import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
 import com.github.code.gambit.data.remote.services.file.FileService
 import com.github.code.gambit.data.remote.services.file.FileServiceImpl
 import com.github.code.gambit.data.remote.services.url.UrlService
@@ -102,6 +104,12 @@ object NetworkModule {
     @Provides
     fun provideUserService(apiService: ApiService, userManager: UserManager): UserService {
         return UserServiceImpl(apiService, userManager)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthService(): AuthService {
+        return AuthServiceImpl()
     }
 
     @Singleton

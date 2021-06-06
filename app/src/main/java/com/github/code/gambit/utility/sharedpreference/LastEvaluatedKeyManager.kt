@@ -10,6 +10,8 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
         when (keyType) {
             KeyType.FILE -> put(Key.FILE_LEK, lastEvaluatedKey)
             KeyType.URL -> put(Key.URL_LEK, lastEvaluatedKey)
+            KeyType.FILTER_FILE -> put(Key.FILTER_FILE_LEK, lastEvaluatedKey)
+            KeyType.SEARCH_FILE -> put(Key.SEARCH_FILE_LEK, lastEvaluatedKey)
         }
     }
 
@@ -17,13 +19,18 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
         return when (keyType) {
             KeyType.FILE -> get(Key.FILE_LEK)
             KeyType.URL -> get(Key.URL_LEK)
+            KeyType.FILTER_FILE -> get(Key.FILTER_FILE_LEK)
+            KeyType.SEARCH_FILE -> get(Key.SEARCH_FILE_LEK)
         }
     }
 
     fun flush() {
-        putLastEvalKey("", KeyType.FILE)
-        putLastEvalKey("", KeyType.URL)
+        val empty = ""
+        putLastEvalKey(empty, KeyType.FILE)
+        putLastEvalKey(empty, KeyType.URL)
+        putLastEvalKey(empty, KeyType.FILTER_FILE)
+        putLastEvalKey(empty, KeyType.SEARCH_FILE)
     }
 
-    enum class KeyType { FILE, URL }
+    enum class KeyType { FILE, URL, FILTER_FILE, SEARCH_FILE }
 }

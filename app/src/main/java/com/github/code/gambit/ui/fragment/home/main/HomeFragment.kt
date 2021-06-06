@@ -125,7 +125,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     private fun registerEventCallbacks() {
         viewModel.homeState.observe(viewLifecycleOwner) {
             when (it) {
-                is HomeState.Error -> longToast(it.message)
+                is HomeState.Error -> {
+                    binding.linearProgress.hide()
+                    longToast(it.message)
+                }
                 is HomeState.FilesLoaded -> {
                     if (!it.isSearchResult) {
                         if (isFirstLoading) {
