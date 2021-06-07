@@ -10,10 +10,7 @@ import com.github.code.gambit.data.entity.chache.FileMetaDataCacheEntity
 interface FileMetaDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFileMetaData(fileMetaDataCacheEntity: FileMetaDataCacheEntity)
-
-    @Query("SELECT * FROM fileMetaData WHERE uuid = :uuid")
-    suspend fun getFileMetaData(uuid: String): List<FileMetaDataCacheEntity>
+    suspend fun insertFileMetaData(fileMetaDataCacheEntity: FileMetaDataCacheEntity): Long
 
     @Query("SELECT * FROM fileMetaData ORDER BY timestamp DESC")
     suspend fun getAllFileMetaData(): List<FileMetaDataCacheEntity>

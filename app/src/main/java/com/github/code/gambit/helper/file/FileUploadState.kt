@@ -5,6 +5,7 @@ import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.data.model.FileUploadStatus
 
 sealed class FileUploadState {
+    data class Error(val message: String) : FileUploadState()
     data class UploadStarted(val fileName: String) : FileUploadState()
     data class UploadSuccess(val file: FileNetworkEntity) : FileUploadState()
     data class UpdateFileState(val uuid: String, val newState: WorkInfo.State) : FileUploadState()

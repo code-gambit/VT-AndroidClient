@@ -108,6 +108,9 @@ class MainActivity : AppCompatActivity(), BottomNavController {
                 is FileUploadState.UpdateFileState -> {
                     adapter.updateStatus(it.uuid, it.newState)
                 }
+                is FileUploadState.Error -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
         setUpRecyclerView()
