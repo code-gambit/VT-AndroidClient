@@ -23,6 +23,7 @@ import com.github.code.gambit.ui.fragment.home.FileListAdapter
 import com.github.code.gambit.ui.fragment.home.FileUrlClickCallback
 import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
 import com.github.code.gambit.ui.fragment.home.filtercomponent.FilterComponent
+import com.github.code.gambit.ui.fragment.home.filtercomponent.FilterType
 import com.github.code.gambit.ui.fragment.home.searchcomponent.FileSearchComponent
 import com.github.code.gambit.utility.extention.copyToClipboard
 import com.github.code.gambit.utility.extention.exitFullscreen
@@ -43,7 +44,10 @@ import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.Circle
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, BottomNavController {
@@ -72,6 +76,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     private lateinit var fileSearchComponent: FileSearchComponent
     private lateinit var filterComponent: FilterComponent
+
+    private val customDateFormat = SimpleDateFormat("dd MMM YY", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -170,8 +176,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                     adapter.backup()
                     binding.clearFilter.show()
                     binding.linearProgress.hide()
-                    binding.headerTitle.text = "Uploaded"
-                    binding.headerSubtitle.text = it.header
+                    binding.headerTitle.text = getString(R.string.uploaded)
+                    binding.headerSubtitle.text = when (it.filter.type) {
+                        FilterType.NULL -> getString(R.string.recently)
+                        FilterType.TODAY -> getString(R.string.today)
+                        FilterType.YESTERDAY -> getString(R.string.yesterday)
+                        FilterType.LAST_WEEK -> getString(R.string.last_week)
+                        FilterType.LAST_MONTH -> getString(R.string.last_month)
+                        FilterType.CUSTOM -> {
+                            val header =
+                                getString(R.string.uploaded) + getString(R.string.space) + getString(
+                                    R.string.between
+                                )
+                            binding.headerTitle.text = header
+                            val start = customDateFormat.format(it.filter.start)
+                            val end = customDateFormat.format(it.filter.end)
+                            "$start - $end"
+                        }
+                    }
                     adapter.addAll(it.files, true)
                 }
                 is HomeState.FileDeleted -> {

@@ -79,7 +79,7 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
             when (it) {
                 is ServiceResult.Error -> postError(it.exception)
                 is ServiceResult.Success -> {
-                    _homeState.postValue(HomeState.FilterResult(it.data, filter.type.toString()))
+                    _homeState.postValue(HomeState.FilterResult(it.data, filter))
                 }
             }
         }
@@ -136,7 +136,7 @@ sealed class HomeState {
     data class Loading(val isSearchResultLoading: Boolean = false) : HomeState()
     data class FilesLoaded(val files: List<File>, val isSearchResult: Boolean = false) : HomeState()
     data class FileDeleted(val file: File) : HomeState()
-    data class FilterResult(val files: List<File>, val header: String) : HomeState()
+    data class FilterResult(val files: List<File>, val filter: Filter) : HomeState()
     data class UrlsLoaded(val urls: List<Url>) : HomeState()
     data class UrlGenerated(val url: Url) : HomeState()
     data class Error(val message: String) : HomeState()
