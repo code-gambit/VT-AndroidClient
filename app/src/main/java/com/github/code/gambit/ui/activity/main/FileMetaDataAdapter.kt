@@ -8,6 +8,8 @@ import com.github.code.gambit.data.model.FileUploadStatus
 import com.github.code.gambit.databinding.FileMetaDataListItemBinding
 import com.github.code.gambit.ui.BaseAdapter
 import com.github.code.gambit.ui.OnItemClickListener
+import com.github.code.gambit.utility.extention.byteToMb
+import timber.log.Timber
 
 class FileMetaDataAdapter(val context: Context) :
     BaseAdapter<FileUploadStatus, FileMetaDataListItemBinding, OnItemClickListener<FileUploadStatus>>(
@@ -24,7 +26,7 @@ class FileMetaDataAdapter(val context: Context) :
         binding: FileMetaDataListItemBinding
     ) {
         binding.fileName.text = item.fileMetaData.name
-        binding.fileSize.text = item.fileMetaData.size.toString()
+        binding.fileSize.text = item.fileMetaData.size.byteToMb()
         binding.filePath.text = item.state.toString()
     }
 
@@ -38,8 +40,11 @@ class FileMetaDataAdapter(val context: Context) :
     }
 
     fun updateStatus(uuid: String, state: WorkInfo.State) {
-        val item = getDataList.find { it.fileMetaData.uuid == uuid }
-        item?.state = state
-        notifyDataSetChanged()
+        val dt = getDataList
+        dt.find { it.fileMetaData.uuid == uuid }?.let {
+            it.state = state
+            Timber.tag("work").i("${it.fileMetaData.uuid} updated to $state")
+            notifyDataSetChanged()
+        }
     }
 }

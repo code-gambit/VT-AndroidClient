@@ -7,7 +7,6 @@ import com.github.code.gambit.data.mapper.cache.UrlCacheMapper
 import com.github.code.gambit.data.model.File
 import com.github.code.gambit.data.model.FileMetaData
 import com.github.code.gambit.data.model.Url
-import java.util.Calendar
 
 class CacheDataSourceImpl
 constructor(
@@ -50,15 +49,9 @@ constructor(
         return urlCacheMapper.mapFromEntityList(urls)
     }
 
-    override suspend fun insertFileMetaData(fileMetaData: FileMetaData, uuid: String) {
+    override suspend fun insertFileMetaData(fileMetaData: FileMetaData): Long {
         val data: FileMetaDataCacheEntity = fileMetaDataMapper.mapToEntity(fileMetaData)
-        data.timestamp = Calendar.getInstance().timeInMillis
         return fileWorkerDao.insertFileMetaData(data)
-    }
-
-    override suspend fun getFileMetaData(uuid: String): FileMetaData {
-        val res = fileWorkerDao.getFileMetaData(uuid)[0]
-        return FileMetaData(res.path, res.name, res.size)
     }
 
     override suspend fun getAllFileMetaData(): List<FileMetaData> {
