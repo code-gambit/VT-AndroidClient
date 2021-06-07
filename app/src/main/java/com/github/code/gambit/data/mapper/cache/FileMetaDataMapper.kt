@@ -10,14 +10,13 @@ class FileMetaDataMapper
 constructor() : EntityMapper<FileMetaDataCacheEntity, FileMetaData> {
 
     override fun mapFromEntity(entity: FileMetaDataCacheEntity): FileMetaData {
-        return FileMetaData(entity.path, entity.name, entity.size, entity.uuid)
+        return FileMetaData(entity.path, entity.name, entity.size, entity.timestamp, entity.uuid)
     }
 
     override fun mapToEntity(domainModel: FileMetaData): FileMetaDataCacheEntity {
-        val uuid = domainModel.uuid?.let { domainModel.uuid } ?: ""
         return FileMetaDataCacheEntity(
-            uuid,
-            0L,
+            domainModel.uuid,
+            domainModel.timestamp,
             domainModel.path,
             domainModel.name,
             domainModel.size

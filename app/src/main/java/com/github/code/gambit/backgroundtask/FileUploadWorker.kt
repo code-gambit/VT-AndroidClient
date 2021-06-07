@@ -16,7 +16,6 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.github.code.gambit.R
 import com.github.code.gambit.data.entity.chache.FileCacheEntity
-import com.github.code.gambit.data.entity.chache.FileMetaDataCacheEntity
 import com.github.code.gambit.data.entity.network.FileNetworkEntity
 import com.github.code.gambit.data.local.Database
 import com.github.code.gambit.data.mapper.cache.FileCacheMapper
@@ -36,7 +35,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.io.File
 import java.lang.Exception
-import java.util.Calendar
 import kotlin.math.pow
 
 class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -62,19 +60,6 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
         val fmd = FileMetaData.fromString(fileMetaDataString)
         val uid = System.currentTimeMillis().toInt()
         val size = String.format("%.2f", fmd.size.div(10.0.pow(6.0)))
-        try {
-            val data = FileMetaDataCacheEntity(
-                id.toString(),
-                Calendar.getInstance().timeInMillis,
-                fmd.path,
-                fmd.name,
-                fmd.size
-            )
-            fileMetaDataDao.insertFileMetaData(data)
-            Timber.tag("worker").i("added file in db")
-        } catch (err: Exception) {
-            Timber.tag("worker").i(err.localizedMessage)
-        }
         setForeground(
             makeStatusNotification(
                 uid,
@@ -94,7 +79,6 @@ class FileUploadWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
         }*/
         val file = File(fmd.path)
         val res = InfuraIPFS().add.file(file, fmd.name, fmd.name).Hash
-        val fileDao = fileDao
         val fileService = getFileService()
         val fne = FileNetworkEntity("", "", res, fmd.name, fmd.size, fmd.name.split(".")[1])
         val task = fileService.uploadFile(fne)

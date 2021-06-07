@@ -24,6 +24,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.lang.Exception
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +40,6 @@ constructor(
 
     private lateinit var observer: Observer<List<WorkInfo>>
     private lateinit var workInfoLiveData: LiveData<List<WorkInfo>>
-    private val uuids = mutableListOf<String>()
 
     @Inject
     lateinit var systemManager: SystemManager
@@ -60,40 +61,42 @@ constructor(
         }
     }
 
-    private fun observeWorkInfo() {
+    private suspend fun observeWorkInfo() {
+        when (val fmds = fileUploadRepository.getAllFileMetaData()) {
+            is ServiceResult.Error -> {
+                postError(fmds.exception)
+                return
+            }
+            is ServiceResult.Success -> {
+                fmds.data.forEach {
+                    postFileMetaData(it)
+                }
+            }
+        }
         observer = Observer<List<WorkInfo>> { workInfos ->
-            viewModelScope.launch {
-                handleWorkInfo(workInfos)
+            workInfos.forEach { workInfo ->
+                _fileUploadState.value = FileUploadState.UpdateFileState(workInfo.id.toString(), workInfo.state)
+                Timber.tag("work").i("${workInfo.id} ${workInfo.state}")
             }
         }
         workInfoLiveData = workManager.getWorkInfosByTagLiveData(AppConstant.Worker.FILE_UPLOAD_TAG)
         workInfoLiveData.observeForever(observer)
     }
 
-    private suspend fun handleWorkInfo(workInfos: List<WorkInfo>) {
-        workInfos.forEach { workInfo ->
-            val uuid = workInfo.id.toString()
-            Timber.tag("work").i("$uuid ${workInfo.state}")
-            if (!uuids.contains(uuid)) {
-                val fmd = fileUploadRepository.getFileMetaData(uuid)
-                if (fmd is ServiceResult.Success) {
-                    fmd.data.uuid = uuid
-                    val fileUploadStatus = FileUploadStatus(fmd.data, workInfo.state)
-                    postStatus(fileUploadStatus)
-                    uuids.add(uuid)
-                }
-            } else {
-                uuids.find { it == uuid }?.let { it1 -> postStatus(it1, workInfo.state) }
+    private suspend fun uploadFile(uri: Uri) {
+        val fileMetaData = getFileMetaData(uri)
+        val request = OneTimeWorkRequestBuilder<FileUploadWorker>()
+            .addTag(AppConstant.Worker.FILE_UPLOAD_TAG)
+            .setInputData(createInputDataForUri(fileMetaData)).build()
+        fileMetaData.uuid = request.id.toString()
+        Timber.tag("work").i("${fileMetaData.uuid} enqueued")
+        when (val res = fileUploadRepository.insertFileMetaData(fileMetaData)) {
+            is ServiceResult.Error -> postError(res.exception)
+            is ServiceResult.Success -> {
+                postFileMetaData(fileMetaData)
+                workManager.enqueue(request)
             }
         }
-    }
-
-    private fun postStatus(uuid: String, state: WorkInfo.State) {
-        _fileUploadState.postValue(FileUploadState.UpdateFileState(uuid, state))
-    }
-
-    private fun postStatus(fileUploadStatus: FileUploadStatus) {
-        _fileUploadState.postValue(FileUploadState.NewFileUpload(fileUploadStatus))
     }
 
     private fun getFileMetaData(uri: Uri): FileMetaData {
@@ -108,29 +111,7 @@ constructor(
             fileSize = systemManager.getFileSize(uri)
             fileName = systemManager.getFileName(uri)
         }
-        return FileMetaData(path, fileName, fileSize)
-    }
-
-    private fun uploadFile(uri: Uri) {
-        val fileMetaData = getFileMetaData(uri)
-        val request = OneTimeWorkRequestBuilder<FileUploadWorker>()
-            .addTag(AppConstant.Worker.FILE_UPLOAD_TAG)
-            .setInputData(createInputDataForUri(fileMetaData)).build()
-        // todo enqueue unique work by passing unique string
-        workManager.enqueue(request)
-        /*workManager.getWorkInfoByIdLiveData(request.id).observeForever { workInfo: WorkInfo ->
-            Timber.tag("work").i("info by id: ${workInfo.id}")
-            if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                val string = workInfo.outputData.getString(AppConstant.Worker.FILE_OUTPUT_KEY)
-                if (string != null) {
-                    val file = FileNetworkEntity.fromString(string)
-                    _fileUploadState.postValue(FileUploadState.UploadSuccess(file))
-                    Timber.tag("out").i(file.toString())
-                }
-            } else if (workInfo.state == WorkInfo.State.RUNNING) {
-                _fileUploadState.postValue(FileUploadState.UploadStarted(fileMetaData.name))
-            }
-        }*/
+        return FileMetaData(path, fileName, fileSize, Calendar.getInstance().timeInMillis, "")
     }
 
     private fun createInputDataForUri(fileMetaData: FileMetaData): Data {
@@ -144,6 +125,19 @@ constructor(
             it.putInt(AppConstant.Worker.FILE_SIZE_KEY, fileMetaData.size)
         }
         return builder.build()
+    }
+
+    private fun postFileMetaData(fileMetaData: FileMetaData) {
+        Timber.tag("work").i("$fileMetaData from db")
+        postStatus(FileUploadStatus(fileMetaData, WorkInfo.State.ENQUEUED))
+    }
+
+    private fun postStatus(fileUploadStatus: FileUploadStatus) {
+        _fileUploadState.value = FileUploadState.NewFileUpload(fileUploadStatus)
+    }
+
+    private fun postError(exception: Exception) {
+        _fileUploadState.postValue(FileUploadState.Error(exception.message!!))
     }
 
     override fun onCleared() {
