@@ -76,4 +76,7 @@
     <string name="clear_filter">Clear Filter</string>
     <string name="drag_down_from_here">drag down from here</string>
     <string name="log_out">Log Out</string>
+    <string name="uploaded">Uploaded</string>
+    <string name="between">between</string>
+    <string name="space">&#160;</string>
 </resources>
