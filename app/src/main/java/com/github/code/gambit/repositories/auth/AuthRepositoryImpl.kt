@@ -13,7 +13,6 @@ import com.github.code.gambit.utility.sharedpreference.UserManager
 import java.lang.Exception
 
 class AuthRepositoryImpl
-
 constructor(
     private val authService: AuthService,
     private val networkDataSource: NetworkDataSource,
@@ -81,5 +80,20 @@ constructor(
         }
         (confirmationResult as ServiceResult.Success)
         return login(authData)
+    }
+
+    override suspend fun resendConfirmationCode(userEmail: String): ServiceResult<Unit> {
+        return authService.resentConfirmationCode(userEmail)
+    }
+
+    override suspend fun forgotPassword(userEmail: String): ServiceResult<Unit> {
+        return authService.forgotPassword(userEmail)
+    }
+
+    override suspend fun resetForgotPassword(authData: AuthData): ServiceResult<User> {
+        return when (val res = authService.changePassword(authData.password, authData.confirmationCode!!)) {
+            is ServiceResult.Error -> res
+            is ServiceResult.Success -> login(authData)
+        }
     }
 }
