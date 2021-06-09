@@ -79,4 +79,5 @@
     <string name="uploaded">Uploaded</string>
     <string name="between">between</string>
     <string name="space">&#160;</string>
+    <string name="resend">Resend</string>
 </resources>

@@ -10,6 +10,8 @@ interface AuthService {
     suspend fun signUp(authData: AuthData): ServiceResult<Unit>
     suspend fun logOut(): ServiceResult<Unit>
     suspend fun resetPassword(oldPassword: String, newPassword: String): ServiceResult<Unit>
+    suspend fun forgotPassword(userEmail: String): ServiceResult<Unit>
+    suspend fun changePassword(newPassword: String, confirmationCode: String): ServiceResult<Unit>
     suspend fun updateUserName(fullName: String): ServiceResult<String>
     suspend fun confirmSignUp(authData: AuthData): ServiceResult<Unit>
     suspend fun fetchSession(): ServiceResult<AWSCognitoAuthSession>
