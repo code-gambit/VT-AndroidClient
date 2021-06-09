@@ -12,6 +12,7 @@ import com.github.code.gambit.helper.auth.AuthState
 import com.github.code.gambit.repositories.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +38,21 @@ constructor(
                 }
                 is AuthEvent.SignUpEvent -> {
                     signUp(event.authData)
+                }
+                is AuthEvent.ForgotPassword -> {
+                    forgotPassword(event.userEmail)
+                }
+                is AuthEvent.ResetForgotPassword -> {
+                    resetForgotPassword(event.userEmail, event.newPassword, event.confirmationCode)
+                }
+                is AuthEvent.ResendCode -> {
+                    when (val it = authRepository.resendConfirmationCode(event.userEmail)) {
+                        is ServiceResult.Error -> {
+                            postError(it.exception)
+                            postValue(AuthState.ResendStatus(false))
+                        }
+                        is ServiceResult.Success -> postValue(AuthState.ResendStatus(true))
+                    }
                 }
             }
         }
@@ -67,13 +83,42 @@ constructor(
         val res = authRepository.signUpConfirmation(authData)
         if (res is ServiceResult.Error) {
             if (res.exception.cause is CodeMismatchException) {
-                _authState.postValue(AuthState.CodeMissMatch)
+                postValue(AuthState.CodeMissMatch)
             } else {
-                _authState.postValue(AuthState.Error(res.exception.message!!))
+                postError(res.exception)
             }
         } else {
-            _authState.postValue(AuthState.Success((res as ServiceResult.Success).data))
+            postValue(AuthState.Success((res as ServiceResult.Success).data))
         }
+    }
+
+    private suspend fun forgotPassword(userEmail: String) {
+        _authState.value = AuthState.Loading
+        when (val res = authRepository.forgotPassword(userEmail)) {
+            is ServiceResult.Error -> postError(res.exception)
+            is ServiceResult.Success -> postValue(AuthState.Confirmation)
+        }
+    }
+
+    private suspend fun resetForgotPassword(userEmail: String, newPassword: String, confirmationCode: String) {
+        when (val res = authRepository.resetForgotPassword(AuthData("", userEmail, newPassword, null, confirmationCode))) {
+            is ServiceResult.Error -> {
+                if (res.exception.cause is CodeMismatchException) {
+                    postValue(AuthState.CodeMissMatch)
+                } else {
+                    postError(res.exception)
+                }
+            }
+            is ServiceResult.Success -> postValue(AuthState.Success(res.data))
+        }
+    }
+
+    private fun postError(exception: Exception) {
+        _authState.postValue(AuthState.Error(exception.localizedMessage!!))
+    }
+
+    private fun postValue(state: AuthState<User>) {
+        _authState.postValue(state)
     }
 }
 
@@ -81,4 +126,7 @@ sealed class AuthEvent {
     data class LoginEvent(val authData: AuthData) : AuthEvent()
     data class SignUpEvent(val authData: AuthData) : AuthEvent()
     data class ConfirmationEvent(val authData: AuthData) : AuthEvent()
+    data class ResendCode(val userEmail: String) : AuthEvent()
+    data class ForgotPassword(val userEmail: String) : AuthEvent()
+    data class ResetForgotPassword(val userEmail: String, val newPassword: String, val confirmationCode: String) : AuthEvent()
 }

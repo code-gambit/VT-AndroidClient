@@ -58,6 +58,27 @@ class AuthServiceImpl : AuthService {
         }
     }
 
+    override suspend fun forgotPassword(userEmail: String): ServiceResult<Unit> {
+        return try {
+            Amplify.Auth.resetPassword(userEmail)
+            ServiceResult.Success(Unit)
+        } catch (e: java.lang.Exception) {
+            ServiceResult.Error(e)
+        }
+    }
+
+    override suspend fun changePassword(
+        newPassword: String,
+        confirmationCode: String
+    ): ServiceResult<Unit> {
+        return try {
+            Amplify.Auth.confirmResetPassword(newPassword, confirmationCode)
+            ServiceResult.Success(Unit)
+        } catch (e: java.lang.Exception) {
+            ServiceResult.Error(e)
+        }
+    }
+
     override suspend fun updateUserName(fullName: String): ServiceResult<String> {
         return try {
             val attribute = AuthUserAttribute(AuthUserAttributeKey.name(), fullName)

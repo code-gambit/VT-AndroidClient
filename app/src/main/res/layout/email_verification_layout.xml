@@ -28,7 +28,9 @@
         android:textSize="12sp"
         android:textColor="@color/raw_black"
         android:fontFamily="sans-serif"
-        android:layout_below="@id/verification_code_text"/>
+        android:layout_below="@id/verification_code_text"
+        android:textAlignment="center"
+        android:maxLines="2"/>
     <TextView
         android:id="@+id/email_text"
         android:layout_width="wrap_content"
@@ -52,18 +54,43 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/email_text"/>
 
-    <TextView
+    <Button
         android:id="@+id/validate"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/cancel"
         android:letterSpacing="0.1"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="@dimen/root_side_margin"
         android:textColor="@color/raw_black"
         android:text="@string/validate"/>
+
+    <Button
+        android:id="@+id/cancel"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="@string/cancel"
+        android:textColor="@color/raw_black"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"/>
+
+
+    <Button
+        android:id="@+id/resend"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="@string/resend"
+        android:textColor="@color/raw_black"
+        android:layout_below="@id/otp_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/root_side_margin"/>
+
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_bar"

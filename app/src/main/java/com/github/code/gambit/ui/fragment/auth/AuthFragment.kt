@@ -1,37 +1,25 @@
 package com.github.code.gambit.ui.fragment.auth
 
-import `in`.aabhasjindal.otptextview.OtpTextView
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.app.Dialog
-import android.content.DialogInterface
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
-import android.view.ViewAnimationUtils
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.User
-import com.github.code.gambit.databinding.EmailVerificationLayoutBinding
 import com.github.code.gambit.databinding.FragmentAuthBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
+import com.github.code.gambit.ui.fragment.auth.confirmationcomponent.ConfirmationComponent
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.exitFullscreen
-import com.github.code.gambit.utility.extention.setStatusColor
-import com.github.code.gambit.utility.extention.show
+import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.math.hypot
 
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
@@ -45,9 +33,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private lateinit var authData: AuthData
 
-    private lateinit var mOtpTextView: OtpTextView
-    private lateinit var dialogView: View
-    private lateinit var dialog: Dialog
+    private lateinit var confirmationComponent: ConfirmationComponent
 
     @Inject
     lateinit var permissionManager: SystemManager
@@ -83,6 +69,18 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 )
         }.attach()
 
+        confirmationComponent = ConfirmationComponent.bind(requireContext())
+
+        confirmationComponent.getOtp().observe(viewLifecycleOwner) {
+            it?.let {
+                confirmSignUp(it)
+            }
+        }
+
+        confirmationComponent.setResendCallback { email ->
+            viewModel.setEvent(AuthEvent.ResendCode(email))
+        }
+
         binding.buttonSubmit.setOnClickListener {
             disableInteraction()
             val fg = (binding.fragmentContainer.adapter as AuthFragmentAdapter).getFragment(
@@ -110,13 +108,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     }
                     is AuthState.Confirmation -> {
                         binding.progressBar.hide()
-                        showConfirmationDialog()
+                        confirmationComponent.show(authData.email)
                     }
                     is AuthState.Success<User> -> {
                         binding.progressBar.hide()
                         binding.root.snackbar("Welcome ${it.data.name}")
-                        if (this::dialog.isInitialized && dialog.isShowing) {
-                            revealShow(false, exit = true) { navigateToHome() }
+                        if (this::confirmationComponent.isInitialized && confirmationComponent.isShowing()) {
+                            confirmationComponent.exit { navigateToHome() }
                         } else {
                             navigateToHome()
                         }
@@ -124,97 +122,22 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     is AuthState.Error -> {
                         enableInteraction()
                         binding.progressBar.hide()
-                        if (this::dialog.isInitialized && dialog.isShowing) {
-                            revealShow(false, exit = true)
+                        if (this::confirmationComponent.isInitialized && confirmationComponent.isShowing()) {
+                            confirmationComponent.exit()
                         }
                         binding.root.snackbar(it.reason)
                     }
+                    is AuthState.ResendStatus -> {
+                        if (it.success) {
+                            longToast("Code send on your email")
+                        }
+                    }
                     AuthState.CodeMissMatch -> {
-                        mOtpTextView.showError()
+                        confirmationComponent.showError("Invalid code")
                     }
                 }
             }
         )
-    }
-
-    private fun showConfirmationDialog() {
-        dialog = Dialog(requireContext(), R.style.Theme_VTransfer)
-        EmailVerificationLayoutBinding.inflate(layoutInflater)
-        dialog.setContentView(R.layout.email_verification_layout)
-        dialog.window?.setStatusColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.secondary
-            )
-        )
-        dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
-        val otpTextView: OtpTextView = dialog.findViewById(R.id.otp_view)
-        val progressBar: View = dialog.findViewById(R.id.progress_bar)
-        mOtpTextView = otpTextView
-        val validate: TextView = dialog.findViewById(R.id.validate)
-        dialogView = dialog.findViewById(R.id.root)
-
-        validate.setOnClickListener {
-            val otp = otpTextView.otp
-            when {
-                otp == null -> {
-                    dialogView.snackbar("Code can't be empty")
-                }
-                otp.length != 6 -> {
-                    dialogView.snackbar("Invalid code length")
-                }
-                else -> {
-                    progressBar.show()
-                    validate.isClickable = false
-                    confirmSignUp(otp)
-                }
-            }
-        }
-
-        dialog.setOnShowListener { revealShow(true) }
-
-        dialog.setOnKeyListener(
-            DialogInterface.OnKeyListener { _, i, _ ->
-                if (i == KeyEvent.KEYCODE_BACK) {
-                    revealShow(false)
-                    return@OnKeyListener true
-                }
-                false
-            }
-        )
-
-        dialog.show()
-    }
-
-    private fun revealShow(b: Boolean, exit: Boolean = false, exitFunction: () -> Unit = {}) {
-        val view = dialogView.findViewById<View>(R.id.root)
-        val w = view.width
-        val h = view.height
-        val endRadius = hypot(w.toDouble(), h.toDouble()).toInt()
-        val cx = (view.width / 2)
-        val cy = 0
-        if (b) {
-            val revealAnimator =
-                ViewAnimationUtils.createCircularReveal(view, cx, cy, 0f, endRadius.toFloat())
-            view.visibility = View.VISIBLE
-            revealAnimator.duration = 700
-            revealAnimator.start()
-        } else {
-            val anim =
-                ViewAnimationUtils.createCircularReveal(view, cx, cy, endRadius.toFloat(), 0f)
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    dialog.dismiss()
-                    view.visibility = View.INVISIBLE
-                    if (exit) {
-                        exitFunction()
-                    }
-                }
-            })
-            anim.duration = 700
-            anim.start()
-        }
     }
 
     private fun signUp(authData: AuthData) {
