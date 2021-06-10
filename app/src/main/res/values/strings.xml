@@ -80,4 +80,6 @@
     <string name="between">between</string>
     <string name="space">&#160;</string>
     <string name="resend">Resend</string>
+    <string name="no_internet_message">Not connected to internet</string>
+    <string name="incorrect_username_or_password">Incorrect Username or Password</string>
 </resources>
