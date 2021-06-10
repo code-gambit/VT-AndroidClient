@@ -1,6 +1,7 @@
 package com.github.code.gambit.ui.activity.main
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.View
 import androidx.work.WorkInfo
 import com.github.code.gambit.R
@@ -27,7 +28,31 @@ class FileMetaDataAdapter(val context: Context) :
     ) {
         binding.fileName.text = item.fileMetaData.name
         binding.fileSize.text = item.fileMetaData.size.byteToMb()
-        binding.filePath.text = item.state.toString()
+        binding.filePath.text = item.fileMetaData.path
+        binding.status.text = item.state.toString()
+        when (item.state) {
+            WorkInfo.State.ENQUEUED -> {
+                binding.linearProgress.show()
+            }
+            WorkInfo.State.RUNNING -> {
+                binding.linearProgress.show()
+            }
+            WorkInfo.State.SUCCEEDED -> {
+                binding.linearProgress.hide()
+                binding.status.chipBackgroundColor = ColorStateList.valueOf(context.getColor(android.R.color.holo_green_light))
+            }
+            WorkInfo.State.FAILED -> {
+                binding.linearProgress.hide()
+                binding.status.chipBackgroundColor = ColorStateList.valueOf(context.getColor(android.R.color.holo_red_light))
+            }
+            WorkInfo.State.BLOCKED -> {
+                binding.linearProgress.hide()
+            }
+            WorkInfo.State.CANCELLED -> {
+                binding.linearProgress.hide()
+                binding.status.chipBackgroundColor = ColorStateList.valueOf(context.getColor(android.R.color.holo_red_light))
+            }
+        }
     }
 
     override fun onItemClick(

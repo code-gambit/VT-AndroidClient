@@ -22,6 +22,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                tools:text="ENQUEUE"
+                android:lines="1"
+                android:textColor="@color/raw_white"
+                app:chipSurfaceColor="@color/secondary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"/>
+
             <ImageView
                 android:id="@+id/file_icon"
                 android:layout_width="82dp"
@@ -35,6 +53,7 @@
                 android:visibility="gone"/>
 
             <LinearLayout
+                android:id="@+id/text_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -90,6 +109,17 @@
                 android:textColor="@color/raw_purple_text"
                 android:textSize="18sp"
                 android:text="@string/mb" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/linear_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:indicatorColor="@color/secondary"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_below="@id/text_container"/>
 
         </RelativeLayout>
 
