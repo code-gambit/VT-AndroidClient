@@ -4,66 +4,64 @@ import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
-import com.amplifyframework.auth.cognito.AWSCognitoUserPoolTokens
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.kotlin.core.Amplify
+import com.github.code.gambit.data.remote.interceptor.AuthInterceptor
 import com.github.code.gambit.helper.ServiceResult
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.utility.extention.defaultBuilder
 
-class AuthServiceImpl : AuthService {
+class AuthServiceImpl(private val authInterceptor: AuthInterceptor) : AuthService {
 
     override suspend fun login(authData: AuthData): ServiceResult<Unit> {
-        return try {
-            val result = Amplify.Auth.signIn(authData.email, authData.password)
+        return authInterceptor.authRequest({
+            Amplify.Auth.signIn(
+                authData.email,
+                authData.password
+            )
+        }) { result ->
             if (result.isSignInComplete) {
                 ServiceResult.Success(Unit)
             } else {
                 ServiceResult.Error(Exception("Login incomplete + ${result.nextStep}"))
             }
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
         }
     }
 
     override suspend fun signUp(authData: AuthData): ServiceResult<Unit> {
-        val options = AuthSignUpOptions.builder().defaultBuilder(authData)
-        return try {
-            val result = Amplify.Auth.signUp(authData.email, authData.password, options)
+        return authInterceptor.authRequest({
+            val options = AuthSignUpOptions.builder().defaultBuilder(authData)
+            Amplify.Auth.signUp(authData.email, authData.password, options)
+        }) { result ->
             if (result.isSignUpComplete) {
                 ServiceResult.Success(Unit)
             } else {
                 ServiceResult.Error(Exception("SignUp incomplete + ${result.nextStep}"))
             }
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
         }
     }
 
     override suspend fun logOut(): ServiceResult<Unit> {
-        return try {
-            Amplify.Auth.signOut()
-            ServiceResult.Success(Unit)
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
-        }
+        return authInterceptor.authRequest({ Amplify.Auth.signOut() }) { ServiceResult.Success(Unit) }
     }
 
-    override suspend fun resetPassword(oldPassword: String, newPassword: String): ServiceResult<Unit> {
-        return try {
-            val result = Amplify.Auth.updatePassword(oldPassword, newPassword)
-            ServiceResult.Success(result)
-        } catch (e: java.lang.Exception) {
-            ServiceResult.Error(e)
+    override suspend fun resetPassword(
+        oldPassword: String,
+        newPassword: String
+    ): ServiceResult<Unit> {
+        return authInterceptor.authRequest({
+            Amplify.Auth.updatePassword(
+                oldPassword,
+                newPassword
+            )
+        }) {
+            ServiceResult.Success(it)
         }
     }
 
     override suspend fun forgotPassword(userEmail: String): ServiceResult<Unit> {
-        return try {
-            Amplify.Auth.resetPassword(userEmail)
+        return authInterceptor.authRequest({ Amplify.Auth.resetPassword(userEmail) }) {
             ServiceResult.Success(Unit)
-        } catch (e: java.lang.Exception) {
-            ServiceResult.Error(e)
         }
     }
 
@@ -71,81 +69,86 @@ class AuthServiceImpl : AuthService {
         newPassword: String,
         confirmationCode: String
     ): ServiceResult<Unit> {
-        return try {
-            Amplify.Auth.confirmResetPassword(newPassword, confirmationCode)
+        return authInterceptor.authRequest({
+            Amplify.Auth.confirmResetPassword(
+                newPassword,
+                confirmationCode
+            )
+        }) {
             ServiceResult.Success(Unit)
-        } catch (e: java.lang.Exception) {
-            ServiceResult.Error(e)
         }
     }
 
     override suspend fun updateUserName(fullName: String): ServiceResult<String> {
-        return try {
+        return authInterceptor.authRequest({
             val attribute = AuthUserAttribute(AuthUserAttributeKey.name(), fullName)
-            val result = Amplify.Auth.updateUserAttribute(attribute)
+            Amplify.Auth.updateUserAttribute(attribute)
+        }) { result ->
             if (result.isUpdated) {
                 ServiceResult.Success(fullName)
             } else {
-                ServiceResult.Error(AuthException("User name update failed", "Switch you internet connection"))
+                ServiceResult.Error(
+                    AuthException(
+                        "User name update failed",
+                        "Switch your internet connection"
+                    )
+                )
             }
-        } catch (e: java.lang.Exception) {
-            ServiceResult.Error(e)
         }
     }
 
     override suspend fun confirmSignUp(authData: AuthData): ServiceResult<Unit> {
-        return try {
-            val result = Amplify.Auth.confirmSignUp(authData.email, authData.confirmationCode!!)
+        return authInterceptor.authRequest({
+            Amplify.Auth.confirmSignUp(
+                authData.email,
+                authData.confirmationCode!!
+            )
+        }) { result ->
             if (result.isSignUpComplete) {
                 ServiceResult.Success(Unit)
             } else {
                 ServiceResult.Error(Exception("Confirmation incomplete + ${result.nextStep}"))
             }
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
         }
     }
 
     override suspend fun fetchSession(): ServiceResult<AWSCognitoAuthSession> {
-        return try {
-            val authSession = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
-            ServiceResult.Success(authSession)
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
+        return authInterceptor.authRequest({ Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession }) {
+            ServiceResult.Success(
+                it
+            )
         }
     }
 
     override suspend fun fetchIdToken(): ServiceResult<String> {
-        when (val session = fetchSession()) {
-            is ServiceResult.Error -> {
-                return ServiceResult.Error(session.exception)
-            }
-            is ServiceResult.Success<AWSCognitoAuthSession> -> {
-                val tokens: AWSCognitoUserPoolTokens = session.data.userPoolTokens.value
-                    ?: return ServiceResult.Error(Exception("token not generated, user might be not authentication"))
-                return ServiceResult.Success(tokens.idToken)
-            }
-            else -> {
-                return ServiceResult.Error(Exception("Illegal state!!"))
+        return authInterceptor.authRequest({ fetchSession() }) { session ->
+            when (session) {
+                is ServiceResult.Error -> {
+                    ServiceResult.Error(session.exception)
+                }
+                is ServiceResult.Success<AWSCognitoAuthSession> -> {
+                    session.data.userPoolTokens.value?.let {
+                        ServiceResult.Success(it.idToken)
+                    }
+                        ?: ServiceResult.Error(Exception("token not generated, user might be not authentication"))
+                }
             }
         }
     }
 
     override suspend fun fetchUserAttribute(): ServiceResult<List<AuthUserAttribute>> {
-        return try {
-            val attributes = Amplify.Auth.fetchUserAttributes()
-            ServiceResult.Success(attributes)
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
+        return authInterceptor.authRequest({ Amplify.Auth.fetchUserAttributes() }) {
+            ServiceResult.Success(
+                it
+            )
         }
     }
 
     override suspend fun resentConfirmationCode(email: String): ServiceResult<Unit> {
-        return try {
-            Amplify.Auth.resendSignUpCode(email)
-            ServiceResult.Success(Unit)
-        } catch (e: AuthException) {
-            ServiceResult.Error(e)
+        return authInterceptor.authRequest({ Amplify.Auth.resendSignUpCode(email) }) {
+            ServiceResult.Success(
+                Unit
+            )
         }
     }
 }

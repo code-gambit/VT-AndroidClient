@@ -1,4 +1,4 @@
-package com.github.code.gambit.data.remote
+package com.github.code.gambit.data.remote.interceptor
 
 import com.github.code.gambit.BuildConfig
 import okhttp3.Interceptor

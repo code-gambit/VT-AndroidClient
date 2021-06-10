@@ -5,11 +5,12 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.github.code.gambit.data.mapper.network.FileNetworkMapper
 import com.github.code.gambit.data.mapper.network.UrlNetworkMapper
 import com.github.code.gambit.data.mapper.network.UserNetworkMapper
-import com.github.code.gambit.data.remote.ApiGatewayInterceptor
 import com.github.code.gambit.data.remote.NetworkDataSource
 import com.github.code.gambit.data.remote.NetworkDataSourceImpl
+import com.github.code.gambit.data.remote.interceptor.ApiGatewayInterceptor
+import com.github.code.gambit.data.remote.interceptor.AuthInterceptor
+import com.github.code.gambit.data.remote.interceptor.NetworkInterceptor
 import com.github.code.gambit.data.remote.services.ApiService
-import com.github.code.gambit.data.remote.services.NetworkInterceptor
 import com.github.code.gambit.data.remote.services.auth.AuthService
 import com.github.code.gambit.data.remote.services.auth.AuthServiceImpl
 import com.github.code.gambit.data.remote.services.file.FileService
@@ -63,6 +64,14 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun provideAuthInterceptor(
+        @ApplicationContext context: Context
+    ): AuthInterceptor {
+        return AuthInterceptor(context)
+    }
+
+    @Singleton
+    @Provides
     fun provideOkHttpClient(
         apiGatewayInterceptor: ApiGatewayInterceptor,
         networkInterceptor: NetworkInterceptor,
@@ -108,8 +117,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthService(): AuthService {
-        return AuthServiceImpl()
+    fun provideAuthService(authInterceptor: AuthInterceptor): AuthService {
+        return AuthServiceImpl(authInterceptor)
     }
 
     @Singleton
