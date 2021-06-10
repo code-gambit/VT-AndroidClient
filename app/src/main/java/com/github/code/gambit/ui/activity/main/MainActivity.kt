@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -28,6 +29,7 @@ import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
 import com.github.code.gambit.utility.extention.bottomNavShow
 import com.github.code.gambit.utility.extention.hide
+import com.github.code.gambit.utility.extention.hideKeyboard
 import com.github.code.gambit.utility.extention.show
 import com.github.code.gambit.utility.extention.showDefaultMaterialAlert
 import com.github.code.gambit.utility.extention.snackbar
@@ -68,6 +70,16 @@ class MainActivity : AppCompatActivity(), BottomNavController {
         val hostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
         if (hostFragment is NavHostFragment)
             navController = hostFragment.navController
+
+        binding.root.addTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+                hideKeyboard()
+            }
+
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {}
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
+        })
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
