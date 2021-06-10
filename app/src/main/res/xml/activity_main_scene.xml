@@ -61,7 +61,8 @@
             android:layout_height="0dp"
             motion:layout_constraintBottom_toTopOf="@id/constraint_layout"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent"
+            android:visibility="visible" />
         <Constraint
             android:id="@+id/file_upload_container_root"
             motion:layout_constraintEnd_toEndOf="parent"

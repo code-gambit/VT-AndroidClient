@@ -152,6 +152,7 @@
         tools:listitem="@layout/file_meta_data_list_item"
         android:paddingTop="32dp"
         android:scaleX="1.1"
-        android:scaleY="1.1"/>
+        android:scaleY="1.1"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
