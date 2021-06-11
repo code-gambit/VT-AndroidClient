@@ -3,6 +3,7 @@ package com.github.code.gambit.utility
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.database.CursorIndexOutOfBoundsException
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -15,6 +16,28 @@ object FileUtil {
     fun Uri.isSchemeTypeContent(): Boolean = "content".equals(this.scheme!!, ignoreCase = true)
 
     fun getPathFromLocalUri(context: Context, uri: Uri): String? {
+        val path: String? = try {
+            _getPathFromLocalUri(context, uri)
+        } catch (exp: CursorIndexOutOfBoundsException) {
+            exp.printStackTrace()
+            uri.path
+        } catch (exp: NullPointerException) {
+            exp.printStackTrace()
+            uri.path
+        } catch (exp: NumberFormatException) {
+            exp.printStackTrace()
+            uri.path
+        }
+        return path?.let {
+            if (File(it).exists()) {
+                path
+            } else {
+                null
+            }
+        }
+    }
+
+    fun _getPathFromLocalUri(context: Context, uri: Uri): String? {
         // DocumentProvider
         when {
             DocumentsContract.isDocumentUri(context, uri) -> {
@@ -22,30 +45,32 @@ object FileUtil {
                 when {
                     isExternalStorageDocument(uri) -> {
                         val docId = DocumentsContract.getDocumentId(uri)
-                        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        val split =
+                            docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         val type = split[0]
 
                         // This is for checking Main Memory
-                        return if ("primary".equals(type, ignoreCase = true)) {
+                        if ("primary".equals(type, ignoreCase = true)) {
                             if (split.size > 1) {
-                                context.getExternalFilesDir(null).toString() + "/" + split[1]
+                                return context.getExternalFilesDir(null).toString() + "/" + split[1]
                             } else {
-                                context.getExternalFilesDir(null).toString() + "/"
+                                return context.getExternalFilesDir(null).toString() + "/"
                             }
                             // This is for checking SD Card
-                        } else {
+                        } /*else {
                             val path = "storage" + "/" + docId.replace(":", "/")
                             if (File(path).exists()) {
                                 path
                             } else {
                                 "/storage/sdcard/" + split[1]
                             }
-                        }
+                        }*/
                     }
                     isDownloadsDocument(uri) -> {
                         val fileName = getFilePath(context, uri)
                         if (fileName != null) {
-                            val path = context.getExternalFilesDir(null).toString() + "/Download/" + fileName
+                            val path = context.getExternalFilesDir(null)
+                                .toString() + "/Download/" + fileName
                             if (File(path).exists()) {
                                 return path
                             }
@@ -56,30 +81,18 @@ object FileUtil {
                             id = id.split(":")[1]
                         }
                         val contentUri = ContentUris.withAppendedId(
-                            Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
+                            Uri.parse("content://downloads/public_downloads"),
+                            java.lang.Long.valueOf(id)
                         )
                         return getDataColumn(context, contentUri, null, null)
                     }
                     isMediaDocument(uri) -> {
                         val docId = DocumentsContract.getDocumentId(uri)
-                        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        val split =
+                            docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         val type = split[0]
 
-                        var contentUri: Uri? = null
-                        when (type) {
-                            "image" -> {
-                                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                            }
-                            "video" -> {
-                                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                            }
-                            "audio" -> {
-                                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                            }
-                            "document" -> {
-                                contentUri = Uri.parse("content://media/external/documents/media")
-                            }
-                        }
+                        val contentUri: Uri? = getContentUri(type)
 
                         val selection = "_id=?"
                         val selectionArgs = arrayOf(split[1])
@@ -106,6 +119,18 @@ object FileUtil {
         return null
     }
 
+    /**
+     * checks the type of uri
+     */
+    private fun getContentUri(type: String): Uri? {
+        when (type) {
+            "image" -> return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            "video" -> return MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            "audio" -> return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        }
+        return null
+    }
+
     private fun getDataColumn(
         context: Context,
         uri: Uri?,
@@ -118,7 +143,8 @@ object FileUtil {
         val projection = arrayOf(column)
 
         try {
-            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            cursor =
+                context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
             if (cursor != null && cursor.moveToFirst()) {
                 val index = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(index)
