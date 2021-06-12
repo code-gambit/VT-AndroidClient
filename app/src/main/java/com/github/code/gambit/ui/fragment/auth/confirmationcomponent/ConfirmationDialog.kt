@@ -17,6 +17,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.EmailVerificationLayoutBinding
+import com.github.code.gambit.utility.extention.enableAfter
 import com.github.code.gambit.utility.extention.setStatusColor
 import com.github.code.gambit.utility.extention.snackbar
 import kotlin.math.hypot
@@ -30,8 +31,10 @@ class ConfirmationDialog(val context: Context) : ConfirmationComponent {
     )
     private val binding get() = _binding
 
+    private val defaultResendCounter = 50
     private val _otp = MutableLiveData<String>()
     private var resendCallBack: ((email: String) -> Unit)? = null
+    private var cancelCallBack: (() -> Unit)? = null
 
     private var userEmail: String = ""
 
@@ -61,11 +64,14 @@ class ConfirmationDialog(val context: Context) : ConfirmationComponent {
         }
 
         binding.cancel.setOnClickListener {
-            revealShow(b = false, exit = true)
+            revealShow(b = false, exit = true, exitFunction = cancelCallBack ?: {})
         }
 
-        binding.resend.setOnClickListener {
-            resendCallBack?.let { it(userEmail) }
+        binding.resend.setOnClickListener { v ->
+            resendCallBack?.let {
+                v.isEnabled = false
+                it(userEmail)
+            }
         }
 
         dialog.setOnShowListener { revealShow(true) }
@@ -120,6 +126,7 @@ class ConfirmationDialog(val context: Context) : ConfirmationComponent {
 
     @SuppressLint("SetTextI18n")
     override fun show(userEmail: String) {
+        binding.resend.enableAfter(defaultResendCounter, binding.resendTimer)
         this.userEmail = userEmail
         binding.infoText.text = "${binding.infoText.text}\n$userEmail"
         dialog.show()
@@ -143,6 +150,18 @@ class ConfirmationDialog(val context: Context) : ConfirmationComponent {
         binding.otpView.showError()
         if (message.isNotEmpty()) {
             snackbar(message)
+        }
+    }
+
+    override fun setOnCancelCallback(cancelFunction: () -> Unit) {
+        cancelCallBack = cancelFunction
+    }
+
+    override fun onResendResult(success: Boolean) {
+        if (success) {
+            binding.resend.enableAfter(defaultResendCounter, binding.resendTimer)
+        } else {
+            binding.resend.enableAfter(0, binding.resendTimer)
         }
     }
 }

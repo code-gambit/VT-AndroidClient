@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/secondary"
     android:id="@+id/root">
 
@@ -79,6 +80,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"/>
 
+    <TextView
+        android:id="@+id/resend_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="47"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/raw_black"
+        android:layout_below="@id/otp_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/root_side_margin"/>
+
 
     <Button
         android:id="@+id/resend"
@@ -87,9 +100,10 @@
         android:layout_height="36dp"
         android:text="@string/resend"
         android:textColor="@color/raw_black"
-        android:layout_below="@id/otp_view"
+        android:layout_below="@id/resend_timer"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/root_side_margin"/>
+        android:layout_marginTop="2dp"
+        android:enabled="false"/>
 
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -97,7 +111,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/resend"
+        android:layout_centerHorizontal="true"
         android:visibility="gone"
         app:indicatorColor="@color/login_signup_button_color"/>
 
