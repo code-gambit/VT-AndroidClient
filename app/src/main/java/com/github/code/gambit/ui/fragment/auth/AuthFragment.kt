@@ -51,7 +51,8 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             if (it) {
                 Toast.makeText(requireContext(), "Permission granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -72,14 +73,14 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         confirmationComponent = ConfirmationComponent.bind(requireContext())
 
         confirmationComponent.getOtp().observe(viewLifecycleOwner) {
-            it?.let {
-                confirmSignUp(it)
-            }
+            it?.let { confirmSignUp(it) }
         }
 
         confirmationComponent.setResendCallback { email ->
             viewModel.setEvent(AuthEvent.ResendCode(email))
         }
+
+        confirmationComponent.setOnCancelCallback { enableInteraction() }
 
         binding.buttonSubmit.setOnClickListener {
             disableInteraction()
@@ -90,12 +91,16 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 val data = (fg as SignUpFragment).validate()
                 if (data != null) {
                     signUp(data)
-                } else { enableInteraction() }
+                } else {
+                    enableInteraction()
+                }
             } else {
                 val data = (fg as LoginFragment).validate()
                 if (data != null) {
                     logIn(data)
-                } else { enableInteraction() }
+                } else {
+                    enableInteraction()
+                }
             }
         }
 
@@ -128,6 +133,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         binding.root.snackbar(it.reason)
                     }
                     is AuthState.ResendStatus -> {
+                        confirmationComponent.onResendResult(it.success)
                         if (it.success) {
                             longToast("Code send on your email")
                         }
