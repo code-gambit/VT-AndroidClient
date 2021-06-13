@@ -36,7 +36,7 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
     fun getUser() = get<User>(Key.USER)
 
-    fun isFirstLaunch() = get<Boolean>(Key.LAUNCHSTATE)
+    fun isFirstLaunch() = get(Key.LAUNCHSTATE, true)
 
     private fun updateLaunchState() = put(Key.LAUNCHSTATE, false)
 
