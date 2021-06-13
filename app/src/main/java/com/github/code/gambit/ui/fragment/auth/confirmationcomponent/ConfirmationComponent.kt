@@ -15,4 +15,6 @@ interface ConfirmationComponent {
     fun getOtp(): LiveData<String>
     fun setResendCallback(callback: (email: String) -> Unit)
     fun showError(message: String = "")
+    fun setOnCancelCallback(cancelFunction: () -> Unit = {})
+    fun onResendResult(success: Boolean)
 }

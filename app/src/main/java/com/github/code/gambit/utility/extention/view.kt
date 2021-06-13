@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -12,8 +13,8 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.github.code.gambit.R
@@ -58,20 +59,33 @@ fun View?.show() {
     }
 }
 
+fun View?.enableAfter(timeInSeconds: Int, counterView: TextView) {
+    if (this == null) {
+        return
+    }
+    var count = timeInSeconds
+    this.isEnabled = false
+    counterView.visibility = View.VISIBLE
+    Handler().post(object : Runnable {
+        override fun run() {
+            counterView.text = count.toString()
+            if (count <= 0) {
+                this@enableAfter.isEnabled = true
+                counterView.visibility = View.INVISIBLE
+                return
+            }
+            count--
+            handler.postDelayed(this, 1000)
+        }
+    })
+}
+
 fun View.toggleVisibility() {
     if (isVisible) {
         visibility = View.GONE
         return
     }
     visibility = View.VISIBLE
-}
-
-fun List<View>.hideAll() {
-    this.forEach { it.hide() }
-}
-
-fun List<View>.showAll() {
-    this.forEach { it.show() }
 }
 
 fun View.snackbar(message: String, view: View) {
@@ -152,8 +166,13 @@ fun Context.showDefaultAlert(title: String, message: String, positiveButtonPress
         .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create().show()
 }
 
-fun Context.showDefaultMaterialAlert(title: String, message: String, positiveButtonPress: () -> Unit) {
+fun Context.showDefaultMaterialAlert(
+    title: String,
+    message: String,
+    positiveButtonPress: () -> Unit
+) {
     MaterialAlertDialogBuilder(this)
-        .setTitle(title).setMessage(message).setPositiveButton("Yes") { _, _ -> positiveButtonPress() }
+        .setTitle(title).setMessage(message)
+        .setPositiveButton("Yes") { _, _ -> positiveButtonPress() }
         .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create().show()
 }
