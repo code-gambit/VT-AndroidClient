@@ -23,20 +23,20 @@ abstract class PreferenceManager(var context: Context) {
         }
     }
 
-    inline fun <reified T> get(key: Key): T {
+    inline fun <reified T> get(key: Key, default: T? = null): T {
         return when (T::class) {
             String::class -> {
-                val a = pref.getString(key.value, "") as T
+                val a = pref.getString(key.value, default?.let { it as String } ?: "") as T
                 a
             }
             Boolean::class -> {
-                pref.getBoolean(key.value, false) as T
+                pref.getBoolean(key.value, default?.let { it as Boolean } ?: false) as T
             }
             Int::class -> {
-                pref.getInt(key.value, -1) as T
+                pref.getInt(key.value, default?.let { it as Int } ?: -1) as T
             }
             User::class -> {
-                val st = pref.getString(key.value, "")!!
+                val st = pref.getString(key.value, default?.let { it as String } ?: "")!!
                 User.fromString(st) as T
             }
             else -> throw IllegalStateException("Only supports String, Boolean and Int")
