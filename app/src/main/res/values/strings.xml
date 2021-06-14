@@ -82,4 +82,8 @@
     <string name="resend">Resend</string>
     <string name="no_internet_message">Not connected to internet</string>
     <string name="incorrect_username_or_password">Incorrect Username or Password</string>
+    <string name="drag_down_info">Drag down from here to see the live status of all the files uploading</string>
+    <string name="file_meta_data_info">Recent uploading file appear here\nAdd file from home page</string>
+    <string name="file_search_info">Your search result appear here\nEnter file name to search</string>
+    <string name="empty_file_search_result">Oops!!\nNo file matching with that name</string>
 </resources>
