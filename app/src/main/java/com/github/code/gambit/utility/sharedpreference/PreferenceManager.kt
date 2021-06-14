@@ -47,6 +47,7 @@ abstract class PreferenceManager(var context: Context) {
 enum class Key(val value: String) {
     LAUNCHSTATE("IS-FIRST-LAUNCH"),
     AUTHSTATE("IS-AUTHENTICATED"),
+    HOMEONBOARDINGSTATE("IS-HOME-ONBOARDED"),
     USER("USER"),
     TOKEN("ID-TOKEN"),
     FILE_LEK("FILE-LAST-EVALUATED-KEY"),

@@ -140,9 +140,9 @@ class MainActivity : AppCompatActivity(), BottomNavController {
             override fun onItemLongClick(item: FileUploadStatus) {}
         }
         val layoutManager = LinearLayoutManager(this)
-        binding.secondaryContainer.layoutManager = layoutManager
-        binding.secondaryContainer.setHasFixedSize(false)
-        binding.secondaryContainer.adapter = adapter
+        binding.metaDataListItem.layoutManager = layoutManager
+        binding.metaDataListItem.setHasFixedSize(false)
+        binding.metaDataListItem.adapter = adapter
     }
 
     private fun setupClickListeners() {
@@ -239,7 +239,11 @@ class MainActivity : AppCompatActivity(), BottomNavController {
     }
 
     fun getAddFab(): View {
-        return binding.addFileButton
+        return binding.bottomNavContainerRoot
+    }
+
+    fun getDragView(): View {
+        return binding.constraintLayout
     }
 
     override fun animateBottomNav(offset: Float) {

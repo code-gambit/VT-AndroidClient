@@ -115,7 +115,7 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
     /**
      * Sets the view which is displayed when list is empty
      */
-    fun bindEmptyListView(view: View) {
+    fun bindEmptyView(view: View) {
         emptyIndicatorView = view
     }
 
@@ -137,6 +137,15 @@ abstract class BaseAdapter<T, B : ViewBinding, LS : OnItemClickListener<T>>(priv
             } else {
                 it.hide()
             }
+        }
+    }
+
+    fun refresh(clearCounter: Boolean = false) {
+        refreshEmptyIndicatorState()
+        if (clearCounter) {
+            counterView?.text = ""
+        } else {
+            updateCounterText()
         }
     }
 

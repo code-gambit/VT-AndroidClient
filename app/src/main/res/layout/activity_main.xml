@@ -140,19 +140,48 @@
         </LinearLayout>
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <RelativeLayout
         android:id="@+id/secondary_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/constraint_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/file_meta_data_list_item"
         android:paddingTop="32dp"
         android:scaleX="1.1"
         android:scaleY="1.1"
-        android:visibility="invisible"/>
+        android:visibility="invisible">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/meta_data_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:listitem="@layout/file_meta_data_list_item" />
+
+        <ImageView
+            android:id="@+id/illustration"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:src="@drawable/illus_uploading"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/illustration"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/file_meta_data_info"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:layout_below="@id/illustration"
+            android:textSize="22sp"
+            android:fontFamily="@font/nunito_regular"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/illustration_text_vertical_gap"/>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

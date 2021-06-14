@@ -35,10 +35,9 @@ import com.github.code.gambit.utility.extention.show
 import com.github.code.gambit.utility.extention.showDefaultMaterialAlert
 import com.github.code.gambit.utility.extention.snackbar
 import com.github.code.gambit.utility.sharedpreference.LastEvaluatedKeyManager
+import com.github.code.gambit.utility.sharedpreference.UserManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.takusemba.spotlight.OnSpotlightListener
-import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Spotlight
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.Circle
@@ -73,6 +72,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     @Inject
     lateinit var lekManager: LastEvaluatedKeyManager
+
+    @Inject
+    lateinit var userManager: UserManager
 
     private lateinit var fileSearchComponent: FileSearchComponent
     private lateinit var filterComponent: FilterComponent
@@ -125,7 +127,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         setUpFileRecyclerView()
         registerEventCallbacks()
         viewModel.setEvent(HomeEvent.GetFiles)
-        // Handler().postDelayed({ spotlight() }, 6000)
     }
 
     private fun registerEventCallbacks() {
@@ -206,7 +207,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun setUpFileRecyclerView() {
-        adapter.bindEmptyListView(binding.noFileIllustrationContainer)
+        adapter.bindEmptyView(binding.noFileIllustrationContainer)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.fileList.layoutManager = layoutManager
         binding.fileList.setHasFixedSize(false)
@@ -303,6 +304,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         binding.topContainer.show()
         binding.swipeRefresh.show()
         binding.fileList.show()
+        spotlight()
     }
 
     private fun showShimmer() {
@@ -313,68 +315,62 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     private fun spotlight() {
+        if (userManager.isHomeOnBoarded()) {
+            return
+        }
         val targets = ArrayList<Target>()
 
         val firstRoot = FrameLayout(requireContext())
-        val first = layoutInflater.inflate(R.layout.home_first_spot, firstRoot)
-        val firstTarget = Target.Builder()
-            .setAnchor(requireMainActivity().getAddFab())
-            .setShape(Circle(120f))
-            .setOverlay(first)
-            .setOnTargetListener(object : OnTargetListener {
-                override fun onEnded() {}
-                override fun onStarted() {}
-            })
-            .build()
+        val first = layoutInflater.inflate(R.layout.home_add_file_spot, firstRoot)
+        val firstTarget = getTarget(requireMainActivity().getAddFab(), first, 250)
 
         val secondRoot = FrameLayout(requireContext())
-        val second = layoutInflater.inflate(R.layout.home_second_spot, secondRoot)
-        val secondTarget = Target.Builder()
-            .setAnchor(binding.searchButton)
-            .setShape(Circle(50f))
-            .setOverlay(second)
-            .setOnTargetListener(object : OnTargetListener {
-                override fun onEnded() {}
-                override fun onStarted() {}
-            }).build()
+        val second = layoutInflater.inflate(R.layout.home_drag_spot, secondRoot)
+        val secondTarget = getTarget(requireMainActivity().getDragView(), second, 100)
 
-        val thirdTarget = Target.Builder()
-            .setAnchor(binding.filterButton)
-            .setShape(Circle(50f))
-            .setOverlay(second)
-            .setOnTargetListener(object : OnTargetListener {
-                override fun onEnded() {}
-                override fun onStarted() {}
-            }).build()
+        val thirdRoot = FrameLayout(requireContext())
+        val third = layoutInflater.inflate(R.layout.home_search_filter_spot, thirdRoot)
+        val thirdTarget = getTarget(binding.searchButton, third)
+
+        val fourthTarget = getTarget(binding.filterButton, third)
 
         targets.add(firstTarget)
         targets.add(secondTarget)
         targets.add(thirdTarget)
+        targets.add(fourthTarget)
 
         val spotlight = Spotlight.Builder(requireActivity())
             .setTargets(targets)
             .setBackgroundColorRes(R.color.spotlightBackground)
             .setDuration(1000L)
             .setAnimation(DecelerateInterpolator(2f))
-            .setOnSpotlightListener(object : OnSpotlightListener {
-                override fun onStarted() {}
-                override fun onEnded() {}
-            }).build()
+            .build()
 
         spotlight.start()
 
         val nextTarget = View.OnClickListener { spotlight.next() }
 
-        // val closeSpotlight = View.OnClickListener { spotlight.finish() }
+        val closeSpotlight = View.OnClickListener {
+            userManager.updateHomeOnBoardingState()
+            spotlight.finish()
+        }
 
         first.findViewById<View>(R.id.next_button).setOnClickListener(nextTarget)
-        second.findViewById<View>(R.id.next_button).setOnClickListener {
+        second.findViewById<View>(R.id.next_button).setOnClickListener(nextTarget)
+        third.findViewById<View>(R.id.next_button).setOnClickListener {
             spotlight.next()
-            second.findViewById<TextView>(R.id.title_text).text = getString(R.string.use_filters)
-            second.findViewById<TextView>(R.id.info_text).text =
+            third.findViewById<TextView>(R.id.title_text).text = getString(R.string.use_filters)
+            third.findViewById<TextView>(R.id.info_text).text =
                 getString(R.string.or_you_can_filter_files_based_on_dates_they_were_uploaded)
-            second.findViewById<View>(R.id.arrow).animate().rotation(105f).setDuration(500).start()
+            third.findViewById<View>(R.id.arrow).animate().rotation(105f).setDuration(500).start()
+            third.findViewById<View>(R.id.next_button).setOnClickListener(closeSpotlight)
         }
+    }
+
+    private fun getTarget(anchorView: View, overlay: View, radius: Int = 50): Target {
+        return Target.Builder().setAnchor(anchorView).setShape(Circle(radius.toFloat()))
+            .setOverlay(overlay)
+            .build()
     }
 
     private fun showFilter() {
@@ -399,6 +395,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     fun closeSearch() {
         hideKeyboard()
+        adapter.bindEmptyView(binding.noFileIllustrationContainer)
         adapter.restore()
         searchBinding.root.hide()
         showBottomNav()

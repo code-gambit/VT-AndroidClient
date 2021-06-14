@@ -38,6 +38,11 @@ constructor(@ApplicationContext context: Context) : PreferenceManager(context) {
 
     fun isFirstLaunch() = get(Key.LAUNCHSTATE, true)
 
+    fun isHomeOnBoarded() = get(Key.HOMEONBOARDINGSTATE, false)
+
+    fun updateHomeOnBoardingState(isOnBoarded: Boolean = true) =
+        put(Key.HOMEONBOARDINGSTATE, isOnBoarded)
+
     private fun updateLaunchState() = put(Key.LAUNCHSTATE, false)
 
     private fun updateIdToken(token: String?) = put(Key.TOKEN, token)
