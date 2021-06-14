@@ -128,7 +128,7 @@
             android:textSize="22sp"
             android:fontFamily="sans-serif"
             android:textColor="@color/black"
-            android:layout_marginTop="@dimen/root_side_margin"/>
+            android:layout_marginTop="@dimen/illustration_text_vertical_gap"/>
 
     </LinearLayout>
 

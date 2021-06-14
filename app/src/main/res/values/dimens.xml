@@ -22,4 +22,6 @@
     <dimen name="drag_down_height">52dp</dimen>
 
     <dimen name="file_type_icon_size">32dp</dimen>
+
+    <dimen name="illustration_text_vertical_gap">32dp</dimen>
 </resources>
