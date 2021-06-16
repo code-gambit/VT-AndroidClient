@@ -50,6 +50,15 @@ fun AuthSignUpOptions.Builder<*>.defaultBuilder(user: User): AuthSignUpOptions {
     ).build()
 }
 
+fun String.getAbsoluteId(): String {
+    val dt = this.split("#")
+    return if (dt.isNotEmpty()) {
+        dt[dt.size - 1]
+    } else {
+        this
+    }
+}
+
 fun Int.byteToMb(): String {
     return String.format("%.2f", this.div(10.0.pow(6.0)))
 }

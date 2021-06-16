@@ -107,6 +107,25 @@ class FileListAdapter(val context: Context) :
         notifyUrlListUpdated(urls[0].fileId)
     }
 
+    fun updateUrl(url: Url) {
+        val file = getFile(url)
+        file?.urls?.find { it.id == url.id }?.apply {
+            this.clicksLeft = url.clicksLeft
+            this.visible = url.visible
+        }
+        notifyUrlListUpdated(file?.id)
+    }
+
+    fun deleteUrl(url: Url) {
+        val file = getFile(url)
+        file?.let {
+            it.urls.find { it.id == url.id }?.apply {
+                it.urls.remove(this)
+                notifyDataSetChanged()
+            }
+        }
+    }
+
     private fun getFile(url: Url) = getDataList.find { it.id == url.fileId }
 
     private fun getUrlAdapter(fileId: String?): UrlListAdapter? = map[fileId]

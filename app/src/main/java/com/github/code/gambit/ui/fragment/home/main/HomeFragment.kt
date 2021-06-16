@@ -25,6 +25,7 @@ import com.github.code.gambit.ui.fragment.home.filtercomponent.Filter
 import com.github.code.gambit.ui.fragment.home.filtercomponent.FilterComponent
 import com.github.code.gambit.ui.fragment.home.filtercomponent.FilterType
 import com.github.code.gambit.ui.fragment.home.searchcomponent.FileSearchComponent
+import com.github.code.gambit.ui.fragment.home.urlcomponent.UrlComponent
 import com.github.code.gambit.utility.extention.copyToClipboard
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.hide
@@ -78,6 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
     private lateinit var fileSearchComponent: FileSearchComponent
     private lateinit var filterComponent: FilterComponent
+    private lateinit var urlComponent: UrlComponent
 
     private val customDateFormat = SimpleDateFormat("dd MMM YY", Locale.getDefault())
 
@@ -89,6 +91,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         activity?.window?.exitFullscreen()
         lekManager.flush()
         registerFilterComponents()
+        registerUrlComponent()
         binding.linearProgress.hide()
         binding.filterButton.setOnClickListener {
             showFilter()
@@ -129,11 +132,23 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
         viewModel.setEvent(HomeEvent.GetFiles)
     }
 
+    private fun registerUrlComponent() {
+        urlComponent = UrlComponent.bind(
+            requireContext(), {},
+            { url ->
+                viewModel.setEvent(HomeEvent.UpdateUrl(url))
+            }
+        ) { url ->
+            viewModel.setEvent(HomeEvent.UpdateUrl(url, true))
+        }
+    }
+
     private fun registerEventCallbacks() {
         viewModel.homeState.observe(viewLifecycleOwner) {
             when (it) {
                 is HomeState.Error -> {
                     binding.linearProgress.hide()
+                    urlComponent.hide()
                     longToast(it.message)
                 }
                 is HomeState.FilesLoaded -> {
@@ -162,7 +177,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 }
                 HomeState.LoadingUrl -> shortToast("Loading Url")
                 is HomeState.UrlGenerated -> {
-                    stopShimmer()
+                    binding.linearProgress.hide()
+                    copyToClipboard(it.url.id)
                     Timber.tag("home").i("${it.url.id}, ${it.url.fileId}")
                     adapter.addUrl(it.url)
                 }
@@ -201,6 +217,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                     requireMainActivity().showSnackBar("${it.file.name} deleted successfully")
                     adapter.remove(it.file)
                     binding.linearProgress.hide()
+                }
+                is HomeState.UrlUpdateResult -> {
+                    if (it.delete) {
+                        if (it.success && it.updatedUrl != null) {
+                            it.updatedUrl.clicksLeft = 0
+                            adapter.deleteUrl(it.updatedUrl)
+                            longToast("Url deleted")
+                        } else {
+                            longToast("Delete of url failed")
+                        }
+                    } else {
+                        if (it.success && it.updatedUrl != null) {
+                            adapter.updateUrl(it.updatedUrl)
+                        } else {
+                            longToast("Update of url failed")
+                        }
+                    }
+                    urlComponent.hide()
                 }
             }
         }
@@ -427,7 +461,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     }
 
     override fun onUrlClick(url: Url, file: File) {
-        Timber.tag("home").i("UrlClick: ${file.name}, ${url.id}")
+        urlComponent.show(url, file)
     }
 
     override fun onItemClick(item: File) {

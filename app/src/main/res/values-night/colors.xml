@@ -9,6 +9,8 @@
     <color name="secondaryVariant">#EB6D6D</color>
     <color name="onSecondary">#EB6D6D</color>
 
+    <color name="secondary_light">#80EB6D6D</color>
+
     <color name="auth_bottom_bar">#4C4C4C</color>
 
     <color name="login_signup_button_color">#EB6D6D</color>

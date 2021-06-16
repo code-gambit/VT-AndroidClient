@@ -95,7 +95,7 @@ constructor(
             val data: Url
             try {
                 data = networkDataSource.generateUrl(url)
-                // cacheDataSource.insertUrls(listOf(data))
+                cacheDataSource.insertUrls(listOf(data))
                 emit(ServiceResult.Success(data))
             } catch (internet: NoInternetException) {
                 emit(ServiceResult.Error(internet))
@@ -118,6 +118,28 @@ constructor(
             } finally {
                 val urls = cacheDataSource.getUrls(fileId)
                 emit(ServiceResult.Success(urls))
+            }
+        }
+    }
+
+    override suspend fun updateUrl(url: Url): Flow<ServiceResult<Url>> {
+        return flow {
+            try {
+                val data = networkDataSource.updateUrl(url)
+                emit(ServiceResult.Success(data))
+            } catch (exception: Exception) {
+                emit(ServiceResult.Error(exception))
+            }
+        }
+    }
+
+    override suspend fun deleteUrl(url: Url): Flow<ServiceResult<Url>> {
+        return flow {
+            try {
+                val data = networkDataSource.deleteUrl(url)
+                emit(ServiceResult.Success(data))
+            } catch (exception: Exception) {
+                emit(ServiceResult.Error(exception))
             }
         }
     }
