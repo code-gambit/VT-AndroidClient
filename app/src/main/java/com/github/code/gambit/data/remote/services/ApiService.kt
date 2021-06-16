@@ -53,7 +53,7 @@ interface ApiService {
     suspend fun getUrls(@Path(AppConstant.API_PATH.FILE_ID) fileId: String): ListResponse<UrlNetworkEntity>
 
     @POST("file/{${AppConstant.API_PATH.FILE_ID}}/url")
-    suspend fun generateUrl(@Path(AppConstant.API_PATH.FILE_ID) fileId: String, @Body urlNetworkEntity: UrlNetworkEntity): Response<String>
+    suspend fun generateUrl(@Path(AppConstant.API_PATH.FILE_ID) fileId: String, @Body urlNetworkEntity: UrlNetworkEntity): Response<UrlNetworkEntity>
 
     @PUT("file/{${AppConstant.API_PATH.FILE_ID}}/url/{${AppConstant.API_PATH.URL_ID}}")
     suspend fun updateUrl(

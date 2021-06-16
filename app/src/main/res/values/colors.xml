@@ -9,6 +9,8 @@
     <color name="secondaryVariant">#63C2D2</color>
     <color name="onSecondary">#63C2D2</color>
 
+    <color name="secondary_light">#8063C2D2</color>
+
     <color name="auth_bottom_bar">#63C2D2</color>
 
     <color name="login_signup_button_color">#522C20</color>
@@ -36,4 +38,5 @@
 
     <color name="spotlightBackground">#E9000000</color>
 
+    <color name="raw_primary_light">#E1E1E1</color>
 </resources>
