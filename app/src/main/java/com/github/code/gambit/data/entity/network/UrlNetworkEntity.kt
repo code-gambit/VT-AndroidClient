@@ -23,7 +23,7 @@ class UrlNetworkEntity(
 
     @SerializedName("visible")
     @Expose
-    var visible: String,
+    var visible: Boolean,
 
     @SerializedName("clicks_left")
     @Expose

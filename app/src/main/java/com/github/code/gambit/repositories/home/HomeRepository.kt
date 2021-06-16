@@ -14,4 +14,6 @@ interface HomeRepository {
     suspend fun deleteFile(file: File): Flow<ServiceResult<Boolean>>
     suspend fun generateUrl(file: File): Flow<ServiceResult<Url>>
     suspend fun getUrls(fileId: String): Flow<ServiceResult<List<Url>>>
+    suspend fun updateUrl(url: Url): Flow<ServiceResult<Url>>
+    suspend fun deleteUrl(url: Url): Flow<ServiceResult<Url>>
 }

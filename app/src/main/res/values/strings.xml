@@ -86,4 +86,9 @@
     <string name="file_meta_data_info">Recent uploading file appear here\nAdd file from home page</string>
     <string name="file_search_info">Your search result appear here\nEnter file name to search</string>
     <string name="empty_file_search_result">Oops!!\nNo file matching with that name</string>
+    <string name="click_count">Click count</string>
+    <string name="is_visible">Is Visible</string>
+    <string name="submit">Submit</string>
+    <string name="no_change">No change</string>
+    <string name="delete">Delete</string>
 </resources>

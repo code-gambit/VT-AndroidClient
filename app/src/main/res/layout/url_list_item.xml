@@ -1,95 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="@dimen/root_side_margin"
     android:layout_marginEnd="@dimen/root_side_margin"
     android:layout_marginBottom="@dimen/root_side_margin"
-    android:background="@color/raw_white">
+    app:cardBackgroundColor="@color/raw_primary_light"
+    app:cardCornerRadius="6dp">
 
-    <TextView
-        android:id="@+id/id"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/click_counter_container"
-        android:lines="1"
-        android:textColor="@color/raw_black"
-        tools:text="/demo"
-        android:textSize="18sp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"/>
-
-    <ImageView
-        android:id="@+id/delete"
-        android:layout_width="@dimen/options_icon_size"
-        android:layout_height="@dimen/options_icon_size"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/url_options_spacing"
-        android:src="@drawable/ic_delete_bin"
-        app:tint="@color/raw_dark_grey"
-        tools:ignore="ContentDescription"
-        android:layout_centerVertical="true"/>
-
-    <ImageView
-        android:id="@+id/visibility_toggle"
-        android:layout_width="@dimen/options_icon_size"
-        android:layout_height="@dimen/options_icon_size"
-        android:layout_marginStart="@dimen/url_options_spacing"
-        android:layout_toStartOf="@id/delete"
-        android:src="@drawable/ic_invisible"
-        app:tint="@color/raw_dark_grey"
-        tools:ignore="ContentDescription"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/click_counter_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/url_options_spacing"
-        android:layout_toStartOf="@id/visibility_toggle"
-        android:gravity="center_vertical"
-        android:visibility="gone">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/options_icon_size"
-            android:layout_height="@dimen/options_icon_size"
-            app:cardBackgroundColor="@color/raw_dark_grey"
-            app:cardCornerRadius="2dp">
-
-            <ImageView
-                android:id="@+id/decrement"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="6dp"
-                android:src="@drawable/ic_delete"
-                app:tint="@color/raw_black"
-                tools:ignore="ContentDescription" />
-        </androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/click_counter"
-            android:layout_width="wrap_content"
+            android:id="@+id/id"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:text="@string/default_click_count" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/options_icon_size"
-            android:layout_height="@dimen/options_icon_size"
-            app:cardBackgroundColor="@color/raw_dark_grey"
-            app:cardCornerRadius="2dp">
-
-            <ImageView
-                android:id="@+id/increment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="6dp"
-                android:src="@drawable/ic_plus"
-                app:tint="@color/raw_black"
-                tools:ignore="ContentDescription" />
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_alignParentStart="true"
+            android:lines="1"
+            android:textColor="@color/raw_black"
+            android:textSize="18sp"
+            tools:text="demo"
+            android:padding="8dp"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

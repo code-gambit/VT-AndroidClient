@@ -15,7 +15,7 @@ constructor() : EntityMapper<UrlNetworkEntity, Url> {
             fileId = entity.pk,
             hash = entity.hash,
             timestamp = entity.sk.split("#")[1],
-            visible = entity.visible == "true",
+            visible = entity.visible,
             clicksLeft = entity.clicks_left
         )
     }
@@ -24,7 +24,7 @@ constructor() : EntityMapper<UrlNetworkEntity, Url> {
         return UrlNetworkEntity(
             hash = domainModel.hash,
             gs1_pk = domainModel.id,
-            visible = domainModel.visible.toString(),
+            visible = domainModel.visible,
             clicks_left = domainModel.clicksLeft
         )
     }
