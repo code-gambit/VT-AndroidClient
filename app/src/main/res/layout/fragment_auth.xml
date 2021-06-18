@@ -45,10 +45,9 @@
             app:layout_anchorGravity="top|end"
             android:backgroundTint="@color/login_signup_button_color"
             app:icon="@drawable/ic_next"
-            app:iconTint="@color/raw_white"
             app:iconGravity="textEnd"
             app:cornerRadius="12dp"
-            app:iconSize="16dp"
+            app:iconSize="22dp"
             android:layout_marginEnd="32dp"/>
 
 

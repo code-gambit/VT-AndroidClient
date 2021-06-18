@@ -27,7 +27,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private lateinit var _binding: FragmentAuthBinding
     private val binding get() = _binding
 
-    private val currentPage get() = binding.fragmentContainer.currentItem
+    val currentPage get() = binding.fragmentContainer.currentItem
 
     private val viewModel: AuthViewModel by viewModels()
 
@@ -170,5 +170,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private fun enableInteraction() {
         binding.buttonSubmit.isEnabled = true
+    }
+
+    fun setPage(page: Int) {
+        if (page == 0 || page == 1) {
+            binding.tabLayout.getTabAt(page)?.select()
+        }
     }
 }

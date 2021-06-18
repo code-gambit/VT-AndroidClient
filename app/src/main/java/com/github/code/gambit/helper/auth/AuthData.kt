@@ -4,6 +4,5 @@ data class AuthData(
     var fullname: String,
     var email: String,
     var password: String,
-    var thumbnail: String?,
     var confirmationCode: String?
 )

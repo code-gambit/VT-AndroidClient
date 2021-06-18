@@ -24,6 +24,7 @@ import com.github.code.gambit.databinding.ActivityMainBinding
 import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.OnItemClickListener
 import com.github.code.gambit.ui.fragment.BottomNavController
+import com.github.code.gambit.ui.fragment.auth.AuthFragment
 import com.github.code.gambit.ui.fragment.home.main.HomeFragment
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
@@ -212,6 +213,12 @@ class MainActivity : AppCompatActivity(), BottomNavController {
 
     override fun onBackPressed() {
         if (!userManager.isAuthenticated()) {
+            val fragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)?.childFragmentManager?.fragments?.first()
+            if (fragment is AuthFragment && fragment.currentPage != 0) {
+                fragment.setPage(0)
+                return
+            }
             super.onBackPressed()
             return
         }

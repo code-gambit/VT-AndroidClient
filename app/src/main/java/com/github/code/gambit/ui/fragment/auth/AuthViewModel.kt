@@ -101,7 +101,7 @@ constructor(
     }
 
     private suspend fun resetForgotPassword(userEmail: String, newPassword: String, confirmationCode: String) {
-        when (val res = authRepository.resetForgotPassword(AuthData("", userEmail, newPassword, null, confirmationCode))) {
+        when (val res = authRepository.resetForgotPassword(AuthData("", userEmail, newPassword, confirmationCode))) {
             is ServiceResult.Error -> {
                 if (res.exception.cause is CodeMismatchException) {
                     postValue(AuthState.CodeMissMatch)

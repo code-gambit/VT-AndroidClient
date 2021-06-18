@@ -96,7 +96,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (error) {
             return null
         }
-        return AuthData("", username, password, null, null)
+        return AuthData("", username, password, null)
     }
 
     // validates the input fields
@@ -122,6 +122,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             binding.root.snackbar("Validation error!!")
             return null
         }
-        return AuthData("", username, password, null, null)
+        return AuthData("", username, password, null)
     }
 }
