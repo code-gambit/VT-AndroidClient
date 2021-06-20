@@ -1,11 +1,7 @@
 package com.github.code.gambit.ui.fragment.auth
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.github.code.gambit.R
 import com.github.code.gambit.databinding.FragmentSignUpBinding
@@ -13,7 +9,6 @@ import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,31 +25,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     @Inject
     lateinit var systemManager: SystemManager
 
-    lateinit var launcher: ActivityResultLauncher<Intent>
-    var profileImage: Uri? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSignUpBinding.bind(view)
-
-        binding.dpContainer.setOnClickListener {
-            systemManager.launchActivity(launcher, Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        registerCallback()
-    }
-
-    private fun registerCallback() {
-        launcher = systemManager.requestImage(this) {
-            if (it != null) {
-                binding.profileImage.setImageURI(it)
-                Timber.i(it.toString())
-                profileImage = it
-            }
-        }
     }
 
     // validates the input fields
@@ -106,6 +79,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             binding.root.snackbar("Validation error!!")
             return null
         }
-        return AuthData(fullName, userEmail, password, profileImage.toString(), null)
+        return AuthData(fullName, userEmail, password, null)
     }
 }

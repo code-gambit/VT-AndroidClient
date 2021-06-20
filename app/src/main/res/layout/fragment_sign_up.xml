@@ -16,42 +16,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:paddingTop="64dp"
+            android:paddingBottom="64dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/profile_upload_image_container"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:cardCornerRadius="32dp">
-                <ImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/profile_image"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_default_dp" />
-            </androidx.cardview.widget.CardView>
-
-            <!--com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/upload_dp_fab"
-                style="@style/Widget.App.FloatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/upload_a_profile_picture_optional"
-                android:src="@drawable/iclink" -->
 
             <TextView
                 android:id="@+id/upload_dp_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="32dp"
-                android:text="@string/upload_a_profile_picture_optional"
-                android:textColor="@color/black" />
+                android:text="@string/create_new_account"
+                android:textColor="@color/black"
+                android:textSize="24sp"/>
         </LinearLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/full_name_input"
@@ -121,35 +100,5 @@
                 android:layout_height="match_parent"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            android:weightSum="3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_input">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="2"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/facebook_authentication"
-                android:src="@drawable/ic_fb" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/google_authentication"
-                android:src="@drawable/ic_gp" />
-
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
