@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -25,6 +26,7 @@ import com.github.code.gambit.helper.file.FileUploadState
 import com.github.code.gambit.ui.OnItemClickListener
 import com.github.code.gambit.ui.fragment.BottomNavController
 import com.github.code.gambit.ui.fragment.home.main.HomeFragment
+import com.github.code.gambit.ui.fragment.profile.ProfileFragment
 import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.bottomNavHide
 import com.github.code.gambit.utility.extention.bottomNavShow
@@ -74,6 +76,10 @@ class MainActivity : AppCompatActivity(), BottomNavController {
         binding.root.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
                 hideKeyboard()
+                val frag = getCurrentFragment()
+                if (frag is ProfileFragment) {
+                    frag.looseFocus()
+                }
             }
 
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
@@ -215,27 +221,30 @@ class MainActivity : AppCompatActivity(), BottomNavController {
             super.onBackPressed()
             return
         }
-        val hostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
-        if (hostFragment is NavHostFragment) {
-            when (val fragment = hostFragment.childFragmentManager.fragments.first()) {
-                is HomeFragment -> {
-                    when {
-                        fragment.isFilterEnable() -> {
-                            fragment.closeFilter()
-                        }
-                        fragment.isSearchEnable() -> {
-                            fragment.closeSearch()
-                        }
-                        else -> {
-                            finish()
-                        }
+        when (val fragment = getCurrentFragment()) {
+            is HomeFragment -> {
+                when {
+                    fragment.isFilterEnable() -> {
+                        fragment.closeFilter()
+                    }
+                    fragment.isSearchEnable() -> {
+                        fragment.closeSearch()
+                    }
+                    else -> {
+                        finish()
                     }
                 }
-                else -> super.onBackPressed()
             }
-        } else {
-            super.onBackPressed()
+            else -> super.onBackPressed()
         }
+    }
+
+    fun getCurrentFragment(): Fragment? {
+        val hostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
+        if (hostFragment is NavHostFragment) {
+            return hostFragment.childFragmentManager.fragments.first()
+        }
+        return null
     }
 
     fun getAddFab(): View {
