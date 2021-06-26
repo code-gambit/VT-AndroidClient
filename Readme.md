@@ -2,6 +2,9 @@
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/codegambit/shared_invite/zt-pe1nuhbk-iPuFm2B1JuMS86od4a4wXQ) [![License](https://img.shields.io/badge/License-GPL-lightgrey.svg?style=for-the-badge)](https://github.com/code-gambit/VT-AndroidClient/blob/master/LICENSE) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/code-gambit/VT-AndroidClient?style=for-the-badge) <br>
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/code-gambit/VT-AndroidClient/Android%20Build?style=for-the-badge)](https://github.com/code-gambit/VT-AndroidClient/actions/workflows/build.yml) ![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white) [![GitHub last commit](https://img.shields.io/github/last-commit/code-gambit/VT-AndroidClient?style=for-the-badge)](https://github.com/code-gambit/VT-AndroidClient/commits)
 
+[![qr](https://user-images.githubusercontent.com/31315800/123507440-fb98f800-d686-11eb-9cad-7f73dfdcfa22.png)](https://rebrand.ly/VT-APK)<br>
+[&#160;&#160;&#160;Download APK&#160;&#160;&#160;](https://rebrand.ly/VT-APK)
+
 ## Project description
 This project is the android client for V Transfer, allowing people to share their file easily with minimum steps without compromising with the security. At the backend we are using [IPFS](https://ipfs.io/) to upload file which is a blockchain based technology for file sharing making it secure and reliable, below are some of the key feature of this app.
 1. Upload file and get a short url for sharing
