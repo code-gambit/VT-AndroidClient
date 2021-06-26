@@ -19,7 +19,7 @@ interface FileSearchComponent {
             }
         }
     }
-    fun setRefreshing()
+    fun setRefreshing(hide: Boolean = false)
     fun setFileLoaded(files: List<File>)
     fun getRequests(): MutableLiveData<String>
     fun show()
