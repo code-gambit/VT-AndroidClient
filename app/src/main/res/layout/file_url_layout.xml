@@ -40,7 +40,7 @@
                     android:contentDescription="@string/close"
                     android:rotation="45"
                     android:src="@drawable/ic_plus"
-                    android:tint="@color/black" />
+                    app:tint="@color/black" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/create_new_url_button"

@@ -55,7 +55,7 @@ class FileSearchComponentImpl(
 
     override fun show() {
         binding.searchInput.editText?.setText("")
-        adapter.bindEmptyView(binding.illustration)
+        adapter.bindEmptyView(binding.emptyInfoContainer)
         adapter.refresh(true)
     }
 
@@ -63,8 +63,12 @@ class FileSearchComponentImpl(
         fileSearchRequest.postValue(searchString)
     }
 
-    override fun setRefreshing() {
-        (binding.progressBar as View).show()
+    override fun setRefreshing(hide: Boolean) {
+        if (!hide) {
+            (binding.progressBar as View).show()
+        } else {
+            (binding.progressBar as View).hide()
+        }
     }
 
     override fun setFileLoaded(files: List<File>) {
