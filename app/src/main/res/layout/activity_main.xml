@@ -38,7 +38,7 @@
             android:contentDescription="@string/drag_down_from_here"
             android:scaleY="0.5"
             android:src="@drawable/ic_down_arrow"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -108,8 +108,7 @@
             android:layout_height="100dp"
             android:gravity="center"
             android:padding="8dp"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/gallery_button"
@@ -144,14 +143,14 @@
         android:id="@+id/secondary_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/constraint_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:paddingTop="32dp"
         android:scaleX="1.1"
         android:scaleY="1.1"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/constraint_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/meta_data_list_item"
@@ -160,28 +159,33 @@
             android:orientation="vertical"
             tools:listitem="@layout/file_meta_data_list_item" />
 
-        <ImageView
-            android:id="@+id/illustration"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:src="@drawable/illus_uploading"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/illustration"
-            android:layout_centerInParent="true"/>
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/illustration_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/file_meta_data_info"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:layout_below="@id/illustration"
-            android:textSize="22sp"
-            android:fontFamily="@font/nunito_regular"
-            android:textColor="@color/black"
-            android:layout_marginTop="@dimen/illustration_text_vertical_gap"/>
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/illustration"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/illustration"
+                android:scaleType="fitCenter"
+                android:src="@drawable/illus_uploading" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/illustration_text_vertical_gap"
+                android:fontFamily="@font/nunito_regular"
+                android:text="@string/file_meta_data_info"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+        </LinearLayout>
     </RelativeLayout>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
