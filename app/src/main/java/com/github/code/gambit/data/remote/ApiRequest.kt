@@ -11,7 +11,7 @@ suspend fun <T> apiRequest(
     keyType: LastEvaluatedKeyManager.KeyType,
     call: suspend (lek: String) -> ListResponse<T>
 ): List<T> {
-    val response = call.invoke(lekManager.getLastEvalKey(LastEvaluatedKeyManager.KeyType.FILE))
+    val response = call.invoke(lekManager.getLastEvalKey(keyType))
     response.body?.let { body ->
         body.lastEvaluatedKey?.let { lekManager.putLastEvalKey(it, keyType) }
         return body.items

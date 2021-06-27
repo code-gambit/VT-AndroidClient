@@ -49,6 +49,10 @@ constructor(
         return urlCacheMapper.mapFromEntityList(urls)
     }
 
+    override suspend fun deleteUrls(): Int {
+        return urlDao.deleteUrls()
+    }
+
     override suspend fun insertFileMetaData(fileMetaData: FileMetaData): Long {
         val data: FileMetaDataCacheEntity = fileMetaDataMapper.mapToEntity(fileMetaData)
         return fileWorkerDao.insertFileMetaData(data)
