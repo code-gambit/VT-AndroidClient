@@ -19,8 +19,8 @@ class NetworkDataSourceImpl(
     private val userNetworkMapper: UserNetworkMapper
 ) : NetworkDataSource {
 
-    override suspend fun getFiles(): List<File> {
-        return fileNetworkMapper.mapFromEntityList(fileService.getFiles())
+    override suspend fun getFiles(force: Boolean): List<File> {
+        return fileNetworkMapper.mapFromEntityList(fileService.getFiles(force))
     }
 
     override suspend fun filterFiles(start: String, end: String): List<File> {

@@ -17,4 +17,7 @@ interface UrlDao {
 
     @Query("SELECT * FROM urls WHERE fileId = :fileId ORDER BY timestamp DESC")
     suspend fun getUrls(fileId: String): List<UrlCacheEntity>
+
+    @Query("DELETE FROM urls")
+    suspend fun deleteUrls(): Int
 }

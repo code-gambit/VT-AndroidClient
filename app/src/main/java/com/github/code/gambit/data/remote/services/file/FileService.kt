@@ -4,7 +4,7 @@ import com.github.code.gambit.data.entity.network.FileNetworkEntity
 
 interface FileService {
 
-    suspend fun getFiles(): List<FileNetworkEntity>
+    suspend fun getFiles(force: Boolean): List<FileNetworkEntity>
     suspend fun searchFile(searchParam: String): List<FileNetworkEntity>
     suspend fun filterFiles(start: String, end: String): List<FileNetworkEntity>
     suspend fun uploadFile(fileNetworkEntity: FileNetworkEntity): FileNetworkEntity

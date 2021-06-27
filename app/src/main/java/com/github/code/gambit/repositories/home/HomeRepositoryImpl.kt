@@ -20,11 +20,21 @@ constructor(
     private val networkDataSource: NetworkDataSource
 ) : HomeRepository {
 
-    override suspend fun getFiles(): Flow<ServiceResult<List<File>>> {
+    private suspend fun clearCacheDb() {
+        cacheDataSource.deleteFiles()
+        cacheDataSource.deleteUrls()
+    }
+
+    override suspend fun getFiles(clearCache: Boolean): Flow<ServiceResult<List<File>>> {
         return flow {
             val data: List<File>
             try {
-                data = networkDataSource.getFiles()
+                if (clearCache) {
+                    data = networkDataSource.getFiles(true)
+                    clearCacheDb()
+                } else {
+                    data = networkDataSource.getFiles()
+                }
                 cacheDataSource.insertFiles(data)
                 val files = cacheDataSource.getFiles()
                 emit(ServiceResult.Success(files))

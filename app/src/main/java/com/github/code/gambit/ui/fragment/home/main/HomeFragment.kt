@@ -1,6 +1,7 @@
 package com.github.code.gambit.ui.fragment.home.main
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
@@ -64,6 +65,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
     private val searchBinding get() = _searchBinding
 
     private var isFirstLoading = true
+    private var isLoading = false
 
     @Inject
     lateinit var homeRepository: HomeRepository
@@ -111,12 +113,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
         binding.swipeRefresh.setOnRefreshListener {
             binding.swipeRefresh.isRefreshing = false
-            viewModel.setEvent(HomeEvent.GetFiles)
-        }
-
-        binding.swipeRefresh.setOnDragListener { _, dragEvent ->
-            Timber.tag("home").i("drag: ${dragEvent.y}")
-            true
+            setHomeFileEvent(true)
         }
 
         binding.clearFilter.setOnClickListener {
@@ -129,7 +126,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
 
         setUpFileRecyclerView()
         registerEventCallbacks()
-        viewModel.setEvent(HomeEvent.GetFiles)
+        setHomeFileEvent()
     }
 
     private fun registerUrlComponent() {
@@ -256,9 +253,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
                 if (!recyclerView.canScrollVertically(1) &&
                     newState == RecyclerView.SCROLL_STATE_IDLE &&
-                    pastVisibleItem + visibleItemCount >= totalItemCount
+                    pastVisibleItem + visibleItemCount >= totalItemCount &&
+                    !isLoading
                 ) {
-                    viewModel.setEvent(HomeEvent.GetFiles)
+                    setHomeFileEvent()
                 }
             }
 
@@ -324,6 +322,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 }
                 viewModel.setEvent(HomeEvent.SearchFile(it))
             }
+        }
+    }
+
+    private fun setHomeFileEvent(cacheClear: Boolean = false) {
+        if (!isLoading) {
+            isLoading = true
+            Handler().postDelayed({ isLoading = false }, 1000)
+            viewModel.setEvent(HomeEvent.GetFiles(cacheClear))
         }
     }
 

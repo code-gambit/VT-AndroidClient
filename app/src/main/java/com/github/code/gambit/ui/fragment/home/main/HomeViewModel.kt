@@ -27,9 +27,9 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
     fun setEvent(event: HomeEvent) {
         viewModelScope.launch {
             when (event) {
-                HomeEvent.GetFiles -> {
+                is HomeEvent.GetFiles -> {
                     _homeState.postValue(HomeState.Loading())
-                    getFile()
+                    getFile(event.clearCache)
                 }
                 is HomeEvent.GenerateUrl -> {
                     _homeState.postValue(HomeState.Loading())
@@ -62,8 +62,8 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
         }
     }
 
-    private suspend fun getFile() {
-        homeRepository.getFiles().collect {
+    private suspend fun getFile(clearCache: Boolean) {
+        homeRepository.getFiles(clearCache).collect {
             when (it) {
                 is ServiceResult.Error -> postError(it.exception)
                 is ServiceResult.Success -> {
@@ -160,7 +160,7 @@ constructor(private val homeRepository: HomeRepository) : ViewModel() {
 }
 
 sealed class HomeEvent {
-    object GetFiles : HomeEvent()
+    data class GetFiles(val clearCache: Boolean = false) : HomeEvent()
     data class FilterFiles(val filter: Filter) : HomeEvent()
     data class DeleteFile(val file: File) : HomeEvent()
     data class GetUrls(val file: File) : HomeEvent()

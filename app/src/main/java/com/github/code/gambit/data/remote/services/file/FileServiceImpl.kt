@@ -14,7 +14,10 @@ class FileServiceImpl(
 
     private val userId get() = userManager.getUserId()
 
-    override suspend fun getFiles(): List<FileNetworkEntity> {
+    override suspend fun getFiles(force: Boolean): List<FileNetworkEntity> {
+        if (force) {
+            lekManager.putLastEvalKey("", LastEvaluatedKeyManager.KeyType.FILE)
+        }
         return apiRequest(lekManager, LastEvaluatedKeyManager.KeyType.FILE) { lek ->
             apiService.getFiles(userId, lek, null)
         }

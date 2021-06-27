@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
 
-    suspend fun getFiles(): Flow<ServiceResult<List<File>>>
+    suspend fun getFiles(clearCache: Boolean = false): Flow<ServiceResult<List<File>>>
     suspend fun searchFile(searchString: String): Flow<ServiceResult<List<File>>>
     suspend fun searchFileByFilter(filter: Filter): Flow<ServiceResult<List<File>>>
     suspend fun deleteFile(file: File): Flow<ServiceResult<Boolean>>
