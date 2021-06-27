@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity(), BottomNavController {
 
             override fun onItemLongClick(item: FileUploadStatus) {}
         }
+        adapter.bindEmptyView(binding.illustrationContainer)
         val layoutManager = LinearLayoutManager(this)
         binding.metaDataListItem.layoutManager = layoutManager
         binding.metaDataListItem.setHasFixedSize(false)
