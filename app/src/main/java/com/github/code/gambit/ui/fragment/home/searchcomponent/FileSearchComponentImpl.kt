@@ -9,17 +9,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.code.gambit.R
 import com.github.code.gambit.data.model.File
-import com.github.code.gambit.data.model.Url
 import com.github.code.gambit.databinding.SearchLayoutBinding
 import com.github.code.gambit.ui.fragment.home.FileListAdapter
-import com.github.code.gambit.ui.fragment.home.FileUrlClickCallback
 import com.github.code.gambit.utility.extention.hide
 import com.github.code.gambit.utility.extention.show
 
 class FileSearchComponentImpl(
     private val binding: SearchLayoutBinding,
     private val adapter: FileListAdapter
-) : FileSearchComponent, FileUrlClickCallback {
+) : FileSearchComponent {
 
     val fileSearchRequest = MutableLiveData<String>()
     private var context: Context? = null
@@ -30,7 +28,6 @@ class FileSearchComponentImpl(
         binding.fileList.layoutManager = LinearLayoutManager(context)
         binding.fileList.setHasFixedSize(false)
         binding.fileList.adapter = adapter
-        adapter.listener = this
         binding.homeButton.setOnClickListener {
             setIllustrationState(true)
             closeFunc()
@@ -101,16 +98,4 @@ class FileSearchComponentImpl(
     override fun getRequests(): MutableLiveData<String> {
         return fileSearchRequest
     }
-
-    override fun onCreateNewUrl(file: File) = fileSearchRequest.postValue("")
-
-    override fun onLoadMoreUrl(file: File) = fileSearchRequest.postValue("")
-
-    override fun onUrlLongClick(url: Url, file: File) = fileSearchRequest.postValue("")
-
-    override fun onUrlClick(url: Url, file: File) = fileSearchRequest.postValue("")
-
-    override fun onItemClick(item: File) = fileSearchRequest.postValue("")
-
-    override fun onItemLongClick(item: File) = fileSearchRequest.postValue("")
 }
