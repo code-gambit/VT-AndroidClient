@@ -149,7 +149,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), FileUrlClickCallback, Bot
                 is HomeState.Error -> {
                     binding.linearProgress.hide()
                     urlComponent.hide()
-                    fileSearchComponent.setRefreshing(hide = true)
+                    if (this::fileSearchComponent.isInitialized) {
+                        fileSearchComponent.setRefreshing(hide = true)
+                    }
                     longToast(it.message)
                 }
                 is HomeState.FilesLoaded -> {

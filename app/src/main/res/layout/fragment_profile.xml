@@ -19,7 +19,7 @@
                 android:layout_width="@dimen/profile_image_large_size"
                 android:layout_height="@dimen/profile_image_large_size"
                 android:layout_marginTop="64dp"
-                app:cardCornerRadius="75dp"
+                app:cardCornerRadius="59dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/profile_image"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_default_dp" />
             </androidx.cardview.widget.CardView>
 
