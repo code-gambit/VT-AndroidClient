@@ -3,7 +3,6 @@ package com.github.code.gambit.di
 import android.Manifest
 import android.content.Context
 import androidx.work.WorkManager
-import com.cloudinary.android.MediaManager
 import com.github.code.gambit.VTransfer
 import com.github.code.gambit.ui.activity.main.FileMetaDataAdapter
 import com.github.code.gambit.ui.fragment.home.FileListAdapter
@@ -60,12 +59,6 @@ object AppModule {
     @Provides
     fun getThirdFragment(): ThirdOnBoardingFragment {
         return ThirdOnBoardingFragment()
-    }
-
-    @Singleton
-    @Provides
-    fun provideMediaManager(): MediaManager {
-        return MediaManager.get()
     }
 
     @Singleton
