@@ -24,9 +24,10 @@
             app:startIconDrawable="@drawable/ic_baseline_search_24">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/input_theme.editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
