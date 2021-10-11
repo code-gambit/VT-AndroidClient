@@ -1,0 +1,6 @@
+{
+  "authSelections": "userPoolOnly",
+  "resourceName": "vtauthfed3e26f",
+  "serviceType": "imported",
+  "region": "ap-south-1"
+}
