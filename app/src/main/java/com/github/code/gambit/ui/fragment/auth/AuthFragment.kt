@@ -2,7 +2,6 @@ package com.github.code.gambit.ui.fragment.auth
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,14 +11,11 @@ import com.github.code.gambit.databinding.FragmentAuthBinding
 import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
 import com.github.code.gambit.ui.fragment.auth.confirmationcomponent.ConfirmationComponent
-import com.github.code.gambit.utility.SystemManager
 import com.github.code.gambit.utility.extention.exitFullscreen
 import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import javax.inject.Named
 
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
@@ -35,26 +31,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private lateinit var confirmationComponent: ConfirmationComponent
 
-    @Inject
-    lateinit var permissionManager: SystemManager
-
-    @Inject
-    @Named("PERMISSION")
-    lateinit var permissions: List<String>
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthBinding.bind(view)
         activity?.window?.exitFullscreen()
-
-        permissionManager.checkPermission(this) {
-            if (it) {
-                Toast.makeText(requireContext(), "Permission granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
 
         binding.fragmentContainer.adapter = AuthFragmentAdapter.getInstance(
             activity?.supportFragmentManager!!,
