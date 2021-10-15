@@ -12,6 +12,7 @@ import com.github.code.gambit.helper.auth.AuthData
 import com.github.code.gambit.helper.auth.AuthState
 import com.github.code.gambit.ui.fragment.auth.confirmationcomponent.ConfirmationComponent
 import com.github.code.gambit.utility.extention.exitFullscreen
+import com.github.code.gambit.utility.extention.hideKeyboard
 import com.github.code.gambit.utility.extention.longToast
 import com.github.code.gambit.utility.extention.snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -128,17 +129,17 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private fun signUp(authData: AuthData) {
         this.authData = authData
-        viewModel.setEvent(AuthEvent.SignUpEvent(authData))
+        setEvent(AuthEvent.SignUpEvent(authData))
     }
 
     private fun logIn(authData: AuthData) {
         this.authData = authData
-        viewModel.setEvent(AuthEvent.LoginEvent(authData))
+        setEvent(AuthEvent.LoginEvent(authData))
     }
 
     private fun confirmSignUp(code: String) {
         authData.confirmationCode = code
-        viewModel.setEvent(AuthEvent.ConfirmationEvent(authData))
+        setEvent(AuthEvent.ConfirmationEvent(authData))
     }
 
     private fun navigateToHome() =
@@ -156,5 +157,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         if (page == 0 || page == 1) {
             binding.tabLayout.getTabAt(page)?.select()
         }
+    }
+
+    fun setEvent(event: AuthEvent) {
+        hideKeyboard()
+        viewModel.setEvent(event)
     }
 }
